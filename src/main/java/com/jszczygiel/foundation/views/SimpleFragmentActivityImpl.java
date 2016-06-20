@@ -31,6 +31,7 @@ public abstract class SimpleFragmentActivityImpl<T extends Fragment> extends App
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(getLayoutId());
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
 

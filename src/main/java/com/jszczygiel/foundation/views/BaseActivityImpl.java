@@ -48,10 +48,13 @@ public abstract class BaseActivityImpl<T extends BasePresenterImpl> extends AppC
     @CallSuper
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(getLayoutId());
         setPresenter();
         setUpPresenter(presenter);
         getPresenter().onAttach(this);
     }
+
+    protected abstract int getLayoutId();
 
     @Override
     @CallSuper
