@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import rx.Observable;
-import rx.functions.Action1;
 import rx.functions.Func1;
 
 public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
@@ -40,17 +39,10 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
 
     @Override
     public Observable<T> remove(String id) {
-        return remove(id, NOTIFY);
-    }
-
-    @Override
-    public Observable<T> remove(String id, final boolean notify) {
         return Observable.just(models.remove(id)).map(new Func1<T, T>() {
             @Override
             public T call(T model) {
-                if (notify) {
-                    subject.onNext(new Tuple<>(SubjectAction.REMOVED, model));
-                }
+                subject.onNext(new Tuple<>(SubjectAction.REMOVED, model));
                 return model;
             }
         });
@@ -59,21 +51,6 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
     @Override
     public void update(T model) {
         subject.onNext(new Tuple<>(SubjectAction.CHANGED, model));
-    }
-
-    @Override
-    public void changed(String id) {
-        get(id).filter(new Func1<T, Boolean>() {
-            @Override
-            public Boolean call(T context) {
-                return context != null;
-            }
-        }).subscribe(new Action1<T>() {
-            @Override
-            public void call(T model) {
-                update(model);
-            }
-        });
     }
 
     @Override
@@ -99,6 +76,5 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
     protected Map<String, T> getModels() {
         return models;
     }
-
 
 }

@@ -38,6 +38,11 @@ dependencies {
     compile 'com.google.firebase:firebase-database:9.0.2'
     compile 'com.google.firebase:firebase-auth:9.0.2'
 
+    //data
+    compile 'com.fasterxml.jackson.core:jackson-core:2.7.4'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.4'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.4'
+
     //rx
     compile 'io.reactivex:rxandroid:1.2.0'
     compile 'io.reactivex:rxjava:1.1.5'
