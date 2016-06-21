@@ -1,11 +1,11 @@
 package com.jszczygiel.foundation.rx.schedulers;
 
+import com.jszczygiel.foundation.helpers.SystemHelper;
+
 import java.util.concurrent.Executors;
 
 import rx.Scheduler;
 import rx.schedulers.Schedulers;
-
-import static com.livechat.foundation.helpers.SystemHelper.getNumberOfCores;
 
 public class SchedulerHelper {
     private static final Scheduler parserScheduler;
@@ -13,7 +13,7 @@ public class SchedulerHelper {
     private static final Scheduler uiScheduler;
 
     static {
-        int cores = getNumberOfCores();
+        int cores = SystemHelper.getNumberOfCores();
         parserScheduler = Schedulers.from(Executors.newFixedThreadPool(cores * 2 - 1));
         uiScheduler = Schedulers.from(Executors.newFixedThreadPool(cores == 1 ? 1 : cores / 2));
     }

@@ -57,7 +57,7 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
     }
 
     @Override
-    public void changed(T model) {
+    public void update(T model) {
         subject.onNext(new Tuple<>(SubjectAction.CHANGED, model));
     }
 
@@ -71,7 +71,7 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
         }).subscribe(new Action1<T>() {
             @Override
             public void call(T model) {
-                changed(model);
+                update(model);
             }
         });
     }

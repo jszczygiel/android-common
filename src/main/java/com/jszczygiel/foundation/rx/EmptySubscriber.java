@@ -1,6 +1,7 @@
 package com.jszczygiel.foundation.rx;
 
-import com.livechat.foundation.helpers.Logger;
+
+import com.jszczygiel.foundation.helpers.LoggerHelper;
 
 import rx.Subscriber;
 
@@ -12,7 +13,7 @@ public class EmptySubscriber<T> extends Subscriber<T> {
 
     @Override
     public void onError(Throwable e) {
-        Logger.log(e);
+        LoggerHelper.log(e);
     }
 
     @Override

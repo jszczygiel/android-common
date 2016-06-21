@@ -16,11 +16,9 @@ public interface Repo<T> {
 
     Observable<T> remove(String id);
 
-    Observable<T> remove(String id, boolean notify);
 
-    void changed(T model);
+    void update(T model);
 
-    void changed(String id);
 
     Observable<Tuple<Integer, T>> observe();
 
