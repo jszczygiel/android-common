@@ -1,0 +1,210 @@
+package com.jszczygiel.foundation.views;
+
+import android.os.Bundle;
+import android.support.annotation.CallSuper;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.FrameLayout;
+
+import com.jszczygiel.R;
+import com.jszczygiel.compkit.adapter.BaseRecyclerAdapter;
+import com.jszczygiel.compkit.adapter.BaseViewModel;
+import com.jszczygiel.compkit.recyclerview.EndlessRecyclerOnScrollListener;
+import com.jszczygiel.compkit.recyclerview.WrapContentLinearLayoutManager;
+import com.jszczygiel.foundation.presenters.interfaces.BaseListPresenter;
+import com.jszczygiel.foundation.views.interfaces.BaseListFragment;
+
+import butterknife.BindView;
+
+public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends BaseFragmentImpl<T> implements BaseListFragment<T> {
+
+    protected BaseRecyclerAdapter adapter;
+    @BindView(R.id.list) RecyclerView recyclerView;
+    @BindView(R.id.empty) FrameLayout emptyView;
+    @Nullable
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    private int firstVisibleItem, lastVisibleItem;
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_base_list;
+    }
+
+    @Override
+    public RecyclerView.ItemAnimator newItemAnimatorInstance() {
+        return new DefaultItemAnimator();
+    }
+
+    @Override
+    public RecyclerView.ItemDecoration[] newItemDecoratorsInstance() {
+        return new RecyclerView.ItemDecoration[0];
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        WrapContentLinearLayoutManager linearLayoutManager = new WrapContentLinearLayoutManager(getContext(), isReverse());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(newItemAnimatorInstance());
+        recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+            @Override
+            public void onScrolledToBeginning() {
+                BaseListFragmentImpl.this.onScrolledToBeginning();
+            }
+
+            @Override
+            public void onLoadMore() {
+                BaseListFragmentImpl.this.onLoadMore();
+            }
+
+            @Override
+            public void onItemsVisibilityChanged(int firstVisibleItem, int lastVisibleItem) {
+                BaseListFragmentImpl.this.onItemsVisibilityChanged(firstVisibleItem, lastVisibleItem);
+            }
+
+            @Override
+            public boolean isLoading() {
+                return BaseListFragmentImpl.this.isLoading();
+            }
+        });
+
+        for (RecyclerView.ItemDecoration decorator : newItemDecoratorsInstance()) {
+            recyclerView.addItemDecoration(decorator);
+        }
+
+        if (savedInstanceState != null) {
+            getPresenter().onRestoreInstanceState(savedInstanceState);
+        } else {
+            getPresenter().onLoad(getArguments());
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getPresenter().onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        adapter.onDetachedFromRecyclerView(null);
+    }
+
+    @Override
+    public boolean isReverse() {
+        return false;
+    }
+
+    @Override
+    public void onLoadMore() {
+
+    }
+
+    @Override
+    public void onScrolledToBeginning() {
+
+    }
+
+    @Override
+    public boolean isLoading() {
+        return false;
+    }
+
+    @Override
+    public void showList() {
+        if (recyclerView != null) {
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+        if (emptyView != null) {
+            emptyView.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showEmpty() {
+        if (recyclerView != null) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        if (emptyView != null) {
+            emptyView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void addOrUpdate(BaseViewModel model) {
+        adapter.addOrUpdate(model);
+    }
+
+    @Override
+    public int getItemCount() {
+        return adapter.getItemCount();
+    }
+
+    @Override
+    public void remove(BaseViewModel model) {
+        adapter.remove(model);
+    }
+
+    @Override
+    public void removeById(String id) {
+        adapter.removeById(id);
+    }
+
+    @CallSuper
+    protected void onItemsVisibilityChanged(int firstVisibleItem, int lastVisibleItem) {
+        this.firstVisibleItem = firstVisibleItem;
+        this.lastVisibleItem = lastVisibleItem;
+    }
+
+    @Override
+    public void scrollToTop() {
+        if (recyclerView != null) {
+            recyclerView.smoothScrollToPosition(0);
+        }
+    }
+
+    @Override
+    public void scrollToPosition(int position) {
+        recyclerView.smoothScrollToPosition(position);
+    }
+
+    @Override
+    public int getCurrentPosition() {
+        if (recyclerView == null) {
+            return RecyclerView.NO_POSITION;
+        }
+        return ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+    }
+
+    @Override
+    public Bundle getParcelableList() {
+        return adapter.getBundle();
+    }
+
+    @Override
+    public void setParcelableList(Bundle bundle) {
+        adapter.setBundle(bundle);
+    }
+
+    @Override
+    public void triggerItemsVisibilityUpdate() {
+        onItemsVisibilityChanged(firstVisibleItem, lastVisibleItem);
+    }
+
+    @Override
+    public void setSelectedItem(String selectedId) {
+        adapter.setSelectedId(selectedId);
+    }
+
+    @Override
+    public String getSelectedId() {
+        return adapter.getSelectedId();
+    }
+
+}
