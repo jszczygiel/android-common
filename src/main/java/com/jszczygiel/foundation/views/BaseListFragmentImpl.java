@@ -17,7 +17,6 @@ import com.jszczygiel.compkit.recyclerview.WrapContentLinearLayoutManager;
 import com.jszczygiel.foundation.presenters.interfaces.BaseListPresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseListFragment;
 
-import butterknife.BindView;
 
 public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends BaseFragmentImpl<T> implements BaseListFragment<T> {
 
