@@ -46,8 +46,6 @@ public class ColorHelper {
 
         int[] mColors;
 
-        int mDefaultColor;
-
         int[][] mStates;
 
         private ColorStateListBuilder(int[]... states) {

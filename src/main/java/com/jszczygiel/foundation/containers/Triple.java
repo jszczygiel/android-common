@@ -1,5 +1,7 @@
 package com.jszczygiel.foundation.containers;
 
+import android.support.annotation.NonNull;
+
 import com.jszczygiel.foundation.helpers.CompareHelper;
 
 public class Triple<T1, T2, T3> implements Comparable<Triple<T1, T2, T3>> {
@@ -30,7 +32,7 @@ public class Triple<T1, T2, T3> implements Comparable<Triple<T1, T2, T3>> {
     }
 
     @Override
-    public int compareTo(Triple<T1, T2, T3> another) {
+    public int compareTo(@NonNull Triple<T1, T2, T3> another) {
         return CompareHelper.compare(hashCode(), another.hashCode());
     }
 }

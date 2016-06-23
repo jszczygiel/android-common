@@ -589,7 +589,7 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
 
     private int findIndexOf(T item, T[] mData, int left, int right, int reason) {
         while (left < right) {
-            final int middle = (left + right) / 2;
+            final int middle = (left + right) >>> 1;
             T myItem = mData[middle];
             final int cmp = mCallback.compare(myItem, item);
             if (cmp < 0) {
@@ -680,7 +680,7 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
         for (int i = size() - 1; i >= 0; i--) {
             T item = get(i);
             if (item.getClass().equals(klass)) {
-                removeItemAtIndex(i,false);
+                removeItemAtIndex(i, false);
             }
         }
     }

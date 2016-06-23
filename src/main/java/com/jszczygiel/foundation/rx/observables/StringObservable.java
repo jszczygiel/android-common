@@ -64,8 +64,8 @@ public class StringObservable {
      *
      * @param <R>
      */
-    public static interface UnsafeFunc0<R> extends Callable<R> {
-        public R call() throws Exception;
+    public interface UnsafeFunc0<R> extends Callable<R> {
+        R call() throws Exception;
     }
 
     /**

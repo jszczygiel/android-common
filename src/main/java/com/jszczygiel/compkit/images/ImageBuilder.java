@@ -259,7 +259,7 @@ public class ImageBuilder {
         ArrayList<BitmapTransformation> transformationList = new ArrayList<>();
 
         for (Integer trans : transformations) {
-            switch (trans.intValue()) {
+            switch (trans) {
                 case Transformations.ROUND:
                     transformationList.add(new RoundTransformation(localContext, padding));
                     break;

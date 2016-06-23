@@ -49,7 +49,7 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(newItemAnimatorInstance());
-        recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
             @Override
             public void onScrolledToBeginning() {
                 BaseListFragmentImpl.this.onScrolledToBeginning();

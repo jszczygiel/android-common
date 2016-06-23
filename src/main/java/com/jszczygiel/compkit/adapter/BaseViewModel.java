@@ -31,6 +31,7 @@ public abstract class BaseViewModel implements Parcelable {
 
     public BaseViewModel(Parcel in) {
         id = in.readString();
+        //noinspection WrongConstant
         type = in.readInt();
     }
 
