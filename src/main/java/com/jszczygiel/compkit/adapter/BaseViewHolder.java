@@ -28,18 +28,12 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
      */
     public static abstract class BaseInteractionListener {
         public void onItemClick(BaseViewModel model) {
-
-        }
-
-        public void onOptionsClick(BaseViewModel model) {
-
         }
 
         public void onDetailsClick(BaseViewModel model) {
         }
 
         public void onHeaderClick(View header, int position, long headerId) {
-
         }
     }
 

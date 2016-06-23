@@ -21,8 +21,8 @@ import rx.Subscriber;
 
 public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
 
-    private final DatabaseReference table;
-    private String userId;
+    protected final DatabaseReference table;
+    protected String userId;
 
     public FirebaseRepoImpl() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -39,8 +39,8 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
 
     public abstract Class<T> getType();
 
-    private void checkPreConditions() {
-        if (TextUtils.isEmpty(userId)) {
+    protected void checkPreConditions() {
+        if (TextUtils.isEmpty(userId) && !isPublic()) {
             throw new DatabaseException("no valid userId");
         }
     }
@@ -51,7 +51,7 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
         return Observable.create(new Observable.OnSubscribe<T>() {
             @Override
             public void call(final Subscriber<? super T> subscriber) {
-                table.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+                getReference().child(id).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         subscriber.onNext(dataSnapshot.getValue(getType()));
@@ -67,13 +67,21 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
         });
     }
 
+    protected DatabaseReference getReference() {
+        if (isPublic()) {
+            return table;
+        } else {
+            return table.child(userId);
+        }
+    }
+
     @Override
     public Observable<T> getAll() {
         checkPreConditions();
         return Observable.create(new Observable.OnSubscribe<T>() {
             @Override
             public void call(final Subscriber<? super T> subscriber) {
-                table.addListenerForSingleValueEvent(new ValueEventListener() {
+                getReference().addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -94,7 +102,7 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
     @Override
     public void add(T model) {
         checkPreConditions();
-        table.child(userId).child(model.getId()).setValue(model);
+        getReference().child(model.getId()).setValue(model);
     }
 
     @Override
@@ -103,7 +111,7 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
         return Observable.create(new Observable.OnSubscribe<T>() {
             @Override
             public void call(final Subscriber<? super T> subscriber) {
-                table.child(userId).addChildEventListener(new ChildEventListener() {
+                getReference().addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
@@ -130,7 +138,7 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
 
                     }
                 });
-                table.child(userId).child(id).removeValue();
+                getReference().child(id).removeValue();
             }
         });
     }
@@ -138,7 +146,7 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
     @Override
     public void update(T model) {
         checkPreConditions();
-        table.child(userId).child(model.getId()).setValue(model);
+        getReference().child(model.getId()).setValue(model);
     }
 
     @Override
@@ -147,7 +155,7 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
         return Observable.create(new Observable.OnSubscribe<Tuple<Integer, T>>() {
             @Override
             public void call(final Subscriber<? super Tuple<Integer, T>> subscriber) {
-                table.child(userId).addChildEventListener(new ChildEventListener() {
+                getReference().addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         subscriber.onNext(new Tuple<>(SubjectAction.ADDED, dataSnapshot.getValue(getType())));
@@ -183,7 +191,7 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
         return Observable.create(new Observable.OnSubscribe<List<T>>() {
             @Override
             public void call(final Subscriber<? super List<T>> subscriber) {
-                table.child(userId).addChildEventListener(new ChildEventListener() {
+                getReference().addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         subscriber.onNext(getAll().toList().toBlocking().first());
@@ -216,6 +224,6 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
     @Override
     public void clear() {
         checkPreConditions();
-        table.child(userId).removeValue();
+        getReference().removeValue();
     }
 }

@@ -16,13 +16,13 @@ public interface Repo<T> {
 
     Observable<T> remove(String id);
 
-
     void update(T model);
-
 
     Observable<Tuple<Integer, T>> observe();
 
     Observable<List<T>> observeAll();
 
     void clear();
+
+    boolean isPublic();
 }
