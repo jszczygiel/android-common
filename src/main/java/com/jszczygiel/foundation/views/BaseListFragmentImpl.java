@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -23,10 +22,8 @@ import butterknife.BindView;
 public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends BaseFragmentImpl<T> implements BaseListFragment<T> {
 
     protected BaseRecyclerAdapter adapter;
-    @BindView(R.id.list) RecyclerView recyclerView;
-    @BindView(R.id.empty) FrameLayout emptyView;
-    @Nullable
-    @BindView(R.id.toolbar) Toolbar toolbar;
+    RecyclerView recyclerView;
+    FrameLayout emptyView;
     private int firstVisibleItem, lastVisibleItem;
 
     @Override
@@ -47,6 +44,8 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        recyclerView= (RecyclerView) view.findViewById(R.id.list);
+        emptyView= (FrameLayout) view.findViewById(R.id.empty);
         WrapContentLinearLayoutManager linearLayoutManager = new WrapContentLinearLayoutManager(getContext(), isReverse());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
