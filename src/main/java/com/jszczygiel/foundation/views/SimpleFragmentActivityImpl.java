@@ -44,7 +44,7 @@ public abstract class SimpleFragmentActivityImpl<T extends Fragment> extends App
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.activity_simple_root, fragment);
-            transaction.commit();
+            transaction.commitNow();
         } else {
             fragment = (T) getSupportFragmentManager().getFragments().get(0);
         }
