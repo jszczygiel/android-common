@@ -38,6 +38,7 @@ public abstract class BaseServiceImpl<T extends BasePresenter> extends Service i
 
     @Override
     public void onDestroy() {
+        getPresenter().onDetach();
         presenter = null;
         super.onDestroy();
     }
