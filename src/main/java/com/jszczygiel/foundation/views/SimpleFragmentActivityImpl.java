@@ -36,10 +36,18 @@ public abstract class SimpleFragmentActivityImpl<T extends Fragment> extends App
             Bundle extras = getIntent().getExtras();
 
             fragment = newFragmentInstance();
+            Bundle fragmentExtras = fragment.getArguments();
             if (extras != null) {
-                fragment.setArguments(extras);
+                if (fragmentExtras == null) {
+                    fragment.setArguments(extras);
+                } else {
+                    fragmentExtras.putAll(extras);
+                    fragment.setArguments(fragmentExtras);
+                }
             } else {
-                fragment.setArguments(new Bundle());
+                if (fragmentExtras == null) {
+                    fragment.setArguments(new Bundle());
+                }
             }
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
