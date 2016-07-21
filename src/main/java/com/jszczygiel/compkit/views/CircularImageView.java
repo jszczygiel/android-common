@@ -35,6 +35,7 @@ public class CircularImageView extends ImageView {
     private Drawable drawable;
     private Paint paint;
     private Paint paintBorder;
+    private Paint backgroundPaint;
 
     //region Constructor & Init Method
     public CircularImageView(final Context context) {
@@ -55,6 +56,9 @@ public class CircularImageView extends ImageView {
         paint = new Paint();
         paint.setAntiAlias(true);
 
+        backgroundPaint = new Paint();
+        backgroundPaint.setAntiAlias(true);
+
         paintBorder = new Paint();
         paintBorder.setAntiAlias(true);
 
@@ -73,7 +77,11 @@ public class CircularImageView extends ImageView {
             shadowRadius = DEFAULT_SHADOW_RADIUS;
             drawShadow(attributes.getFloat(R.styleable.CircularImageView_civ_shadow_radius, shadowRadius), attributes.getColor(R.styleable.CircularImageView_civ_shadow_color, shadowColor));
         }
+
+        int color = attributes.getColor(R.styleable.CircularImageView_civ_inner_color, Color.WHITE);
+        backgroundPaint.setColor(color);
     }
+
     //endregion
 
     //region Set Attr Method
@@ -84,14 +92,16 @@ public class CircularImageView extends ImageView {
     }
 
     public void setBorderColor(int borderColor) {
-        if (paintBorder != null)
+        if (paintBorder != null) {
             paintBorder.setColor(borderColor);
+        }
         invalidate();
     }
 
     public void addShadow() {
-        if (shadowRadius == 0)
+        if (shadowRadius == 0) {
             shadowRadius = DEFAULT_SHADOW_RADIUS;
+        }
         drawShadow(shadowRadius, shadowColor);
         invalidate();
     }
@@ -126,8 +136,9 @@ public class CircularImageView extends ImageView {
         loadBitmap();
 
         // Check if image isn't null
-        if (image == null)
+        if (image == null) {
             return;
+        }
 
         if (!isInEditMode()) {
             canvasSize = canvas.getWidth();
@@ -142,13 +153,16 @@ public class CircularImageView extends ImageView {
         int circleCenter = (int) (canvasSize - (borderWidth * 2)) / 2;
         // Draw Border
         canvas.drawCircle(circleCenter + borderWidth, circleCenter + borderWidth, circleCenter + borderWidth - (shadowRadius + shadowRadius / 2), paintBorder);
+
+        canvas.drawCircle(circleCenter + borderWidth, circleCenter + borderWidth, circleCenter - (shadowRadius + shadowRadius / 2), backgroundPaint);
         // Draw CircularImageView
         canvas.drawCircle(circleCenter + borderWidth, circleCenter + borderWidth, circleCenter - (shadowRadius + shadowRadius / 2), paint);
     }
 
     private void loadBitmap() {
-        if (this.drawable == getDrawable())
+        if (this.drawable == getDrawable()) {
             return;
+        }
 
         this.drawable = getDrawable();
         this.image = drawableToBitmap(this.drawable);
@@ -159,10 +173,12 @@ public class CircularImageView extends ImageView {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         canvasSize = w;
-        if (h < canvasSize)
+        if (h < canvasSize) {
             canvasSize = h;
-        if (image != null)
+        }
+        if (image != null) {
             updateShader();
+        }
     }
 
     private void drawShadow(float shadowRadius, int shadowColor) {
@@ -175,8 +191,9 @@ public class CircularImageView extends ImageView {
     }
 
     private void updateShader() {
-        if (image == null)
+        if (image == null) {
             return;
+        }
 
         // Crop Center Image
         image = cropBitmap(image);
@@ -221,8 +238,9 @@ public class CircularImageView extends ImageView {
         int intrinsicWidth = drawable.getIntrinsicWidth();
         int intrinsicHeight = drawable.getIntrinsicHeight();
 
-        if (!(intrinsicWidth > 0 && intrinsicHeight > 0))
+        if (!(intrinsicWidth > 0 && intrinsicHeight > 0)) {
             return null;
+        }
 
         try {
             // Create Bitmap object out of the drawable
@@ -285,6 +303,10 @@ public class CircularImageView extends ImageView {
         }
 
         return (result + 2);
+    }
+
+    public void setInnerColor(int innerColor) {
+        backgroundPaint.setColor(innerColor);
     }
     //endregion
 }
