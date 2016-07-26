@@ -17,7 +17,6 @@ import com.jszczygiel.compkit.recyclerview.WrapContentLinearLayoutManager;
 import com.jszczygiel.foundation.presenters.interfaces.BaseListPresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseListFragment;
 
-
 public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends BaseFragmentImpl<T> implements BaseListFragment<T> {
 
     protected BaseRecyclerAdapter adapter;
@@ -43,10 +42,11 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView= (RecyclerView) view.findViewById(R.id.list);
-        emptyView= (FrameLayout) view.findViewById(R.id.empty);
+        recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        emptyView = (FrameLayout) view.findViewById(R.id.empty);
         WrapContentLinearLayoutManager linearLayoutManager = new WrapContentLinearLayoutManager(getContext(), isReverse());
         recyclerView.setLayoutManager(linearLayoutManager);
+        adapter = newAdapterInstance();
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(newItemAnimatorInstance());
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
