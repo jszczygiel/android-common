@@ -35,6 +35,7 @@ public abstract class BaseViewModel implements Parcelable {
         type = in.readInt();
     }
 
+
     public static class Types {
 
         public static final int NOT_SET = -1;
