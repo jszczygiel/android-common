@@ -30,6 +30,7 @@
     <dimen name="keyline_space_grid_negative_1">-8dp</dimen>
     <dimen name="keyline_space_grid_negative_2">-16dp</dimen>
     <dimen name="keyline_space_grid_negative_3">-24dp</dimen>
+    <dimen name="keyline_space_grid_negative_3_half">-28dp</dimen>
     <dimen name="keyline_space_grid_negative_4">-32dp</dimen>
 
 </resources>

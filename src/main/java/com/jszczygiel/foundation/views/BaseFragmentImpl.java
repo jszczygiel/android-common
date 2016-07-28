@@ -114,14 +114,6 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
         getActivity().setIntent(intent);
     }
 
-    public void setTitle(String text) {
-        getActivity().setTitle(text);
-    }
-
-    public void setTitle(int textId) {
-        getActivity().setTitle(textId);
-    }
-
 
     @ColorInt
     public int getColor(@ColorRes int colorId) {
