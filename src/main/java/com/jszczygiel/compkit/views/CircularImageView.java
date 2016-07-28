@@ -54,7 +54,7 @@ public class CircularImageView extends ImageView {
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         // Init paint
         paint = new Paint();
-        paint.setAntiAlias(true);
+        paint.setAntiAlias(false);
 
         backgroundPaint = new Paint();
         backgroundPaint.setAntiAlias(true);

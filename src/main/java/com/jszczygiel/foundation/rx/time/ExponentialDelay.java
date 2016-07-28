@@ -9,7 +9,7 @@ public class ExponentialDelay extends Delay {
     private final double growBy;
     private final int powersOf;
 
-    ExponentialDelay(TimeUnit unit, long upper, long lower, double growBy, int powersOf) {
+    public ExponentialDelay(TimeUnit unit, long upper, long lower, double growBy, int powersOf) {
         super(unit);
         this.lower = lower;
         this.upper = upper;

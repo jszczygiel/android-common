@@ -75,7 +75,9 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        if(unbinder!=null) {
+            unbinder.unbind();
+        }
     }
 
     @Nullable
