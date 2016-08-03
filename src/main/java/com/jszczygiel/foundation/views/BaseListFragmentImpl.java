@@ -6,7 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.jszczygiel.R;
@@ -39,11 +41,13 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
         return new RecyclerView.ItemDecoration[0];
     }
 
+    @Nullable
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         emptyView = (FrameLayout) view.findViewById(R.id.empty);
+
         WrapContentLinearLayoutManager linearLayoutManager = new WrapContentLinearLayoutManager(getContext(), isReverse());
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = newAdapterInstance();
@@ -74,12 +78,7 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
         for (RecyclerView.ItemDecoration decorator : newItemDecoratorsInstance()) {
             recyclerView.addItemDecoration(decorator);
         }
-
-        if (savedInstanceState != null) {
-            getPresenter().onRestoreInstanceState(savedInstanceState);
-        } else {
-            getPresenter().onLoad(getArguments());
-        }
+        return view;
     }
 
     @Override

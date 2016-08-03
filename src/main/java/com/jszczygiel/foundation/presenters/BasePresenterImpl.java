@@ -36,6 +36,9 @@ public abstract class BasePresenterImpl<T> implements BasePresenter<T> {
         }
     }
 
+    public boolean isTablet() {
+        return isTablet;
+    }
 
     @Override
     public final boolean isViewAvailable() {

@@ -8,6 +8,8 @@ import rx.Observable;
 
 public interface Repo<T> {
 
+    void setUserId(String userId);
+
     Observable<T> get(String id);
 
     Observable<T> getAll();

@@ -1,4 +1,4 @@
-package com.jszczygiel.compkit.views;
+package com.jszczygiel.compkit.customviews;
 
 import android.content.Context;
 import android.content.res.Resources;

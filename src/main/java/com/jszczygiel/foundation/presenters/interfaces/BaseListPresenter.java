@@ -4,5 +4,4 @@ import android.os.Bundle;
 
 public interface BaseListPresenter<T> extends BasePresenter<T>{
 
-    void onLoad(Bundle arguments);
 }

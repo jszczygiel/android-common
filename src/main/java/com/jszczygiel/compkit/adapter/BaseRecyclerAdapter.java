@@ -60,17 +60,15 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
 
             @Override
             public boolean areContentsTheSame(BaseViewModel oldItem, BaseViewModel newItem) {
-                return checkIfContentIsEqual(oldItem, newItem);
+                return !(oldItem == null || newItem == null) && oldItem.equals(newItem);
             }
 
             @Override
             public boolean areItemsTheSame(BaseViewModel item1, BaseViewModel item2) {
-                return !(item1 == null || item2 == null) && item1.equals(item2);
+                return !(item1 == null || item2 == null) && item1.hashCode() == item2.hashCode();
             }
         });
     }
-
-    protected abstract boolean checkIfContentIsEqual(BaseViewModel oldItem, BaseViewModel newItem);
 
     protected abstract Comparator<BaseViewModel> getComparator();
 

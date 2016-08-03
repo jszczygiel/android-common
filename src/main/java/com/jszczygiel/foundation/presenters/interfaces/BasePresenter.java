@@ -24,4 +24,6 @@ public interface BasePresenter<T> {
     void onRestoreInstanceState(Bundle savedInstanceState);
 
     void setOrientation(int orientation);
+
+    void onLoad(Bundle arguments);
 }

@@ -18,7 +18,7 @@ import com.jszczygiel.foundation.views.interfaces.BaseFragment;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment implements BaseFragment<T>{
+public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment implements BaseFragment<T> {
 
     /**
      * instance of presenter
@@ -84,8 +84,18 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutId(), container, false);
-        unbinder=ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState != null) {
+            getPresenter().onRestoreInstanceState(savedInstanceState);
+        } else {
+            getPresenter().onLoad(getArguments());
+        }
     }
 
     protected abstract int getLayoutId();
@@ -113,7 +123,6 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     public void setIntent(Intent intent) {
         getActivity().setIntent(intent);
     }
-
 
     @ColorInt
     public int getColor(@ColorRes int colorId) {
