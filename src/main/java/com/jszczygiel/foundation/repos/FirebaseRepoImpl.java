@@ -33,7 +33,6 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
 
     public FirebaseRepoImpl() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         table = database.getReference(getTableName());
         collectionSubject = PublishSubject.createWith(PublishSubject.BUFFER);
         models = new ConcurrentHashMap<>();
@@ -122,8 +121,8 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
                             T model = dataSnapshot.getValue(getType());
                             if (model != null) {
                                 addInternal(model);
+                                subscriber.onNext(model);
                             }
-                            subscriber.onNext(model);
                             subscriber.onCompleted();
                         }
 

@@ -480,8 +480,8 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
         throwIfMerging();
         final T existing = get(index);
         // assume changed if the same object is given back
-        boolean contentsChanged = !mCallback.areItemsTheSame(existing,item) && !mCallback.areContentsTheSame(existing, item);
-        if (!mCallback.areItemsTheSame(existing,item)) {
+        boolean contentsChanged = existing == item || !mCallback.areContentsTheSame(existing, item);
+        if (!mCallback.areItemsTheSame(existing, item)) {
             // different items, we can use comparison and may avoid lookup
             final int cmp = mCallback.compare(existing, item);
             if (cmp == 0) {

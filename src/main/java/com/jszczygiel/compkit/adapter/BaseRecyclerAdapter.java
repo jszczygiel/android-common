@@ -56,6 +56,7 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
 
             @Override
             public void onChanged(int position, int count) {
+                notifyItemRangeChanged(position, count);
             }
 
             @Override
@@ -138,9 +139,7 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
     }
 
     private synchronized int updateInternal(int index, BaseViewModel toUpdate, Object payload) {
-        if (collection.updateItemAt(index, toUpdate)) {
-            notifyItemChanged(index, payload);
-        }
+        collection.updateItemAt(index, toUpdate);
         return index;
     }
 

@@ -49,6 +49,16 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
     }
 
     @Override
+    public void setUserId(String userId) {
+
+    }
+
+    @Override
+    public boolean isPublic() {
+        return false;
+    }
+
+    @Override
     public void update(T model) {
         subject.onNext(new Tuple<>(SubjectAction.CHANGED, model));
     }

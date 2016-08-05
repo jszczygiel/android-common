@@ -72,7 +72,9 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.2.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.github.justzak:dilatingdotsprogressbar:1.0.1'
-
+    compile('com.github.ozodrukh:CircularReveal:2.0.1@aar') {
+        transitive = true;
+    }
 
     //data
     compile 'com.google.firebase:firebase-database:9.2.1'

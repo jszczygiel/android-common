@@ -137,4 +137,9 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     public String getTitle() {
         return (String) getActivity().getTitle();
     }
+
+    @Override
+    public void setResult(int resultCode, Intent data) {
+        getActivity().setResult(resultCode, data);
+    }
 }
