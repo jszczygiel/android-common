@@ -142,4 +142,9 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     public void setResult(int resultCode, Intent data) {
         getActivity().setResult(resultCode, data);
     }
+
+    @Override
+    public void setResult(int resultCode) {
+        getActivity().setResult(resultCode);
+    }
 }

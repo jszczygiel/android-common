@@ -32,8 +32,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
 
         metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        Random random = new Random();
-
+Random random=new Random();
         x = getIntent().getIntExtra(EXTRA_X, random.nextInt(metrics.widthPixels));
         y = getIntent().getIntExtra(EXTRA_Y, random.nextInt(metrics.heightPixels));
 

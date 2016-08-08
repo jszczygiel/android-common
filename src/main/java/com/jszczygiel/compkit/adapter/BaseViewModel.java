@@ -16,8 +16,8 @@ public abstract class BaseViewModel implements Parcelable {
     public static final int NOT_SET = -1;
 
     @Types.Type
-    private final int type;
-    private final String id;
+    protected final int type;
+    protected final String id;
     private Triple<Integer, Long, Long> oldChatState;
 
     public BaseViewModel(int type) {

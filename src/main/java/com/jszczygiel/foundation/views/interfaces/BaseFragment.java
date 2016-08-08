@@ -19,4 +19,6 @@ public interface BaseFragment<T extends BasePresenter> {
     void finish();
 
     void setResult(int resultCode, Intent data);
+
+    void setResult(int resultCode);
 }
