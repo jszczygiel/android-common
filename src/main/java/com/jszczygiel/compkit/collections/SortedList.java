@@ -485,7 +485,9 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
             // different items, we can use comparison and may avoid lookup
             final int cmp = mCallback.compare(existing, item);
             if (cmp == 0) {
-                mData[index] = item;
+                if (contentsChanged || mData[index] == null) {
+                    mData[index] = item;
+                }
                 if (contentsChanged) {
                     mCallback.onChanged(index, 1);
                 }
@@ -496,8 +498,14 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
             mCallback.onChanged(index, 1);
         }
         // TODO this done in 1 pass to avoid shifting twice.
-        removeItemAtIndex(index, false);
-        int newIndex = add(item, false);
+        int newIndex;
+        if (contentsChanged) {
+            removeItemAtIndex(index, false);
+            newIndex = add(item, false);
+        } else {
+            removeItemAtIndex(index, false);
+            newIndex = add(existing, false);
+        }
         if (index != newIndex) {
             mCallback.onMoved(index, newIndex);
         }

@@ -76,18 +76,23 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
         }
     }
 
-    private void addInternal(T model) {
+    protected void addInternal(T model) {
         models.put(model.getId(), model);
         subject.onNext(new Tuple<>(SubjectAction.ADDED, model));
     }
 
-    private void updateInternal(T model) {
+    protected void updateInternal(T model) {
         models.put(model.getId(), model);
         subject.onNext(new Tuple<>(SubjectAction.CHANGED, model));
     }
 
-    private void removeInternal(String id) {
+    protected void removeInternal(String id) {
         subject.onNext(new Tuple<>(SubjectAction.REMOVED, models.remove(id)));
+    }
+
+    @Override
+    public void notify(T model) {
+        updateInternal(model);
     }
 
     public abstract String getTableName();

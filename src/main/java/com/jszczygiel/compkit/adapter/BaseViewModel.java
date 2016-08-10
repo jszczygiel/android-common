@@ -46,17 +46,6 @@ public abstract class BaseViewModel implements Parcelable {
         public @interface Type {
         }
 
-        @Type
-        int navigationType;
-
-        public Types(@Type int navigationType) {
-            this.navigationType = navigationType;
-        }
-
-        @Type
-        public int getType() {
-            return navigationType;
-        }
     }
 
     @Types.Type
