@@ -20,6 +20,8 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
     private int x;
     private int y;
 
+    private boolean isReveled;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_reveal;
@@ -32,7 +34,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
 
         metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-Random random=new Random();
+        Random random = new Random();
         x = getIntent().getIntExtra(EXTRA_X, random.nextInt(metrics.widthPixels));
         y = getIntent().getIntExtra(EXTRA_Y, random.nextInt(metrics.heightPixels));
 
@@ -46,6 +48,7 @@ Random random=new Random();
                         @Override
                         public void onAnimationEnd(Animator a) {
                             animator = null;
+                            isReveled = true;
                         }
                     });
                     animator.start();
@@ -57,7 +60,14 @@ Random random=new Random();
 
     @Override
     public void finish() {
-        if (animator == null) {
+        if (!isReveled) {
+            if (animator != null) {
+                animator.cancel();
+                animator = null;
+            }
+            super.finish();
+            overridePendingTransition(0, 0);
+        } else if (animator == null) {
             animator = AnimationHelper.circularReveal(container, x, y, metrics.widthPixels, 0, new AnimationHelper.SimpleAnimatorListener() {
                 @Override
                 public void onAnimationEnd(Animator a) {
