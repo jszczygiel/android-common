@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,10 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = newAdapterInstance();
         recyclerView.setAdapter(adapter);
+        ItemTouchHelper touchHelper = createTouchHelperInstance();
+        if (touchHelper != null) {
+            touchHelper.attachToRecyclerView(recyclerView);
+        }
         recyclerView.setItemAnimator(newItemAnimatorInstance());
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
             @Override
@@ -79,6 +84,10 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
             recyclerView.addItemDecoration(decorator);
         }
         return view;
+    }
+
+    public ItemTouchHelper createTouchHelperInstance() {
+        return null;
     }
 
     @Override
