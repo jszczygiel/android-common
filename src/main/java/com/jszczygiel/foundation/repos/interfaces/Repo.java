@@ -20,7 +20,6 @@ public interface Repo<T> {
 
     void update(T model);
 
-    void notify(T model);
 
     Observable<Tuple<Integer, T>> observe();
 

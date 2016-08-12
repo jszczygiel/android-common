@@ -90,10 +90,6 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
         subject.onNext(new Tuple<>(SubjectAction.REMOVED, models.remove(id)));
     }
 
-    @Override
-    public void notify(T model) {
-        updateInternal(model);
-    }
 
     public abstract String getTableName();
 
@@ -160,6 +156,9 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
     public void update(T model) {
         checkPreConditions();
         getReference().child(model.getId()).setValue(model);
+        if (models.get(model.getId()).equals(model)) {
+            updateInternal(model);
+        }
     }
 
     @Override

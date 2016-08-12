@@ -59,6 +59,12 @@ public abstract class SimpleFragmentActivityImpl<T extends Fragment> extends App
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        setIntent(null);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
