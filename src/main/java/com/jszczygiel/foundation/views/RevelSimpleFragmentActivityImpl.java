@@ -1,6 +1,7 @@
 package com.jszczygiel.foundation.views;
 
 import android.animation.Animator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
@@ -78,5 +79,28 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
             });
             animator.start();
         }
+    }
+
+    @Override
+    public boolean navigateUpTo(final Intent upIntent) {
+        if (!isReveled) {
+            if (animator != null) {
+                animator.cancel();
+                animator = null;
+            }
+            overridePendingTransition(0, 0);
+            return super.navigateUpTo(upIntent);
+        } else if (animator == null) {
+            animator = AnimationHelper.circularReveal(container, x, y, metrics.widthPixels, 0, new AnimationHelper.SimpleAnimatorListener() {
+                @Override
+                public void onAnimationEnd(Animator a) {
+                    container.setVisibility(View.GONE);
+                    RevelSimpleFragmentActivityImpl.super.navigateUpTo(upIntent);
+                    overridePendingTransition(0, 0);
+                }
+            });
+            animator.start();
+        }
+        return true;
     }
 }

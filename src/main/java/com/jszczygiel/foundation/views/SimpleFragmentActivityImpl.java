@@ -112,4 +112,6 @@ public abstract class SimpleFragmentActivityImpl<T extends Fragment> extends App
                 .addToBackStack(null)
                 .commit();
     }
+
+
 }
