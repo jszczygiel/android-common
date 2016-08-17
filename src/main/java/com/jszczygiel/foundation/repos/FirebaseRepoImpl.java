@@ -11,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jszczygiel.foundation.containers.Tuple;
 import com.jszczygiel.foundation.enums.SubjectAction;
+import com.jszczygiel.foundation.helpers.LoggerHelper;
 import com.jszczygiel.foundation.repos.interfaces.BaseModel;
 import com.jszczygiel.foundation.repos.interfaces.Repo;
 import com.jszczygiel.foundation.rx.PublishSubject;
@@ -70,7 +71,7 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    LoggerHelper.log(databaseError.toException());
                 }
             });
         }
@@ -89,7 +90,6 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
     protected void removeInternal(String id) {
         subject.onNext(new Tuple<>(SubjectAction.REMOVED, models.remove(id)));
     }
-
 
     public abstract String getTableName();
 
@@ -111,7 +111,6 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
 
     @Override
     public Observable<T> get(final String id) {
-        checkPreConditions();
         if (models.get(id) == null) {
             return Observable.create(new Observable.OnSubscribe<T>() {
                 @Override
@@ -156,7 +155,8 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
     public void update(T model) {
         checkPreConditions();
         getReference().child(model.getId()).setValue(model);
-        if (models.get(model.getId()).equals(model)) {
+        T oldModel = models.get(model.getId());
+        if (oldModel != null && oldModel.equals(model)) {
             updateInternal(model);
         }
     }
