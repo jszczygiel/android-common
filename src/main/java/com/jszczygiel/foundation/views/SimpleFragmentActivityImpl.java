@@ -51,6 +51,7 @@ public abstract class SimpleFragmentActivityImpl<T extends Fragment> extends App
             }
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.fade_in,android.R.anim.fade_out);
             transaction.replace(R.id.activity_simple_root, fragment);
             transaction.commitNow();
         } else {

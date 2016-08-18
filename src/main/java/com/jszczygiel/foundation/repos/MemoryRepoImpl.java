@@ -54,6 +54,11 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
     }
 
     @Override
+    public int count() {
+        return models.size();
+    }
+
+    @Override
     public boolean isPublic() {
         return false;
     }

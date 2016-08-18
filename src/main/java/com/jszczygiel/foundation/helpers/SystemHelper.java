@@ -8,6 +8,7 @@ import android.os.Build;
 import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -70,5 +71,11 @@ public class SystemHelper {
             //Default to return 1 core
             return 1;
         }
+    }
+
+    public static void showKeyboard(EditText message) {
+        InputMethodManager keyboard = (InputMethodManager)
+                message.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        keyboard.showSoftInput(message, 0);
     }
 }

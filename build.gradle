@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0-beta1'
+        classpath 'com.android.tools.build:gradle:2.1.2'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
         classpath 'com.google.gms:google-services:3.0.0'
@@ -39,10 +39,10 @@ group='com.github.jszczygiel'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 15
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -72,15 +72,19 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.2.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.github.justzak:dilatingdotsprogressbar:1.0.1'
-    compile 'com.github.ozodrukh:CircularReveal:2.0.1@aar'
+    compile('com.github.ozodrukh:CircularReveal:2.0.1@aar') {
+        transitive = true;
+    }
 
     //data
-    compile 'com.google.firebase:firebase-database:9.4.0'
-    compile 'com.google.firebase:firebase-auth:9.4.0'
+    compile 'com.google.firebase:firebase-database:9.2.1'
+    compile 'com.google.firebase:firebase-auth:9.2.1'
+    compile 'com.google.android.gms:play-services-auth:9.2.1'
 
     //data
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.1'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.1'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.7.4'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.4'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.4'
 
     //rx
     compile 'io.reactivex:rxandroid:1.2.0'
@@ -88,5 +92,11 @@ dependencies {
     compile 'io.reactivex:rxjava-math:1.0.0'
     compile 'com.artemzin.rxjava:proguard-rules:1.1.5.0'
     compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+
+    testCompile 'junit:junit:4.12'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support:support-annotations:24.1.1'
+
 
 }

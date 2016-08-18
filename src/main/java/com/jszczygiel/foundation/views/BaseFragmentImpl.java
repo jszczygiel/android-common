@@ -52,7 +52,9 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     }
 
     private void setPresenter() {
-        this.presenter = initializePresenter();
+        if (presenter == null) {
+            this.presenter = initializePresenter();
+        }
     }
 
     @Override
@@ -68,14 +70,24 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     @CallSuper
     public void onDestroy() {
         super.onDestroy();
+        if (!isStaticView()) {
+            clear();
+        }
+    }
+
+    public void clear() {
         getPresenter().onDetach();
         presenter = null;
+    }
+
+    public boolean isStaticView() {
+        return false;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(unbinder!=null) {
+        if (unbinder != null) {
             unbinder.unbind();
         }
     }

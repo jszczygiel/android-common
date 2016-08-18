@@ -1,13 +1,15 @@
 package com.jszczygiel.compkit.animators;
 
 import android.animation.Animator;
+import android.graphics.Color;
 import android.view.View;
-import io.codetail.animation.ViewAnimationUtils;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 
 import com.jszczygiel.foundation.containers.Tuple;
+
+import io.codetail.animation.ViewAnimationUtils;
 
 public class AnimationHelper {
 
@@ -77,5 +79,19 @@ public class AnimationHelper {
         public void onAnimationRepeat(Animation animation) {
 
         }
+    }
+
+    public static int darker(int color, float factor) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= factor;
+        return Color.HSVToColor(hsv);
+    }
+
+    public static int lighter(int color, float factor) {
+        int red = (int) ((Color.red(color) * (1 - factor) / 255 + factor) * 255);
+        int green = (int) ((Color.green(color) * (1 - factor) / 255 + factor) * 255);
+        int blue = (int) ((Color.blue(color) * (1 - factor) / 255 + factor) * 255);
+        return Color.argb(Color.alpha(color), red, green, blue);
     }
 }
