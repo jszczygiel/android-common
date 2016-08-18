@@ -77,6 +77,11 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
         }
     }
 
+    @Override
+    public int count() {
+        return models.size();
+    }
+
     protected void addInternal(T model) {
         models.put(model.getId(), model);
         subject.onNext(new Tuple<>(SubjectAction.ADDED, model));

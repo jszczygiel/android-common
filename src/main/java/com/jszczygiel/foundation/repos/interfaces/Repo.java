@@ -20,7 +20,6 @@ public interface Repo<T> {
 
     void update(T model);
 
-
     Observable<Tuple<Integer, T>> observe();
 
     Observable<List<T>> observeAll();
@@ -28,4 +27,7 @@ public interface Repo<T> {
     void clear();
 
     boolean isPublic();
+
+    int count();
+
 }
