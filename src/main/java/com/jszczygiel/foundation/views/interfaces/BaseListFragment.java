@@ -44,9 +44,9 @@ public interface BaseListFragment<T extends BaseListPresenter> extends BaseFragm
 
     BaseRecyclerAdapter newAdapterInstance();
 
-    RecyclerView.ItemAnimator newItemAnimatorInstance();
+    RecyclerView.ItemAnimator createItemAnimatorInstance();
 
-    RecyclerView.ItemDecoration[] newItemDecoratorsInstance();
+    RecyclerView.ItemDecoration[] createItemDecoratorsInstances();
 
     boolean isReverse();
 }

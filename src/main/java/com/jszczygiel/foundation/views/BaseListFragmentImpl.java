@@ -33,12 +33,12 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
     }
 
     @Override
-    public RecyclerView.ItemAnimator newItemAnimatorInstance() {
+    public RecyclerView.ItemAnimator createItemAnimatorInstance() {
         return new DefaultItemAnimator();
     }
 
     @Override
-    public RecyclerView.ItemDecoration[] newItemDecoratorsInstance() {
+    public RecyclerView.ItemDecoration[] createItemDecoratorsInstances() {
         return new RecyclerView.ItemDecoration[0];
     }
 
@@ -57,7 +57,7 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
         if (touchHelper != null) {
             touchHelper.attachToRecyclerView(recyclerView);
         }
-        recyclerView.setItemAnimator(newItemAnimatorInstance());
+        recyclerView.setItemAnimator(createItemAnimatorInstance());
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
             @Override
             public void onScrolledToBeginning() {
@@ -80,11 +80,12 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
             }
         });
 
-        for (RecyclerView.ItemDecoration decorator : newItemDecoratorsInstance()) {
+        for (RecyclerView.ItemDecoration decorator : createItemDecoratorsInstances()) {
             recyclerView.addItemDecoration(decorator);
         }
         return view;
     }
+
 
     public ItemTouchHelper createTouchHelperInstance() {
         return null;

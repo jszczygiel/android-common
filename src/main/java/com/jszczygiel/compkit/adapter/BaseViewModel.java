@@ -36,6 +36,7 @@ public abstract class BaseViewModel implements Parcelable {
     }
 
 
+
     public static class Types {
 
         public static final int NOT_SET = -1;

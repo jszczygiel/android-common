@@ -36,7 +36,6 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
         public void onHeaderClick(View header, int position, long headerId) {
         }
 
-
     }
 
     public BaseViewHolder(View itemView, Context context) {
