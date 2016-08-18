@@ -3,11 +3,16 @@ package com.jszczygiel.foundation.views;
 import android.animation.Animator;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.jszczygiel.R;
 import com.jszczygiel.compkit.animators.AnimationHelper;
@@ -19,7 +24,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
     public static final String EXTRA_X = "extra_x";
     public static final String EXTRA_Y = "extra_y";
     public static final String EXTRA_COLOR = "extra_color";
-    private View container;
+    private FrameLayout container;
     private Animator animator;
     private int x;
     private int y;
@@ -27,6 +32,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
 
     private boolean isReveled;
     protected Point point;
+    private TransitionDrawable transition;
 
     @Override
     public int getLayoutId() {
@@ -42,17 +48,24 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
 
         x = getX();
         y = getY();
-        int transitionColor = getIntent().getIntExtra(EXTRA_COLOR, -1);
 
-        container = findViewById(com.jszczygiel.R.id.activity_simple_root);
-        if (transitionColor != -1) {
-            container.setBackgroundColor(transitionColor);
-        }
+        final int color = getIntent().getIntExtra(RevelSimpleFragmentActivityImpl.EXTRA_COLOR, Color.TRANSPARENT);
+
+        container = (FrameLayout) findViewById(R.id.activity_simple_root);
         container.post(new Runnable() {
             @Override
             public void run() {
+                if (color != Color.TRANSPARENT) {
+                    transition = new TransitionDrawable(new Drawable[]{new ColorDrawable(color), getFragmentView().getBackground()});
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        getFragmentView().setBackground(transition);
+                    } else {
+                        getFragmentView().setBackgroundDrawable(transition);
+                    }
+                    transition.startTransition(AnimationHelper.DURATION);
+                }
                 if (animator == null) {
-                    animator = AnimationHelper.circularReveal(container, x, y, 0, point.x, new AnimationHelper.SimpleAnimatorListener() {
+                    animator = AnimationHelper.circularReveal(container, x, y, 0, point.y, new AnimationHelper.SimpleAnimatorListener() {
                         @Override
                         public void onAnimationEnd(Animator a) {
                             animator = null;
@@ -66,6 +79,10 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
 
     }
 
+    private View getFragmentView() {
+        return container.getChildAt(0);
+    }
+
     @Override
     public void finish() {
         if (!isReveled) {
@@ -76,7 +93,10 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
             super.finish();
             overridePendingTransition(0, 0);
         } else if (animator == null) {
-            animator = AnimationHelper.circularReveal(container, x, y, point.x, 0, new AnimationHelper.SimpleAnimatorListener() {
+            if (transition != null) {
+                transition.reverseTransition(AnimationHelper.DURATION);
+            }
+            animator = AnimationHelper.circularReveal(container, x, y, point.y, 0, new AnimationHelper.SimpleAnimatorListener() {
                 @Override
                 public void onAnimationEnd(Animator a) {
                     container.setVisibility(View.GONE);
@@ -111,7 +131,10 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
             overridePendingTransition(0, 0);
             return super.navigateUpTo(upIntent);
         } else if (animator == null) {
-            animator = AnimationHelper.circularReveal(container, x, y, point.x, 0, new AnimationHelper.SimpleAnimatorListener() {
+            if (transition != null) {
+                transition.reverseTransition(AnimationHelper.DURATION);
+            }
+            animator = AnimationHelper.circularReveal(container, x, y, point.y, 0, new AnimationHelper.SimpleAnimatorListener() {
                 @Override
                 public void onAnimationEnd(Animator a) {
                     container.setVisibility(View.GONE);

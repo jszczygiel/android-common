@@ -1,6 +1,7 @@
 package com.jszczygiel.foundation.views;
 
 import android.content.Intent;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.ColorInt;
@@ -26,6 +27,7 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     private T presenter;
     private boolean isTablet;
     private Unbinder unbinder;
+    private TransitionDrawable transition;
 
     /**
      * @return provides new instance of presenter
@@ -73,6 +75,7 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
         if (!isStaticView()) {
             clear();
         }
+
     }
 
     public void clear() {
@@ -96,6 +99,7 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutId(), container, false);
+
         unbinder = ButterKnife.bind(this, view);
         return view;
     }

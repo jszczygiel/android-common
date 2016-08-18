@@ -37,22 +37,17 @@ public abstract class SimpleFragmentActivityImpl<T extends Fragment> extends App
 
             fragment = newFragmentInstance();
             Bundle fragmentExtras = fragment.getArguments();
+            if (fragmentExtras == null) {
+                fragmentExtras = new Bundle();
+            }
             if (extras != null) {
-                if (fragmentExtras == null) {
-                    fragment.setArguments(extras);
-                } else {
-                    fragmentExtras.putAll(extras);
-                    fragment.setArguments(fragmentExtras);
-                }
-            } else {
-                if (fragmentExtras == null) {
-                    fragment.setArguments(new Bundle());
-                }
+                fragmentExtras.putAll(extras);
             }
 
+            fragment.setArguments(fragmentExtras);
+
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(android.R.anim.fade_in,android.R.anim.fade_out);
-            transaction.replace(R.id.activity_simple_root, fragment);
+            transaction.add(R.id.activity_simple_root, fragment);
             transaction.commitNow();
         } else {
             fragment = (T) getSupportFragmentManager().getFragments().get(0);
@@ -113,6 +108,5 @@ public abstract class SimpleFragmentActivityImpl<T extends Fragment> extends App
                 .addToBackStack(null)
                 .commit();
     }
-
 
 }

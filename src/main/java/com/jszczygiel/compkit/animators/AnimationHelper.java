@@ -2,6 +2,7 @@ package com.jszczygiel.compkit.animators;
 
 import android.animation.Animator;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -13,7 +14,7 @@ import io.codetail.animation.ViewAnimationUtils;
 
 public class AnimationHelper {
 
-    private static final long DURATION = 266;
+    public static final int DURATION = 266;
 
     private AnimationHelper() {
     }
@@ -38,6 +39,19 @@ public class AnimationHelper {
         int[] outLocation = new int[2];
         view.getLocationOnScreen(outLocation);
         return new Tuple<>(outLocation[0] + view.getWidth() / 2, outLocation[1]);
+    }
+
+    public static int getColor(View view) {
+
+        if (view.getBackground() instanceof ColorDrawable) {
+            return ((ColorDrawable) view.getBackground()).getColor();
+        }
+        Object tag = view.getTag();
+        if (tag instanceof String) {
+            return Color.parseColor((String) tag);
+        }
+
+        return Color.TRANSPARENT;
     }
 
     public static class SimpleAnimatorListener implements Animator.AnimatorListener {

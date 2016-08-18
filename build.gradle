@@ -77,9 +77,9 @@ dependencies {
     }
 
     //data
-    compile 'com.google.firebase:firebase-database:9.2.1'
-    compile 'com.google.firebase:firebase-auth:9.2.1'
-    compile 'com.google.android.gms:play-services-auth:9.2.1'
+    compile 'com.google.firebase:firebase-database:9.4.0'
+    compile 'com.google.firebase:firebase-auth:9.4.0'
+    compile 'com.google.android.gms:play-services-auth:9.4.0'
 
     //data
     compile 'com.fasterxml.jackson.core:jackson-core:2.7.4'
