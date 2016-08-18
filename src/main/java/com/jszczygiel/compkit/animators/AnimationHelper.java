@@ -3,6 +3,9 @@ package com.jszczygiel.compkit.animators;
 import android.animation.Animator;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -15,6 +18,7 @@ import io.codetail.animation.ViewAnimationUtils;
 public class AnimationHelper {
 
     public static final int DURATION = 266;
+    public static final int LONG_DURATION = DURATION*4;
 
     private AnimationHelper() {
     }
@@ -52,6 +56,23 @@ public class AnimationHelper {
         }
 
         return Color.TRANSPARENT;
+    }
+
+    public static void transitionBackground(View collapsingToolbar, Drawable background) {
+        Drawable drawable = collapsingToolbar.getBackground();
+        if (drawable instanceof TransitionDrawable) {
+            drawable = ((TransitionDrawable) drawable).getDrawable(1);
+        } else if (drawable == null) {
+            drawable = new ColorDrawable(Color.TRANSPARENT);
+        }
+        TransitionDrawable transitionDrawable = new TransitionDrawable(new Drawable[]{drawable, background});
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            collapsingToolbar.setBackground(transitionDrawable);
+        } else {
+            collapsingToolbar.setBackgroundDrawable(transitionDrawable);
+        }
+        transitionDrawable.startTransition(LONG_DURATION);
+
     }
 
     public static class SimpleAnimatorListener implements Animator.AnimatorListener {
