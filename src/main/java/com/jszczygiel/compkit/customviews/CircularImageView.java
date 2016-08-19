@@ -98,6 +98,15 @@ public class CircularImageView extends ImageView {
         invalidate();
     }
 
+    private void drawShadow(float shadowRadius, int shadowColor) {
+        this.shadowRadius = shadowRadius;
+        this.shadowColor = shadowColor;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            setLayerType(LAYER_TYPE_SOFTWARE, paintBorder);
+        }
+        paintBorder.setShadowLayer(shadowRadius, 0.0f, shadowRadius / 2, shadowColor);
+    }
+
     public void addShadow() {
         if (shadowRadius == 0) {
             shadowRadius = DEFAULT_SHADOW_RADIUS;
@@ -114,14 +123,22 @@ public class CircularImageView extends ImageView {
     public void setShadowColor(int shadowColor) {
         drawShadow(shadowRadius, shadowColor);
         invalidate();
-    }
-
-    @Override
+    }    @Override
     public ScaleType getScaleType() {
         return SCALE_TYPE;
     }
 
     @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        canvasSize = w;
+        if (h < canvasSize) {
+            canvasSize = h;
+        }
+        if (image != null) {
+            updateShader();
+        }
+    }    @Override
     public void setScaleType(ScaleType scaleType) {
         if (scaleType != SCALE_TYPE) {
             throw new IllegalArgumentException(String.format("ScaleType %s not supported. ScaleType.CENTER_CROP is used by default. So you don't need to use ScaleType.", scaleType));
@@ -129,7 +146,9 @@ public class CircularImageView extends ImageView {
     }
     //endregion
 
-    //region Draw Method
+    public void setInnerColor(int innerColor) {
+        backgroundPaint.setColor(innerColor);
+    }    //region Draw Method
     @Override
     public void onDraw(Canvas canvas) {
         // Load the bitmap
@@ -169,26 +188,9 @@ public class CircularImageView extends ImageView {
         updateShader();
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        canvasSize = w;
-        if (h < canvasSize) {
-            canvasSize = h;
-        }
-        if (image != null) {
-            updateShader();
-        }
-    }
 
-    private void drawShadow(float shadowRadius, int shadowColor) {
-        this.shadowRadius = shadowRadius;
-        this.shadowColor = shadowColor;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            setLayerType(LAYER_TYPE_SOFTWARE, paintBorder);
-        }
-        paintBorder.setShadowLayer(shadowRadius, 0.0f, shadowRadius / 2, shadowColor);
-    }
+
+
 
     private void updateShader() {
         if (image == null) {
@@ -305,8 +307,6 @@ public class CircularImageView extends ImageView {
         return (result + 2);
     }
 
-    public void setInnerColor(int innerColor) {
-        backgroundPaint.setColor(innerColor);
-    }
+
     //endregion
 }

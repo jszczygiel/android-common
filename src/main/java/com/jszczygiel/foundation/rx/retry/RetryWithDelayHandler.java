@@ -24,8 +24,8 @@ public class RetryWithDelayHandler implements Func1<Tuple<Integer, Throwable>, O
      *
      * @param maxAttempts the maximum number of retries before a {@link CannotRetryException} is thrown. It will be
      *                    capped at <code>{@link Integer#MAX_VALUE} - 1</code>.
-     * @param retryDelay the {@link Delay} to apply between each retry (can grow,
-     *  eg. by using {@link ExponentialDelay}).
+     * @param retryDelay  the {@link Delay} to apply between each retry (can grow,
+     *                    eg. by using {@link ExponentialDelay}).
      */
     public RetryWithDelayHandler(int maxAttempts, Delay retryDelay) {
         this(maxAttempts, retryDelay, null, null);
@@ -34,12 +34,12 @@ public class RetryWithDelayHandler implements Func1<Tuple<Integer, Throwable>, O
     /**
      * Construct a {@link RetryWithDelayHandler retry handler} that will retry on most errors but will stop on specific errors.
      *
-     * @param maxAttempts the maximum number of retries before a {@link CannotRetryException} is thrown. It will be
-     *                    capped at <code>{@link Integer#MAX_VALUE} - 1</code>.
-     * @param retryDelay the {@link Delay} to apply between each retry (can grow,
-     *  eg. by using {@link ExponentialDelay}).
+     * @param maxAttempts                the maximum number of retries before a {@link CannotRetryException} is thrown. It will be
+     *                                   capped at <code>{@link Integer#MAX_VALUE} - 1</code>.
+     * @param retryDelay                 the {@link Delay} to apply between each retry (can grow,
+     *                                   eg. by using {@link ExponentialDelay}).
      * @param errorInterruptingPredicate a predicate that determine if an error must stop the retry cycle (when true),
-     *  in which case said error is cascaded down.
+     *                                   in which case said error is cascaded down.
      */
     public RetryWithDelayHandler(int maxAttempts, Delay retryDelay, Func1<Throwable, Boolean> errorInterruptingPredicate,
                                  Action4<Integer, Throwable, Long, TimeUnit> doOnRetry) {
@@ -56,10 +56,6 @@ public class RetryWithDelayHandler implements Func1<Tuple<Integer, Throwable>, O
         this.errorInterruptingPredicate = errorInterruptingPredicate;
         this.optionalScheduler = scheduler;
         this.doOnRetry = doOnRetry;
-    }
-
-    protected static String messageForMaxAttempts(long reachedAfterNRetries) {
-        return "maximum number of attempts reached after " + reachedAfterNRetries + " retries";
     }
 
     @Override
@@ -85,5 +81,9 @@ public class RetryWithDelayHandler implements Func1<Tuple<Integer, Throwable>, O
                 return Observable.timer(delay, unit);
             }
         }
+    }
+
+    protected static String messageForMaxAttempts(long reachedAfterNRetries) {
+        return "maximum number of attempts reached after " + reachedAfterNRetries + " retries";
     }
 }

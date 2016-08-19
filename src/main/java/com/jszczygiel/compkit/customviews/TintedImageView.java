@@ -42,6 +42,42 @@ public class TintedImageView extends AppCompatImageView {
         parseColorAttributes(context, attrs);
     }
 
+    protected void parseColorAttributes(Context context, AttributeSet attrs) {
+        TypedArray ta = null;
+
+        try {
+            ta = context.obtainStyledAttributes(attrs, R.styleable.TintedImageView, 0, 0);
+
+            int tintColour = ta.getColor(R.styleable.TintedImageView_tintColour, ContextCompat.getColor(context, android.R.color.black));
+            int selectedTintColour = ta.getColor(R.styleable.TintedImageView_selectedTintColour, ContextCompat.getColor(context, android.R.color.black));
+
+            colorStateList = ColorHelper.ColorStateListBuilder
+                    .forStates(STATE_PRESSED, StateSet.WILD_CARD)
+                    .withColors(selectedTintColour, tintColour)
+                    .toList();
+        } finally {
+            if (ta != null) {
+                ta.recycle();
+            }
+        }
+
+        applyTint(getDrawable());
+    }
+
+    protected void applyTint(Drawable drawable) {
+        if (colorStateList == null || drawable == null) {
+            return;
+        }
+
+        drawable.mutate();
+
+        DrawableCompat.setTintList(drawable, colorStateList);
+        DrawableCompat.setTintMode(drawable, colorTintMode);
+
+        drawable.setState(getDrawableState());
+        invalidateDrawable(drawable);
+    }
+
     @Override
     public void setImageDrawable(Drawable drawable) {
         if (drawable != null) {
@@ -67,20 +103,6 @@ public class TintedImageView extends AppCompatImageView {
         applyTint(getDrawable());
     }
 
-    protected void applyTint(Drawable drawable) {
-        if (colorStateList == null || drawable == null) {
-            return;
-        }
-
-        drawable.mutate();
-
-        DrawableCompat.setTintList(drawable, colorStateList);
-        DrawableCompat.setTintMode(drawable, colorTintMode);
-
-        drawable.setState(getDrawableState());
-        invalidateDrawable(drawable);
-    }
-
     @Override
     protected void drawableStateChanged() {
         super.drawableStateChanged();
@@ -89,6 +111,10 @@ public class TintedImageView extends AppCompatImageView {
             drawable.setState(getDrawableState());
             invalidateDrawable(drawable);
         }
+    }
+
+    public void loadImage(@DrawableRes int placeHolder) {
+        loadImage(placeHolder, null);
     }
 
     public void loadImage(@DrawableRes int placeHolder, String url) {
@@ -100,10 +126,6 @@ public class TintedImageView extends AppCompatImageView {
             imageLoader.load(placeHolder).into(this);
         }
 
-    }
-
-    public void loadImage(@DrawableRes int placeHolder) {
-        loadImage(placeHolder, null);
     }
 
     public void setColorTintList(ColorStateList colors) {
@@ -136,27 +158,5 @@ public class TintedImageView extends AppCompatImageView {
 
     protected void setColorTintMode(PorterDuff.Mode mode) {
         colorTintMode = mode;
-    }
-
-    protected void parseColorAttributes(Context context, AttributeSet attrs) {
-        TypedArray ta = null;
-
-        try {
-            ta = context.obtainStyledAttributes(attrs, R.styleable.TintedImageView, 0, 0);
-
-            int tintColour = ta.getColor(R.styleable.TintedImageView_tintColour, ContextCompat.getColor(context, android.R.color.black));
-            int selectedTintColour = ta.getColor(R.styleable.TintedImageView_selectedTintColour, ContextCompat.getColor(context,  android.R.color.black));
-
-            colorStateList = ColorHelper.ColorStateListBuilder
-                    .forStates(STATE_PRESSED, StateSet.WILD_CARD)
-                    .withColors(selectedTintColour, tintColour)
-                    .toList();
-        } finally {
-            if (ta != null) {
-                ta.recycle();
-            }
-        }
-
-        applyTint(getDrawable());
     }
 }

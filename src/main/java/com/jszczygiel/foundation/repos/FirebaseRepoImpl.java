@@ -26,11 +26,11 @@ import rx.Subscriber;
 public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
 
     protected final DatabaseReference table;
-    protected String userId;
-    private ChildEventListener reference;
     private final PublishSubject<Tuple<Integer, T>> subject;
     private final PublishSubject<List<T>> collectionSubject;
     private final Map<String, T> models;
+    protected String userId;
+    private ChildEventListener reference;
 
     public FirebaseRepoImpl() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -39,6 +39,8 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
         models = new ConcurrentHashMap<>();
         subject = PublishSubject.createWith(PublishSubject.BUFFER);
     }
+
+    public abstract String getTableName();
 
     @Override
     public void setUserId(String userId) {
@@ -77,15 +79,20 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
         }
     }
 
-    @Override
-    public int count() {
-        return models.size();
+    protected DatabaseReference getReference() {
+        if (isPublic()) {
+            return table;
+        } else {
+            return table.child(userId);
+        }
     }
 
     protected void addInternal(T model) {
         models.put(model.getId(), model);
         subject.onNext(new Tuple<>(SubjectAction.ADDED, model));
     }
+
+    public abstract Class<T> getType();
 
     protected void updateInternal(T model) {
         models.put(model.getId(), model);
@@ -94,24 +101,6 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
 
     protected void removeInternal(String id) {
         subject.onNext(new Tuple<>(SubjectAction.REMOVED, models.remove(id)));
-    }
-
-    public abstract String getTableName();
-
-    public abstract Class<T> getType();
-
-    protected void checkPreConditions() {
-        if (TextUtils.isEmpty(userId) && !isPublic()) {
-            throw new DatabaseException("no valid userId");
-        }
-    }
-
-    protected DatabaseReference getReference() {
-        if (isPublic()) {
-            return table;
-        } else {
-            return table.child(userId);
-        }
     }
 
     @Override
@@ -143,9 +132,20 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
     }
 
     @Override
+    public Observable<T> getAll() {
+        return Observable.from(models.values());
+    }
+
+    @Override
     public void add(T model) {
         checkPreConditions();
         getReference().child(model.getId()).setValue(model);
+    }
+
+    protected void checkPreConditions() {
+        if (TextUtils.isEmpty(userId) && !isPublic()) {
+            throw new DatabaseException("no valid userId");
+        }
     }
 
     @Override
@@ -167,9 +167,8 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
     }
 
     @Override
-    public void clear() {
-        checkPreConditions();
-        getReference().removeValue();
+    public Observable<Tuple<Integer, T>> observe() {
+        return subject;
     }
 
     @Override
@@ -178,13 +177,14 @@ public abstract class FirebaseRepoImpl<T extends BaseModel> implements Repo<T> {
     }
 
     @Override
-    public Observable<Tuple<Integer, T>> observe() {
-        return subject;
+    public void clear() {
+        checkPreConditions();
+        getReference().removeValue();
     }
 
     @Override
-    public Observable<T> getAll() {
-        return Observable.from(models.values());
+    public int count() {
+        return models.size();
     }
 
     protected Map<String, T> getModels() {

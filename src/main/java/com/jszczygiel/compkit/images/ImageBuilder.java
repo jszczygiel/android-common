@@ -34,16 +34,15 @@ public class ImageBuilder {
     public static final float THREE_QUATERS_DENSITY = 0.75f;
     public static final float HALF_DENSITY = 0.5f;
     public static final float QUATER_DENSITY = 0.25f;
-    private ImageView imageView;
-    private String url;
-    private int resourceId;
     private final Activity activity;
     private final Context context;
     private final Fragment fragment;
-
+    private final List<Integer> transformations = new ArrayList<>();
+    private ImageView imageView;
+    private String url;
+    private int resourceId;
     //OPTIONAL
     private int placeHolderId;
-    private final List<Integer> transformations = new ArrayList<>();
     private int animationId;
     private int errorPlaceHolderId;
     private ImageListener listener;
@@ -53,43 +52,6 @@ public class ImageBuilder {
     private int height;
     private String key;
     private float padding;
-
-    public static class Transformations {
-
-        public static final int ROUND = 0;
-        public static final int BLUR = 1;
-        public static final int CENTER_CROP = 2;
-        public static final int FIT_CENTER = 3;
-
-        @IntDef({ROUND, BLUR, FIT_CENTER, CENTER_CROP})
-        @Retention(RetentionPolicy.SOURCE)
-        public @interface Type {
-        }
-
-        @Type
-        int transformation;
-
-        public Transformations(@Type int transformation) {
-            this.transformation = transformation;
-        }
-
-        @Type
-        public int getType() {
-            return transformation;
-        }
-    }
-
-    public static ImageBuilder with(Activity activity) {
-        return new ImageBuilder(activity);
-    }
-
-    public static ImageBuilder with(Context context) {
-        return new ImageBuilder(context);
-    }
-
-    public static ImageBuilder with(Fragment fragment) {
-        return new ImageBuilder(fragment);
-    }
 
     private ImageBuilder(Activity context) {
         this.activity = context;
@@ -107,6 +69,22 @@ public class ImageBuilder {
         this.fragment = context;
         this.context = null;
         this.activity = null;
+    }
+
+    public static ImageBuilder with(Activity activity) {
+        return new ImageBuilder(activity);
+    }
+
+    public static ImageBuilder with(Context context) {
+        return new ImageBuilder(context);
+    }
+
+    public static ImageBuilder with(Fragment fragment) {
+        return new ImageBuilder(fragment);
+    }
+
+    public static void clear(View view) {
+        Glide.clear(view);
     }
 
     /**
@@ -321,6 +299,36 @@ public class ImageBuilder {
         return true;
     }
 
+    public interface ImageListener {
+        void onLoaded();
+
+        void onCancel();
+    }
+
+    public static class Transformations {
+
+        public static final int ROUND = 0;
+        public static final int BLUR = 1;
+        public static final int CENTER_CROP = 2;
+        public static final int FIT_CENTER = 3;
+        @Type
+        int transformation;
+
+        public Transformations(@Type int transformation) {
+            this.transformation = transformation;
+        }
+
+        @Type
+        public int getType() {
+            return transformation;
+        }
+
+        @IntDef({ROUND, BLUR, FIT_CENTER, CENTER_CROP})
+        @Retention(RetentionPolicy.SOURCE)
+        public @interface Type {
+        }
+    }
+
     public static class Request {
 
         private final com.bumptech.glide.request.Request request;
@@ -341,12 +349,6 @@ public class ImageBuilder {
         }
     }
 
-    public interface ImageListener {
-        void onLoaded();
-
-        void onCancel();
-    }
-
     public abstract static class TargetListener {
 
         public void onResourceReady(Drawable bitmap) {
@@ -354,9 +356,5 @@ public class ImageBuilder {
 
         public void onLoadFailed(Exception exception) {
         }
-    }
-
-    public static void clear(View view) {
-        Glide.clear(view);
     }
 }

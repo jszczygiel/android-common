@@ -11,7 +11,7 @@ public interface ListAction {
     int CLEAR_ALL = 2;
     int SCROLL_TO_TOP = 3;
 
-    @IntDef({ADD, REMOVE,CLEAR_ALL})
+    @IntDef({ADD, REMOVE, CLEAR_ALL})
     @Retention(RetentionPolicy.SOURCE)
     @interface Type {
     }

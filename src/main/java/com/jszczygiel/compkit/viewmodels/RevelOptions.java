@@ -7,9 +7,19 @@ import android.view.View;
 
 import com.jszczygiel.compkit.animators.AnimationHelper;
 import com.jszczygiel.foundation.containers.Tuple;
-import com.jszczygiel.foundation.views.RevelSimpleFragmentActivityImpl;
 
 public class RevelOptions implements Parcelable {
+    public static final Creator<RevelOptions> CREATOR = new Creator<RevelOptions>() {
+        @Override
+        public RevelOptions createFromParcel(Parcel in) {
+            return new RevelOptions(in);
+        }
+
+        @Override
+        public RevelOptions[] newArray(int size) {
+            return new RevelOptions[size];
+        }
+    };
     final int x;
     final int y;
     final int fromColor;
@@ -39,17 +49,17 @@ public class RevelOptions implements Parcelable {
         fromColor = in.readInt();
     }
 
-    public static final Creator<RevelOptions> CREATOR = new Creator<RevelOptions>() {
-        @Override
-        public RevelOptions createFromParcel(Parcel in) {
-            return new RevelOptions(in);
-        }
+    public int getX() {
+        return x;
+    }
 
-        @Override
-        public RevelOptions[] newArray(int size) {
-            return new RevelOptions[size];
-        }
-    };
+    public int getY() {
+        return y;
+    }
+
+    public int getFromColor() {
+        return fromColor;
+    }
 
     @Override
     public int describeContents() {

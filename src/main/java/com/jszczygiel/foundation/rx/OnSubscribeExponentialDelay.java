@@ -14,6 +14,13 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.MultipleAssignmentSubscription;
 
 public class OnSubscribeExponentialDelay implements Observable.OnSubscribe<Long> {
+    static final long CLOCK_DRIFT_TOLERANCE_NANOS;
+
+    static {
+        CLOCK_DRIFT_TOLERANCE_NANOS = TimeUnit.MINUTES.toNanos(
+                Long.getLong("rx.scheduler.drift-tolerance", 15));
+    }
+
     final long initialDelay;
     final Delay period;
     final Scheduler scheduler;
@@ -25,7 +32,7 @@ public class OnSubscribeExponentialDelay implements Observable.OnSubscribe<Long>
     }
 
     public OnSubscribeExponentialDelay(long initialDelay) {
-        this(initialDelay, Delay.exponential(TimeUnit.SECONDS, 10*60, 10, 2));
+        this(initialDelay, Delay.exponential(TimeUnit.SECONDS, 10 * 60, 10, 2));
     }
 
     public OnSubscribeExponentialDelay(long initialDelay, Delay period) {
@@ -58,13 +65,6 @@ public class OnSubscribeExponentialDelay implements Observable.OnSubscribe<Long>
             }
 
         }, initialDelay, period, period.unit());
-    }
-
-    static final long CLOCK_DRIFT_TOLERANCE_NANOS;
-
-    static {
-        CLOCK_DRIFT_TOLERANCE_NANOS = TimeUnit.MINUTES.toNanos(
-                Long.getLong("rx.scheduler.drift-tolerance", 15));
     }
 
     public Subscription schedulePeriodically(final Scheduler.Worker worker, final Action0 action, long initialDelay, Delay periodDelay, final TimeUnit unit) {

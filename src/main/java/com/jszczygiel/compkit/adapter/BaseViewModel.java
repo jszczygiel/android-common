@@ -35,20 +35,6 @@ public abstract class BaseViewModel implements Parcelable {
         type = in.readInt();
     }
 
-
-
-    public static class Types {
-
-        public static final int NOT_SET = -1;
-
-
-        @IntDef({NOT_SET})
-        @Retention(RetentionPolicy.SOURCE)
-        public @interface Type {
-        }
-
-    }
-
     @Types.Type
     public int getModelType() {
         return type;
@@ -59,10 +45,11 @@ public abstract class BaseViewModel implements Parcelable {
     }
 
     @Override
-    @CallSuper
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeString(id);
-        out.writeInt(type);
+    public int hashCode() {
+        int result = 42;
+        result = 37 * result + id.hashCode();
+        result = 37 * result + type;
+        return result;
     }
 
     /**
@@ -78,15 +65,25 @@ public abstract class BaseViewModel implements Parcelable {
     }
 
     @Override
-    public int hashCode() {
-        int result = 42;
-        result = 37 * result + id.hashCode();
-        result = 37 * result + type;
-        return result;
+    public int describeContents() {
+        return 0;
     }
 
     @Override
-    public int describeContents() {
-        return 0;
+    @CallSuper
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(id);
+        out.writeInt(type);
+    }
+
+    public static class Types {
+
+        public static final int NOT_SET = -1;
+
+        @IntDef({NOT_SET})
+        @Retention(RetentionPolicy.SOURCE)
+        public @interface Type {
+        }
+
     }
 }

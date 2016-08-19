@@ -16,16 +16,10 @@ import com.jszczygiel.R;
  */
 public abstract class SimpleFragmentActivityImpl<T extends Fragment> extends AppCompatActivity {
 
-    public T getFragment() {
-        return fragment;
-    }
-
     private T fragment;
 
-    public abstract T newFragmentInstance();
-
-    public int getLayoutId() {
-        return R.layout.activity_simple;
+    public T getFragment() {
+        return fragment;
     }
 
     @Override
@@ -54,11 +48,11 @@ public abstract class SimpleFragmentActivityImpl<T extends Fragment> extends App
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        setIntent(null);
+    public int getLayoutId() {
+        return R.layout.activity_simple;
     }
+
+    public abstract T newFragmentInstance();
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -99,6 +93,12 @@ public abstract class SimpleFragmentActivityImpl<T extends Fragment> extends App
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setIntent(null);
     }
 
     public void replaceFragment(Fragment fragment) {

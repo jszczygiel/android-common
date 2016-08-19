@@ -23,26 +23,6 @@ public abstract class Delay {
     }
 
     /**
-     * Returns the {@link TimeUnit} associated with this {@link Delay}.
-     *
-     * @return the time unit.
-     */
-    public TimeUnit unit() {
-        return unit;
-    }
-
-    /**
-     * Calculate a specific delay based on the attempt passed in.
-     * <p>
-     * This method is to be implemented by the child implementations and depending on the params
-     * that were set during construction time.
-     *
-     * @param attempt the attempt to calculate the delay from.
-     * @return the calculate delay.
-     */
-    public abstract long calculate(long attempt);
-
-    /**
      * Creates a new {@link FixedDelay}.
      *
      * @param delay the time of the delay.
@@ -162,5 +142,25 @@ public abstract class Delay {
     public static Delay exponential(TimeUnit unit, long upper, long lower, long growBy, int powersOf) {
         return new ExponentialDelay(unit, upper, lower, growBy, powersOf);
     }
+
+    /**
+     * Returns the {@link TimeUnit} associated with this {@link Delay}.
+     *
+     * @return the time unit.
+     */
+    public TimeUnit unit() {
+        return unit;
+    }
+
+    /**
+     * Calculate a specific delay based on the attempt passed in.
+     * <p>
+     * This method is to be implemented by the child implementations and depending on the params
+     * that were set during construction time.
+     *
+     * @param attempt the attempt to calculate the delay from.
+     * @return the calculate delay.
+     */
+    public abstract long calculate(long attempt);
 
 }

@@ -20,10 +20,22 @@ public abstract class BaseActivityImpl<T extends BasePresenter> extends AppCompa
     private boolean isTablet;
     private Unbinder unbinder;
 
-    /**
-     * @return provides new instance of presenter
-     */
-    public abstract T initializePresenter();
+    @Override
+    @CallSuper
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(getLayoutId());
+        unbinder = ButterKnife.bind(this);
+        setPresenter();
+        setUpPresenter(presenter);
+        getPresenter().onAttach(this);
+    }
+
+    protected abstract int getLayoutId();
+
+    private void setPresenter() {
+        this.presenter = initializePresenter();
+    }
 
     /**
      * This function can be overridden to setup presenter. It is being called in onCreate after
@@ -39,27 +51,25 @@ public abstract class BaseActivityImpl<T extends BasePresenter> extends AppCompa
         presenter.setOrientation(getResources().getConfiguration().orientation);
     }
 
+    /**
+     * @return provides new instance of presenter
+     */
+    public abstract T initializePresenter();
+
     @Override
     public T getPresenter() {
         return presenter;
     }
 
-    private void setPresenter() {
-        this.presenter = initializePresenter();
+    @Override
+    public boolean isAvailable() {
+        return !isFinishing() && getPresenter() != null;
     }
 
     @Override
-    @CallSuper
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(getLayoutId());
-        unbinder=ButterKnife.bind(this);
-        setPresenter();
-        setUpPresenter(presenter);
-        getPresenter().onAttach(this);
+    public boolean isTablet() {
+        return isTablet;
     }
-
-    protected abstract int getLayoutId();
 
     @Override
     @CallSuper
@@ -80,16 +90,6 @@ public abstract class BaseActivityImpl<T extends BasePresenter> extends AppCompa
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         getPresenter().onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    public boolean isAvailable() {
-        return !isFinishing() && getPresenter() != null;
-    }
-
-    @Override
-    public boolean isTablet() {
-        return isTablet;
     }
 
 }

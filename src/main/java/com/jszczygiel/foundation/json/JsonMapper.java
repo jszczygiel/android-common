@@ -14,6 +14,8 @@ import java.io.IOException;
 public enum JsonMapper {
     INSTANCE;
 
+    private final ObjectMapper mapper;
+
     JsonMapper() {
         mapper = new ObjectMapper();
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
@@ -21,8 +23,6 @@ public enum JsonMapper {
         mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
 
     }
-
-    private final ObjectMapper mapper;
 
     public <T> T fromJson(String json, Class<T> clazz) throws JSONException {
         try {
@@ -54,6 +54,5 @@ public enum JsonMapper {
     public ObjectMapper getObjectMapper() {
         return mapper;
     }
-
 
 }

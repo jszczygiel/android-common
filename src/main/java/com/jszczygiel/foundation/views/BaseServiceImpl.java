@@ -14,19 +14,6 @@ public abstract class BaseServiceImpl<T extends BasePresenter> extends Service i
     private T presenter;
     private boolean isTablet;
 
-    /**
-     * @return provides new instance of presenter
-     */
-    public abstract T initializePresenter();
-
-
-    @Override
-    public void setUpPresenter(T presenter) {
-        isTablet = SystemHelper.isTablet(this);
-        presenter.setIsTablet(isTablet);
-        presenter.setOrientation(getResources().getConfiguration().orientation);
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -43,13 +30,25 @@ public abstract class BaseServiceImpl<T extends BasePresenter> extends Service i
         super.onDestroy();
     }
 
+    private void setPresenter() {
+        this.presenter = initializePresenter();
+    }
+
+    @Override
+    public void setUpPresenter(T presenter) {
+        isTablet = SystemHelper.isTablet(this);
+        presenter.setIsTablet(isTablet);
+        presenter.setOrientation(getResources().getConfiguration().orientation);
+    }
+
+    /**
+     * @return provides new instance of presenter
+     */
+    public abstract T initializePresenter();
+
     @Override
     public T getPresenter() {
         return presenter;
-    }
-
-    private void setPresenter() {
-        this.presenter = initializePresenter();
     }
 
     @Override

@@ -41,7 +41,7 @@ public class AppBarLayoutSnapBehavior extends AppBarLayout.Behavior {
 
         if (topOffset < -(scrollRange / 2f)) {
             // Snap up (to fully invisible)
-            child.setExpanded(false,true);
+            child.setExpanded(false, true);
         } else {
             // Snap down (to fully visible)
             child.setExpanded(true, true);

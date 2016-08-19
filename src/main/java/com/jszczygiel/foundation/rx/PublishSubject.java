@@ -19,20 +19,9 @@ import rx.subjects.Subject;
 
 public class PublishSubject<T> extends Subject<T, T> {
 
-    @IntDef({BUFFER, ERROR, DROP})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface BackPressureStrategy {
-    }
-
     public final static int DROP = 0;
     public final static int BUFFER = 1;
     public final static int ERROR = 2;
-
-    public static <T> PublishSubject<T> createWith(@BackPressureStrategy int strategy) {
-        State<T> state = new State<>(strategy);
-        return new PublishSubject<>(state);
-    }
-
     final State<T> state;                            // (2)
 
     protected PublishSubject(State<T> state) {       // (3)
@@ -40,14 +29,9 @@ public class PublishSubject<T> extends Subject<T, T> {
         this.state = state;
     }
 
-    @Override
-    public void onNext(T t) {
-        state.onNext(t);
-    }
-
-    @Override
-    public void onError(Throwable e) {
-        state.onError(e);
+    public static <T> PublishSubject<T> createWith(@BackPressureStrategy int strategy) {
+        State<T> state = new State<>(strategy);
+        return new PublishSubject<>(state);
     }
 
     @Override
@@ -58,26 +42,56 @@ public class PublishSubject<T> extends Subject<T, T> {
     @Override
     public boolean hasObservers() {
         return state.subscribers != null;
+    }    @Override
+    public void onNext(T t) {
+        state.onNext(t);
+    }
+
+    @IntDef({BUFFER, ERROR, DROP})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface BackPressureStrategy {
+    }    @Override
+    public void onError(Throwable e) {
+        state.onError(e);
     }
 
     static class State<T> implements OnSubscribe<T>, Observer<T>, Producer, Subscription {
-        final int strategy;
-
-        @SuppressWarnings("unchecked")
-        volatile SubscriberState<T>[] subscribers = EMPTY;
-
         @SuppressWarnings("rawtypes")
         static final SubscriberState[] EMPTY = new SubscriberState[0];
-
         @SuppressWarnings("rawtypes")
         static final SubscriberState[] TERMINATED =
                 new SubscriberState[0];
-
+        final int strategy;
+        @SuppressWarnings("unchecked")
+        volatile SubscriberState<T>[] subscribers = EMPTY;
         volatile boolean done;
         Throwable error;
 
         public State(int strategy) {
             this.strategy = strategy;
+        }
+
+        @Override
+        public void call(Subscriber<? super T> t) {
+            SubscriberState<T> innerState =
+                    new SubscriberState<>(t, this);
+            t.add(innerState);
+            t.setProducer(innerState);
+
+            if (add(innerState)) {
+                if (strategy == BUFFER) {
+                    innerState.drain();
+                } else if (innerState.unsubscribed) {
+                    remove(innerState);
+                }
+            } else {
+                Throwable e = error;
+                if (e != null) {
+                    t.onError(e);
+                } else {
+                    t.onCompleted();
+                }
+            }
         }
 
         boolean add(SubscriberState<T> subscriber) {
@@ -128,9 +142,7 @@ public class PublishSubject<T> extends Subject<T, T> {
                 }
                 subscribers = b;
             }
-        }
-
-        @SuppressWarnings("unchecked")
+        }        @SuppressWarnings("unchecked")
         SubscriberState<T>[] terminate() {
             synchronized (this) {
                 SubscriberState<T>[] a = subscribers;
@@ -142,29 +154,18 @@ public class PublishSubject<T> extends Subject<T, T> {
         }
 
         @Override
-        public void call(Subscriber<? super T> t) {
-            SubscriberState<T> innerState =
-                    new SubscriberState<>(t, this);
-            t.add(innerState);
-            t.setProducer(innerState);
-
-            if (add(innerState)) {
-                if (strategy == BUFFER) {
-                    innerState.drain();
-                } else if (innerState.unsubscribed) {
-                    remove(innerState);
-                }
-            } else {
-                Throwable e = error;
-                if (e != null) {
-                    t.onError(e);
-                } else {
-                    t.onCompleted();
-                }
+        public void request(long n) {
+            for (SubscriberState<T> innerState : subscribers) {
+                innerState.request(n);
             }
         }
 
         @Override
+        public void unsubscribe() {
+            for (SubscriberState<T> innerState : subscribers) {
+                innerState.unsubscribe();
+            }
+        }        @Override
         public void onNext(T t) {
             if (done) {
                 return;
@@ -197,19 +198,9 @@ public class PublishSubject<T> extends Subject<T, T> {
             }
         }
 
-        @Override
-        public void request(long n) {
-            for (SubscriberState<T> innerState : subscribers) {
-                innerState.request(n);
-            }
-        }
 
-        @Override
-        public void unsubscribe() {
-            for (SubscriberState<T> innerState : subscribers) {
-                innerState.unsubscribe();
-            }
-        }
+
+
 
         @Override
         public boolean isUnsubscribed() {
@@ -233,13 +224,10 @@ public class PublishSubject<T> extends Subject<T, T> {
         final AtomicLong requested = new AtomicLong();
 
         final AtomicInteger wip = new AtomicInteger();
-
+        final Queue<T> queue;
         volatile boolean unsubscribed;
-
         volatile boolean done;
         Throwable error;
-
-        final Queue<T> queue;
 
         public SubscriberState(
                 Subscriber<? super T> child, State<T> state) {
@@ -423,4 +411,8 @@ public class PublishSubject<T> extends Subject<T, T> {
             return false;
         }
     }
+
+
+
+
 }

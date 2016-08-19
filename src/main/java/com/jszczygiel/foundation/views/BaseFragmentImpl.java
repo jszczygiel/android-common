@@ -30,10 +30,20 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     private Unbinder unbinder;
     private TransitionDrawable transition;
 
-    /**
-     * @return provides new instance of presenter
-     */
-    public abstract T initializePresenter();
+    @Override
+    @CallSuper
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setPresenter();
+        setUpPresenter(presenter);
+        getPresenter().onAttach(this);
+    }
+
+    private void setPresenter() {
+        if (presenter == null) {
+            this.presenter = initializePresenter();
+        }
+    }
 
     /**
      * This function can be overridden to setup presenter. It is being called in onCreate after
@@ -49,51 +59,44 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
         presenter.setOrientation(getResources().getConfiguration().orientation);
     }
 
+    /**
+     * @return provides new instance of presenter
+     */
+    public abstract T initializePresenter();
+
     @Override
     public T getPresenter() {
         return presenter;
     }
 
-    private void setPresenter() {
-        if (presenter == null) {
-            this.presenter = initializePresenter();
-        }
+    @Override
+    public boolean isAvailable() {
+        return !isDetached() && !isRemoving() && getPresenter() != null;
     }
 
     @Override
-    @CallSuper
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setPresenter();
-        setUpPresenter(presenter);
-        getPresenter().onAttach(this);
+    public boolean isTablet() {
+        return isTablet;
     }
 
     @Override
-    @CallSuper
-    public void onDestroy() {
-        super.onDestroy();
-        if (!isStaticView()) {
-            clear();
-        }
-
-    }
-
-    public void clear() {
-        getPresenter().onDetach();
-        presenter = null;
-    }
-
-    public boolean isStaticView() {
-        return false;
+    public void finish() {
+        getActivity().finish();
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
+    public void setResult(int resultCode, Intent data) {
+        getActivity().setResult(resultCode, data);
+    }
+
+    @Override
+    public void setResult(int resultCode) {
+        getActivity().setResult(resultCode);
+    }
+
+    @Override
+    public void showToast(int stringRes, String... formattedArgs) {
+        Toast.makeText(getContext(), getString(stringRes, formattedArgs), Toast.LENGTH_LONG).show();
     }
 
     @Nullable
@@ -115,22 +118,34 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (unbinder != null) {
+            unbinder.unbind();
+        }
+    }
+
+    @Override
+    @CallSuper
+    public void onDestroy() {
+        super.onDestroy();
+        if (!isStaticView()) {
+            clear();
+        }
+
+    }
+
+    public boolean isStaticView() {
+        return false;
+    }
+
+    public void clear() {
+        getPresenter().onDetach();
+        presenter = null;
+    }
+
     protected abstract int getLayoutId();
-
-    @Override
-    public boolean isAvailable() {
-        return !isDetached() && !isRemoving() && getPresenter() != null;
-    }
-
-    @Override
-    public boolean isTablet() {
-        return isTablet;
-    }
-
-    @Override
-    public void finish() {
-        getActivity().finish();
-    }
 
     public void onBackPressed() {
         SystemHelper.hideKeyboard(getActivity(), getActivity().getCurrentFocus());
@@ -153,20 +168,5 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
 
     public String getTitle() {
         return (String) getActivity().getTitle();
-    }
-
-    @Override
-    public void setResult(int resultCode, Intent data) {
-        getActivity().setResult(resultCode, data);
-    }
-
-    @Override
-    public void showToast(int stringRes, String... formattedArgs) {
-        Toast.makeText(getContext(), getString(stringRes, formattedArgs), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void setResult(int resultCode) {
-        getActivity().setResult(resultCode);
     }
 }

@@ -12,10 +12,9 @@ import rx.Subscription;
 
 public abstract class BasePresenterImpl<T> implements BasePresenter<T> {
 
-    T view;
     protected boolean isTablet;
     protected int orientation;
-
+    T view;
     Set<Subscription> subscriptionList;
 
     @CallSuper
@@ -34,10 +33,6 @@ public abstract class BasePresenterImpl<T> implements BasePresenter<T> {
                 subscription.unsubscribe();
             }
         }
-    }
-
-    public boolean isTablet() {
-        return isTablet;
     }
 
     @Override
@@ -83,5 +78,9 @@ public abstract class BasePresenterImpl<T> implements BasePresenter<T> {
     @Override
     public void setOrientation(int orientation) {
         this.orientation = orientation;
+    }
+
+    public boolean isTablet() {
+        return isTablet;
     }
 }

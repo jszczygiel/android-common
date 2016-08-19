@@ -27,21 +27,6 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
     FrameLayout emptyView;
     private int firstVisibleItem, lastVisibleItem;
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_base_list;
-    }
-
-    @Override
-    public RecyclerView.ItemAnimator createItemAnimatorInstance() {
-        return new DefaultItemAnimator();
-    }
-
-    @Override
-    public RecyclerView.ItemDecoration[] createItemDecoratorsInstances() {
-        return new RecyclerView.ItemDecoration[0];
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,8 +45,8 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
         recyclerView.setItemAnimator(createItemAnimatorInstance());
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
             @Override
-            public void onScrolledToBeginning() {
-                BaseListFragmentImpl.this.onScrolledToBeginning();
+            public boolean isLoading() {
+                return BaseListFragmentImpl.this.isLoading();
             }
 
             @Override
@@ -70,13 +55,13 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
             }
 
             @Override
-            public void onItemsVisibilityChanged(int firstVisibleItem, int lastVisibleItem) {
-                BaseListFragmentImpl.this.onItemsVisibilityChanged(firstVisibleItem, lastVisibleItem);
+            public void onScrolledToBeginning() {
+                BaseListFragmentImpl.this.onScrolledToBeginning();
             }
 
             @Override
-            public boolean isLoading() {
-                return BaseListFragmentImpl.this.isLoading();
+            public void onItemsVisibilityChanged(int firstVisibleItem, int lastVisibleItem) {
+                BaseListFragmentImpl.this.onItemsVisibilityChanged(firstVisibleItem, lastVisibleItem);
             }
         });
 
@@ -86,15 +71,14 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
         return view;
     }
 
-
     public ItemTouchHelper createTouchHelperInstance() {
         return null;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        getPresenter().onSaveInstanceState(outState);
+    @CallSuper
+    protected void onItemsVisibilityChanged(int firstVisibleItem, int lastVisibleItem) {
+        this.firstVisibleItem = firstVisibleItem;
+        this.lastVisibleItem = lastVisibleItem;
     }
 
     @Override
@@ -104,23 +88,14 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
     }
 
     @Override
-    public boolean isReverse() {
-        return false;
+    protected int getLayoutId() {
+        return R.layout.fragment_base_list;
     }
 
     @Override
-    public void onLoadMore() {
-
-    }
-
-    @Override
-    public void onScrolledToBeginning() {
-
-    }
-
-    @Override
-    public boolean isLoading() {
-        return false;
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getPresenter().onSaveInstanceState(outState);
     }
 
     @Override
@@ -144,6 +119,21 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
     }
 
     @Override
+    public void onLoadMore() {
+
+    }
+
+    @Override
+    public void onScrolledToBeginning() {
+
+    }
+
+    @Override
+    public boolean isLoading() {
+        return false;
+    }
+
+    @Override
     public void addOrUpdate(BaseViewModel model) {
         adapter.addOrUpdate(model);
     }
@@ -161,12 +151,6 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
     @Override
     public void removeById(String id) {
         adapter.removeById(id);
-    }
-
-    @CallSuper
-    protected void onItemsVisibilityChanged(int firstVisibleItem, int lastVisibleItem) {
-        this.firstVisibleItem = firstVisibleItem;
-        this.lastVisibleItem = lastVisibleItem;
     }
 
     @Override
@@ -212,6 +196,21 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
     @Override
     public String getSelectedId() {
         return adapter.getSelectedId();
+    }
+
+    @Override
+    public RecyclerView.ItemAnimator createItemAnimatorInstance() {
+        return new DefaultItemAnimator();
+    }
+
+    @Override
+    public RecyclerView.ItemDecoration[] createItemDecoratorsInstances() {
+        return new RecyclerView.ItemDecoration[0];
+    }
+
+    @Override
+    public boolean isReverse() {
+        return false;
     }
 
 }

@@ -51,30 +51,25 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
     private static final int INSERTION = 1;
     private static final int DELETION = 1 << 1;
     private static final int LOOKUP = 1 << 2;
+    private final Class<T> mTClass;
     T[] mData;
-
     /**
      * A copy of the previous list contents used during the merge phase of addAll.
      */
     private T[] mOldData;
     private int mOldDataStart;
     private int mOldDataSize;
-
     /**
      * The size of the valid portion of mData during the merge phase of addAll.
      */
     private int mMergedSize;
-
     /**
      * The callback instance that controls the behavior of the SortedList and get notified when
      * changes happen.
      */
     private Callback mCallback;
-
     private BatchedCallback mBatchedCallback;
-
     private int mSize;
-    private final Class<T> mTClass;
 
     /**
      * Creates a new SortedList of type T.
@@ -98,15 +93,6 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
         mData = (T[]) Array.newInstance(klass, initialCapacity);
         mCallback = callback;
         mSize = 0;
-    }
-
-    /**
-     * The number of items in the list.
-     *
-     * @return The number of items in the list.
-     */
-    public int size() {
-        return mSize;
     }
 
     /**
@@ -138,6 +124,117 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
         return add(item, true);
     }
 
+    private void throwIfMerging() {
+        if (mOldData != null) {
+            throw new IllegalStateException("Cannot call this method from within addAll");
+        }
+    }
+
+    private int add(T item, boolean notify) {
+        int index = findIndexOf(item, mData, 0, mSize, INSERTION);
+        if (index == INVALID_POSITION) {
+            index = 0;
+        } else if (index < mSize) {
+            T existing = mData[index];
+            if (mCallback.areItemsTheSame(existing, item)) {
+                if (mCallback.areContentsTheSame(existing, item)) {
+                    //no change but still replace the item
+                    mData[index] = item;
+                    return index;
+                } else {
+                    mData[index] = item;
+                    mCallback.onChanged(index, 1);
+                    return index;
+                }
+            }
+        }
+        addToData(index, item);
+        if (notify) {
+            mCallback.onInserted(index, 1);
+        }
+        return index;
+    }
+
+    private int findIndexOf(T item, T[] mData, int left, int right, int reason) {
+        while (left < right) {
+            final int middle = (left + right) >>> 1;
+            T myItem = mData[middle];
+            final int cmp = mCallback.compare(myItem, item);
+            if (cmp < 0) {
+                left = middle + 1;
+            } else if (cmp == 0) {
+                if (mCallback.areItemsTheSame(myItem, item)) {
+                    return middle;
+                } else {
+                    int exact = linearEqualitySearch(item, middle, left, right);
+                    if (reason == INSERTION) {
+                        return exact == INVALID_POSITION ? middle : exact;
+                    } else {
+                        return exact;
+                    }
+                }
+            } else {
+                right = middle;
+            }
+        }
+        return reason == INSERTION ? left : INVALID_POSITION;
+    }
+
+    private void addToData(int index, T item) {
+        if (index > mSize) {
+            throw new IndexOutOfBoundsException(
+                    "cannot add item to " + index + " because size is " + mSize);
+        }
+        if (mSize == mData.length) {
+            // we are at the limit enlarge
+            T[] newData = (T[]) Array.newInstance(mTClass, mData.length + CAPACITY_GROWTH);
+            System.arraycopy(mData, 0, newData, 0, index);
+            newData[index] = item;
+            System.arraycopy(mData, index, newData, index + 1, mSize - index);
+            mData = newData;
+        } else {
+            // just shift, we fit
+            System.arraycopy(mData, index, mData, index + 1, mSize - index);
+            mData[index] = item;
+        }
+        mSize++;
+    }
+
+    private int linearEqualitySearch(T item, int middle, int left, int right) {
+        // go left
+        for (int next = middle - 1; next >= left; next--) {
+            T nextItem = mData[next];
+            int cmp = mCallback.compare(nextItem, item);
+            if (cmp != 0) {
+                break;
+            }
+            if (mCallback.areItemsTheSame(nextItem, item)) {
+                return next;
+            }
+        }
+        for (int next = middle + 1; next < right; next++) {
+            T nextItem = mData[next];
+            int cmp = mCallback.compare(nextItem, item);
+            if (cmp != 0) {
+                break;
+            }
+            if (mCallback.areItemsTheSame(nextItem, item)) {
+                return next;
+            }
+        }
+        return INVALID_POSITION;
+    }
+
+    /**
+     * Adds the given items to the list. Does not modify the input.
+     *
+     * @param items Array of items to be added into the list.
+     * @see {@link SortedList#addAll(T[] items, boolean mayModifyInput)}
+     */
+    public void addAll(T... items) {
+        addAll(items, false);
+    }
+
     /**
      * Adds the given items to the list. Equivalent to calling {@link SortedList#add} in a loop,
      * except the callback events may be in a different order/granularity since addAll can batch
@@ -164,27 +261,6 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
             addAllInternal(copy);
         }
 
-    }
-
-    /**
-     * Adds the given items to the list. Does not modify the input.
-     *
-     * @param items Array of items to be added into the list.
-     * @see {@link SortedList#addAll(T[] items, boolean mayModifyInput)}
-     */
-    public void addAll(T... items) {
-        addAll(items, false);
-    }
-
-    /**
-     * Adds the given items to the list. Does not modify the input.
-     *
-     * @param items Collection of items to be added into the list.
-     * @see {@link SortedList#addAll(T[] items, boolean mayModifyInput)}
-     */
-    public void addAll(Collection<? extends T> items) {
-        T[] copy = (T[]) Array.newInstance(mTClass, items.size());
-        addAll(items.toArray(copy), true);
     }
 
     private void addAllInternal(T[] newItems) {
@@ -214,6 +290,49 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
         if (forceBatchedUpdates) {
             endBatchedUpdates();
         }
+    }
+
+    /**
+     * Batches adapter updates that happen between calling this method until calling
+     * {@link #endBatchedUpdates()}. For example, if you add multiple items in a loop
+     * and they are placed into consecutive indices, SortedList calls
+     * {@link Callback#onInserted(int, int)} only once with the proper item count. If an event
+     * cannot be merged with the previous event, the previous event is dispatched
+     * to the callback instantly.
+     * <p>
+     * After running your data updates, you <b>must</b> call {@link #endBatchedUpdates()}
+     * which will dispatch any deferred data change event to the current callback.
+     * <p>
+     * A sample implementation may look like this:
+     * <pre>
+     *     mSortedList.beginBatchedUpdates();
+     *     try {
+     *         mSortedList.add(item1)
+     *         mSortedList.add(item2)
+     *         mSortedList.remove(item3)
+     *         ...
+     *     } finally {
+     *         mSortedList.endBatchedUpdates();
+     *     }
+     * </pre>
+     * <p>
+     * Instead of using this method to batch calls, you can use a Callback that extends
+     * {@link BatchedCallback}. In that case, you must make sure that you are manually calling
+     * {@link BatchedCallback#dispatchLastEvent()} right after you complete your data changes.
+     * Failing to do so may create data inconsistencies with the Callback.
+     * <p>
+     * If the current Callback in an instance of {@link BatchedCallback}, calling this method
+     * has no effect.
+     */
+    public void beginBatchedUpdates() {
+        throwIfMerging();
+        if (mCallback instanceof BatchedCallback) {
+            return;
+        }
+        if (mBatchedCallback == null) {
+            mBatchedCallback = new BatchedCallback(mCallback);
+        }
+        mCallback = mBatchedCallback;
     }
 
     /**
@@ -262,15 +381,6 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
             }
         }
         return rangeEnd;
-    }
-
-    private int findSameItem(T item, T[] items, int from, int to) {
-        for (int pos = from; pos < to; pos++) {
-            if (mCallback.areItemsTheSame(items[pos], item)) {
-                return pos;
-            }
-        }
-        return INVALID_POSITION;
     }
 
     /**
@@ -327,55 +437,6 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
         }
     }
 
-    private void throwIfMerging() {
-        if (mOldData != null) {
-            throw new IllegalStateException("Cannot call this method from within addAll");
-        }
-    }
-
-    /**
-     * Batches adapter updates that happen between calling this method until calling
-     * {@link #endBatchedUpdates()}. For example, if you add multiple items in a loop
-     * and they are placed into consecutive indices, SortedList calls
-     * {@link Callback#onInserted(int, int)} only once with the proper item count. If an event
-     * cannot be merged with the previous event, the previous event is dispatched
-     * to the callback instantly.
-     * <p>
-     * After running your data updates, you <b>must</b> call {@link #endBatchedUpdates()}
-     * which will dispatch any deferred data change event to the current callback.
-     * <p>
-     * A sample implementation may look like this:
-     * <pre>
-     *     mSortedList.beginBatchedUpdates();
-     *     try {
-     *         mSortedList.add(item1)
-     *         mSortedList.add(item2)
-     *         mSortedList.remove(item3)
-     *         ...
-     *     } finally {
-     *         mSortedList.endBatchedUpdates();
-     *     }
-     * </pre>
-     * <p>
-     * Instead of using this method to batch calls, you can use a Callback that extends
-     * {@link BatchedCallback}. In that case, you must make sure that you are manually calling
-     * {@link BatchedCallback#dispatchLastEvent()} right after you complete your data changes.
-     * Failing to do so may create data inconsistencies with the Callback.
-     * <p>
-     * If the current Callback in an instance of {@link BatchedCallback}, calling this method
-     * has no effect.
-     */
-    public void beginBatchedUpdates() {
-        throwIfMerging();
-        if (mCallback instanceof BatchedCallback) {
-            return;
-        }
-        if (mBatchedCallback == null) {
-            mBatchedCallback = new BatchedCallback(mCallback);
-        }
-        mCallback = mBatchedCallback;
-    }
-
     /**
      * Ends the update transaction and dispatches any remaining event to the callback.
      */
@@ -389,29 +450,24 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
         }
     }
 
-    private int add(T item, boolean notify) {
-        int index = findIndexOf(item, mData, 0, mSize, INSERTION);
-        if (index == INVALID_POSITION) {
-            index = 0;
-        } else if (index < mSize) {
-            T existing = mData[index];
-            if (mCallback.areItemsTheSame(existing, item)) {
-                if (mCallback.areContentsTheSame(existing, item)) {
-                    //no change but still replace the item
-                    mData[index] = item;
-                    return index;
-                } else {
-                    mData[index] = item;
-                    mCallback.onChanged(index, 1);
-                    return index;
-                }
+    private int findSameItem(T item, T[] items, int from, int to) {
+        for (int pos = from; pos < to; pos++) {
+            if (mCallback.areItemsTheSame(items[pos], item)) {
+                return pos;
             }
         }
-        addToData(index, item);
-        if (notify) {
-            mCallback.onInserted(index, 1);
-        }
-        return index;
+        return INVALID_POSITION;
+    }
+
+    /**
+     * Adds the given items to the list. Does not modify the input.
+     *
+     * @param items Collection of items to be added into the list.
+     * @see {@link SortedList#addAll(T[] items, boolean mayModifyInput)}
+     */
+    public void addAll(Collection<? extends T> items) {
+        T[] copy = (T[]) Array.newInstance(mTClass, items.size());
+        addAll(items.toArray(copy), true);
     }
 
     /**
@@ -423,19 +479,6 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
     public boolean remove(T item) {
         throwIfMerging();
         return remove(item, true);
-    }
-
-    /**
-     * Removes the item at the given index and calls {@link Callback#onRemoved(int, int)}.
-     *
-     * @param index The index of the item to be removed.
-     * @return The removed item.
-     */
-    public T removeItemAt(int index) {
-        throwIfMerging();
-        T item = get(index);
-        removeItemAtIndex(index, true);
-        return item;
     }
 
     private boolean remove(T item, boolean notify) {
@@ -454,6 +497,42 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
         if (notify) {
             mCallback.onRemoved(index, 1);
         }
+    }
+
+    /**
+     * Removes the item at the given index and calls {@link Callback#onRemoved(int, int)}.
+     *
+     * @param index The index of the item to be removed.
+     * @return The removed item.
+     */
+    public T removeItemAt(int index) {
+        throwIfMerging();
+        T item = get(index);
+        removeItemAtIndex(index, true);
+        return item;
+    }
+
+    /**
+     * Returns the item at the given index.
+     *
+     * @param index The index of the item to retrieve.
+     * @return The item at the given index.
+     * @throws java.lang.IndexOutOfBoundsException if provided index is negative or larger than the
+     *                                             size of the list.
+     */
+    public T get(int index) throws IndexOutOfBoundsException {
+        if (index >= mSize || index < 0) {
+            throw new IndexOutOfBoundsException("Asked to get item at " + index + " but size is "
+                    + mSize);
+        }
+        if (mOldData != null) {
+            // The call is made from a callback during addAll execution. The data is split
+            // between mData and mOldData.
+            if (index >= mMergedSize) {
+                return mOldData[index - mMergedSize + mOldDataStart];
+            }
+        }
+        return mData[index];
     }
 
     /**
@@ -551,29 +630,6 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
     }
 
     /**
-     * Returns the item at the given index.
-     *
-     * @param index The index of the item to retrieve.
-     * @return The item at the given index.
-     * @throws java.lang.IndexOutOfBoundsException if provided index is negative or larger than the
-     *                                             size of the list.
-     */
-    public T get(int index) throws IndexOutOfBoundsException {
-        if (index >= mSize || index < 0) {
-            throw new IndexOutOfBoundsException("Asked to get item at " + index + " but size is "
-                    + mSize);
-        }
-        if (mOldData != null) {
-            // The call is made from a callback during addAll execution. The data is split
-            // between mData and mOldData.
-            if (index >= mMergedSize) {
-                return mOldData[index - mMergedSize + mOldDataStart];
-            }
-        }
-        return mData[index];
-    }
-
-    /**
      * Returns the position of the provided item.
      *
      * @param item The item to query for position.
@@ -593,76 +649,6 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
             return INVALID_POSITION;
         }
         return findIndexOf(item, mData, 0, mSize, LOOKUP);
-    }
-
-    private int findIndexOf(T item, T[] mData, int left, int right, int reason) {
-        while (left < right) {
-            final int middle = (left + right) >>> 1;
-            T myItem = mData[middle];
-            final int cmp = mCallback.compare(myItem, item);
-            if (cmp < 0) {
-                left = middle + 1;
-            } else if (cmp == 0) {
-                if (mCallback.areItemsTheSame(myItem, item)) {
-                    return middle;
-                } else {
-                    int exact = linearEqualitySearch(item, middle, left, right);
-                    if (reason == INSERTION) {
-                        return exact == INVALID_POSITION ? middle : exact;
-                    } else {
-                        return exact;
-                    }
-                }
-            } else {
-                right = middle;
-            }
-        }
-        return reason == INSERTION ? left : INVALID_POSITION;
-    }
-
-    private int linearEqualitySearch(T item, int middle, int left, int right) {
-        // go left
-        for (int next = middle - 1; next >= left; next--) {
-            T nextItem = mData[next];
-            int cmp = mCallback.compare(nextItem, item);
-            if (cmp != 0) {
-                break;
-            }
-            if (mCallback.areItemsTheSame(nextItem, item)) {
-                return next;
-            }
-        }
-        for (int next = middle + 1; next < right; next++) {
-            T nextItem = mData[next];
-            int cmp = mCallback.compare(nextItem, item);
-            if (cmp != 0) {
-                break;
-            }
-            if (mCallback.areItemsTheSame(nextItem, item)) {
-                return next;
-            }
-        }
-        return INVALID_POSITION;
-    }
-
-    private void addToData(int index, T item) {
-        if (index > mSize) {
-            throw new IndexOutOfBoundsException(
-                    "cannot add item to " + index + " because size is " + mSize);
-        }
-        if (mSize == mData.length) {
-            // we are at the limit enlarge
-            T[] newData = (T[]) Array.newInstance(mTClass, mData.length + CAPACITY_GROWTH);
-            System.arraycopy(mData, 0, newData, 0, index);
-            newData[index] = item;
-            System.arraycopy(mData, index, newData, index + 1, mSize - index);
-            mData = newData;
-        } else {
-            // just shift, we fit
-            System.arraycopy(mData, index, mData, index + 1, mSize - index);
-            mData[index] = item;
-        }
-        mSize++;
     }
 
     /**
@@ -693,34 +679,57 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
         }
     }
 
-    private class SortedListIterator implements Iterator<T> {
-        /**
-         * Number of elements remaining in this iteration
-         */
-        private int remaining = size();
+    /**
+     * The number of items in the list.
+     *
+     * @return The number of items in the list.
+     */
+    public int size() {
+        return mSize;
+    }
 
-        /**
-         * The expected modCount value
-         */
-
-        public boolean hasNext() {
-            return remaining != 0;
-        }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public T next() {
-            int rem = remaining;
-            if (rem == 0) {
-                throw new NoSuchElementException();
+    public boolean removeById(String id) {
+        for (int i = 0; i < mData.length; i++) {
+            T t = mData[i];
+            if (t != null) {
+                if (t.getId().equals(id)) {
+                    removeItemAtIndex(i, true);
+                    return true;
+                }
             }
-            remaining = rem - 1;
-            return mData[size() - rem];
         }
+        return false;
+    }
 
-        public void remove() {
-            throw new NotImplementedException();
+    public T getSafe(int index) throws IndexOutOfBoundsException {
+        if (index >= mSize || index < 0) {
+            return null;
         }
+        if (mOldData != null) {
+            // The call is made from a callback during addAll execution. The data is split
+            // between mData and mOldData.
+            if (index >= mMergedSize) {
+                return mOldData[index - mMergedSize + mOldDataStart];
+            }
+        }
+        return mData[index];
+    }
+
+    public int indexOfAdding(T item) {
+        int index = findIndexOf(item, mData, 0, mSize, INSERTION);
+        if (index == INVALID_POSITION) {
+            return 0;
+        }
+        return index;
+    }
+
+    public void setAll(T[] parcelableArray, int size) {
+        mData = parcelableArray;
+        mSize = size;
+    }
+
+    public T[] getAll() {
+        return mData;
     }
 
     /**
@@ -826,13 +835,12 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
      */
     public static class BatchedCallback<T2> extends Callback<T2> {
 
-        private final Callback<T2> mWrappedCallback;
         static final int TYPE_NONE = 0;
         static final int TYPE_ADD = 1;
         static final int TYPE_REMOVE = 2;
         static final int TYPE_CHANGE = 3;
         static final int TYPE_MOVE = 4;
-
+        private final Callback<T2> mWrappedCallback;
         int mLastEventType = TYPE_NONE;
         int mLastEventPosition = -1;
         int mLastEventCount = -1;
@@ -935,47 +943,33 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
         }
     }
 
-    public boolean removeById(String id) {
-        for (int i = 0; i < mData.length; i++) {
-            T t = mData[i];
-            if (t != null) {
-                if (t.getId().equals(id)) {
-                    removeItemAtIndex(i, true);
-                    return true;
-                }
+    private class SortedListIterator implements Iterator<T> {
+        /**
+         * Number of elements remaining in this iteration
+         */
+        private int remaining = size();
+
+        /**
+         * The expected modCount value
+         */
+
+        public boolean hasNext() {
+            return remaining != 0;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public T next() {
+            int rem = remaining;
+            if (rem == 0) {
+                throw new NoSuchElementException();
             }
+            remaining = rem - 1;
+            return mData[size() - rem];
         }
-        return false;
-    }
 
-    public T getSafe(int index) throws IndexOutOfBoundsException {
-        if (index >= mSize || index < 0) {
-            return null;
+        public void remove() {
+            throw new NotImplementedException();
         }
-        if (mOldData != null) {
-            // The call is made from a callback during addAll execution. The data is split
-            // between mData and mOldData.
-            if (index >= mMergedSize) {
-                return mOldData[index - mMergedSize + mOldDataStart];
-            }
-        }
-        return mData[index];
-    }
-
-    public int indexOfAdding(T item) {
-        int index = findIndexOf(item, mData, 0, mSize, INSERTION);
-        if (index == INVALID_POSITION) {
-            return 0;
-        }
-        return index;
-    }
-
-    public void setAll(T[] parcelableArray, int size) {
-        mData = parcelableArray;
-        mSize = size;
-    }
-
-    public T[] getAll() {
-        return mData;
     }
 }

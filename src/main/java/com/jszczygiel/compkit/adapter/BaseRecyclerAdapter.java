@@ -24,8 +24,8 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
     protected static final int NO_TYPE = -1;
     protected static final String SELECTED_ID = "selected_id";
     protected final LayoutInflater inflater;
-    protected SortedList<BaseViewModel> collection;
     protected final Context context;
+    protected SortedList<BaseViewModel> collection;
     protected RecyclerView recyclerView;
     protected boolean isSelectable = false;
     protected String selectedId = "";
@@ -73,40 +73,9 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
 
     protected abstract Comparator<BaseViewModel> getComparator();
 
-    @Override
-    public void onViewAttachedToWindow(BaseViewHolder holder) {
-        holder.onViewAttachedToWindow(recyclerView);
-    }
-
-    @Override
-    public void onViewDetachedFromWindow(BaseViewHolder holder) {
-        holder.onViewDetachedFromWindow();
-    }
-
-    // collection management
-    public BaseViewModel getItem(int position) {
-        return collection.get(position);
-    }
-
     // collection management
     public BaseViewModel getItemSafe(int position) {
         return collection.getSafe(position);
-    }
-
-    @Override
-    public int getItemCount() {
-        return collection.size();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (position < collection.size()) {
-            BaseViewModel item = getItem(position);
-            if (item != null) {
-                return getItem(position).getModelType();
-            }
-        }
-        return NO_TYPE;
     }
 
     public synchronized boolean remove(BaseViewModel item) {
@@ -209,6 +178,52 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
         holder.onBind(item, getListener(), payloads);
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (position < collection.size()) {
+            BaseViewModel item = getItem(position);
+            if (item != null) {
+                return getItem(position).getModelType();
+            }
+        }
+        return NO_TYPE;
+    }
+
+    // collection management
+    public BaseViewModel getItem(int position) {
+        return collection.get(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return collection.size();
+    }
+
+    @Override
+    public void onViewAttachedToWindow(BaseViewHolder holder) {
+        holder.onViewAttachedToWindow(recyclerView);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(BaseViewHolder holder) {
+        holder.onViewDetachedFromWindow();
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        this.recyclerView = null;
+    }
+
+    public String getSelectedId() {
+        return selectedId;
+    }
+
     public void setSelectedId(String newSelectedId) {
         if (isSelectable) {
             String oldSelectedGroup = selectedId;
@@ -222,27 +237,12 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
         }
     }
 
-    public String getSelectedId() {
-        return selectedId;
-    }
-
     public void isSelectable(boolean isSelectable) {
         this.isSelectable = isSelectable;
     }
 
     public void setSelectable(boolean selectable) {
         isSelectable = selectable;
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        this.recyclerView = null;
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        this.recyclerView = recyclerView;
     }
 
     public void updateAll(Object payload) {

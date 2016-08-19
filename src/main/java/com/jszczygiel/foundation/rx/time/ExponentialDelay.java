@@ -31,12 +31,6 @@ public class ExponentialDelay extends Delay {
         return applyBounds(calc);
     }
 
-    protected long calculateAlternatePower(long attempt) {
-        //round will cap at Long.MAX_VALUE and pow should prevent overflows
-        double step = Math.pow(this.powersOf, attempt - 1); //attempt > 0
-        return Math.round(step * growBy);
-    }
-
     //fastpath with bitwise operator
     protected long calculatePowerOfTwo(long attempt) {
         long step;
@@ -46,6 +40,12 @@ public class ExponentialDelay extends Delay {
             step = (1L << (attempt - 1));
         }
         //round will cap at Long.MAX_VALUE
+        return Math.round(step * growBy);
+    }
+
+    protected long calculateAlternatePower(long attempt) {
+        //round will cap at Long.MAX_VALUE and pow should prevent overflows
+        double step = Math.pow(this.powersOf, attempt - 1); //attempt > 0
         return Math.round(step * growBy);
     }
 

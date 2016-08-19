@@ -23,21 +23,15 @@ import java.util.Random;
 
 public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extends SimpleFragmentActivityImpl<T> {
     public static final String EXTRA_REVEAL_OPTIONS = "extra_revel_options";
+    protected Point point;
+    Random random = new Random();
     private FrameLayout container;
     private Animator animator;
     private int x;
     private int y;
-    Random random = new Random();
-
     private boolean isReveled;
-    protected Point point;
     private TransitionDrawable transition;
     private RevelOptions revelOptions;
-
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_reveal;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +75,19 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
 
     }
 
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_reveal;
+    }
+
+    public int getX() {
+        return revelOptions == null ? random.nextInt(point.x) : revelOptions.getX();
+    }
+
+    public int getY() {
+        return revelOptions == null ? random.nextInt(point.y) : revelOptions.getY();
+    }
+
     private View getFragmentView() {
         return container.getChildAt(0);
     }
@@ -110,18 +117,6 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
         }
     }
 
-    public View getContainer() {
-        return container;
-    }
-
-    public int getX() {
-        return revelOptions == null ? random.nextInt(point.x) : revelOptions.getX();
-    }
-
-    public int getY() {
-        return revelOptions == null ? random.nextInt(point.y) : revelOptions.getY();
-    }
-
     @Override
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public boolean navigateUpTo(final Intent upIntent) {
@@ -147,6 +142,10 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
             animator.start();
         }
         return true;
+    }
+
+    public View getContainer() {
+        return container;
     }
 
 }

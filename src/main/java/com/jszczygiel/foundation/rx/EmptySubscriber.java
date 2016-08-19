@@ -1,6 +1,5 @@
 package com.jszczygiel.foundation.rx;
 
-
 import com.jszczygiel.foundation.helpers.LoggerHelper;
 
 import rx.Subscriber;

@@ -3,8 +3,8 @@ package com.jszczygiel.foundation.rx;
 import rx.Observable;
 
 public class ReplySubject<T> {
-    private T value;
     private final PublishSubject<T> subject;
+    private T value;
 
     public ReplySubject(T value) {
         this.value = value;

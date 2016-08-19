@@ -26,10 +26,11 @@ public final class OnSubscribeReader extends SyncOnSubscribe<Reader, String> {
         char[] buffer = new char[size];
         try {
             int count = state.read(buffer);
-            if (count == -1)
+            if (count == -1) {
                 observer.onCompleted();
-            else
+            } else {
                 observer.onNext(String.valueOf(buffer, 0, count));
+            }
         } catch (IOException e) {
             observer.onError(e);
         }

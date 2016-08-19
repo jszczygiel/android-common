@@ -27,8 +27,18 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
     }
 
     @Override
+    public void setUserId(String userId) {
+
+    }
+
+    @Override
     public Observable<T> get(String id) {
         return Observable.just(models.get(id));
+    }
+
+    @Override
+    public Observable<T> getAll() {
+        return Observable.from(models.values());
     }
 
     @Override
@@ -49,33 +59,8 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
     }
 
     @Override
-    public void setUserId(String userId) {
-
-    }
-
-    @Override
-    public int count() {
-        return models.size();
-    }
-
-    @Override
-    public boolean isPublic() {
-        return false;
-    }
-
-    @Override
     public void update(T model) {
         subject.onNext(new Tuple<>(SubjectAction.CHANGED, model));
-    }
-
-    @Override
-    public void clear() {
-        models.clear();
-    }
-
-    @Override
-    public Observable<List<T>> observeAll() {
-        return collectionSubject;
     }
 
     @Override
@@ -84,8 +69,23 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
     }
 
     @Override
-    public Observable<T> getAll() {
-        return Observable.from(models.values());
+    public Observable<List<T>> observeAll() {
+        return collectionSubject;
+    }
+
+    @Override
+    public void clear() {
+        models.clear();
+    }
+
+    @Override
+    public boolean isPublic() {
+        return false;
+    }
+
+    @Override
+    public int count() {
+        return models.size();
     }
 
     protected Map<String, T> getModels() {
