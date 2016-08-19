@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.jszczygiel.foundation.helpers.SystemHelper;
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
@@ -157,6 +158,11 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     @Override
     public void setResult(int resultCode, Intent data) {
         getActivity().setResult(resultCode, data);
+    }
+
+    @Override
+    public void showToast(int stringRes, String... formattedArgs) {
+        Toast.makeText(getContext(), getString(stringRes, formattedArgs), Toast.LENGTH_LONG).show();
     }
 
     @Override

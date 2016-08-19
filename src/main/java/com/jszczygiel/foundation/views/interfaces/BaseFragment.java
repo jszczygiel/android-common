@@ -21,4 +21,6 @@ public interface BaseFragment<T extends BasePresenter> {
     void setResult(int resultCode, Intent data);
 
     void setResult(int resultCode);
+
+    void showToast(int stringRes, String... formattedArgs);
 }

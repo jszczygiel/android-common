@@ -16,14 +16,13 @@ import android.widget.FrameLayout;
 
 import com.jszczygiel.R;
 import com.jszczygiel.compkit.animators.AnimationHelper;
+import com.jszczygiel.compkit.viewmodels.RevelOptions;
 import com.jszczygiel.foundation.helpers.SystemHelper;
 
 import java.util.Random;
 
 public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extends SimpleFragmentActivityImpl<T> {
-    public static final String EXTRA_X = "extra_x";
-    public static final String EXTRA_Y = "extra_y";
-    public static final String EXTRA_COLOR = "extra_color";
+    public static final String EXTRA_REVEAL_OPTIONS = "extra_revel_options";
     private FrameLayout container;
     private Animator animator;
     private int x;
@@ -33,6 +32,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
     private boolean isReveled;
     protected Point point;
     private TransitionDrawable transition;
+    private RevelOptions revelOptions;
 
     @Override
     public int getLayoutId() {
@@ -46,10 +46,12 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
 
         point = SystemHelper.getScreenDimension(this);
 
+        revelOptions = getIntent().getParcelableExtra(EXTRA_REVEAL_OPTIONS);
+
         x = getX();
         y = getY();
 
-        final int color = getIntent().getIntExtra(RevelSimpleFragmentActivityImpl.EXTRA_COLOR, Color.TRANSPARENT);
+        final int color = revelOptions == null ? Color.TRANSPARENT : revelOptions.getFromColor();
 
         container = (FrameLayout) findViewById(R.id.activity_simple_root);
         container.post(new Runnable() {
@@ -113,11 +115,11 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
     }
 
     public int getX() {
-        return getIntent().getIntExtra(EXTRA_X, random.nextInt(point.x));
+        return revelOptions == null ? random.nextInt(point.x) : revelOptions.getX();
     }
 
     public int getY() {
-        return getIntent().getIntExtra(EXTRA_Y, random.nextInt(point.y));
+        return revelOptions == null ? random.nextInt(point.y) : revelOptions.getY();
     }
 
     @Override
@@ -146,4 +148,5 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
         }
         return true;
     }
+
 }
