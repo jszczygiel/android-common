@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.jszczygiel.R;
@@ -25,7 +26,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
     public static final String EXTRA_REVEAL_OPTIONS = "extra_revel_options";
     protected Point point;
     Random random = new Random();
-    private FrameLayout container;
+    private ViewGroup container;
     private Animator animator;
     private int x;
     private int y;
@@ -47,28 +48,30 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extend
 
         final int color = revelOptions == null ? Color.TRANSPARENT : revelOptions.getFromColor();
 
-        container = (FrameLayout) findViewById(R.id.activity_simple_root);
+        container = (ViewGroup) findViewById(R.id.activity_simple_root);
         container.post(new Runnable() {
             @Override
             public void run() {
-                if (color != Color.TRANSPARENT) {
-                    transition = new TransitionDrawable(new Drawable[]{new ColorDrawable(color), getFragmentView().getBackground()});
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        getFragmentView().setBackground(transition);
-                    } else {
-                        getFragmentView().setBackgroundDrawable(transition);
-                    }
-                    transition.startTransition(AnimationHelper.DURATION);
-                }
-                if (animator == null) {
-                    animator = AnimationHelper.circularReveal(container, x, y, 0, point.y, new AnimationHelper.SimpleAnimatorListener() {
-                        @Override
-                        public void onAnimationEnd(Animator a) {
-                            animator = null;
-                            isReveled = true;
+                if (!isFinishing()) {
+                    if (color != Color.TRANSPARENT) {
+                        transition = new TransitionDrawable(new Drawable[]{new ColorDrawable(color), getFragmentView().getBackground()});
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            getFragmentView().setBackground(transition);
+                        } else {
+                            getFragmentView().setBackgroundDrawable(transition);
                         }
-                    });
-                    animator.start();
+                        transition.startTransition(AnimationHelper.DURATION);
+                    }
+                    if (animator == null) {
+                        animator = AnimationHelper.circularReveal(container, x, y, 0, point.y, new AnimationHelper.SimpleAnimatorListener() {
+                            @Override
+                            public void onAnimationEnd(Animator a) {
+                                animator = null;
+                                isReveled = true;
+                            }
+                        });
+                        animator.start();
+                    }
                 }
             }
         });
