@@ -15,7 +15,6 @@ import rx.functions.Func1;
 
 public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
 
-    private static final boolean NOTIFY = true;
     private final PublishSubject<Tuple<Integer, T>> subject;
     private final PublishSubject<List<T>> collectionSubject;
     private final Map<String, T> models;
