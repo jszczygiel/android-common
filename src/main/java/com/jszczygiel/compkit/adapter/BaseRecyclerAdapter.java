@@ -294,6 +294,6 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
     }
 
     public List<BaseViewModel> getViewModels() {
-        return Arrays.asList(collection.getAll());
+        return Arrays.asList(Arrays.copyOfRange(collection.getAll(),0,collection.size()));
     }
 }
