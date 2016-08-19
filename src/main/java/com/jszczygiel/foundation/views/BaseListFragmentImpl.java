@@ -20,6 +20,8 @@ import com.jszczygiel.compkit.recyclerview.WrapContentLinearLayoutManager;
 import com.jszczygiel.foundation.presenters.interfaces.BaseListPresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseListFragment;
 
+import java.util.List;
+
 public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends BaseFragmentImpl<T> implements BaseListFragment<T> {
 
     protected BaseRecyclerAdapter adapter;
@@ -213,4 +215,8 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
         return false;
     }
 
+    @Override
+    public List<BaseViewModel> getViewModels() {
+        return adapter.getViewModels();
+    }
 }

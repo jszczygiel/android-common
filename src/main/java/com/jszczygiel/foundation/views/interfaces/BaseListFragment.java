@@ -7,6 +7,8 @@ import com.jszczygiel.compkit.adapter.BaseRecyclerAdapter;
 import com.jszczygiel.compkit.adapter.BaseViewModel;
 import com.jszczygiel.foundation.presenters.interfaces.BaseListPresenter;
 
+import java.util.List;
+
 public interface BaseListFragment<T extends BaseListPresenter> extends BaseFragment<T> {
     void showList();
 
@@ -49,4 +51,6 @@ public interface BaseListFragment<T extends BaseListPresenter> extends BaseFragm
     RecyclerView.ItemDecoration[] createItemDecoratorsInstances();
 
     boolean isReverse();
+
+    List<BaseViewModel> getViewModels();
 }

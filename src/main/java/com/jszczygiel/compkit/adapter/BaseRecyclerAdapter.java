@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.jszczygiel.compkit.collections.SortedList;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -290,5 +291,9 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
             }
         }
         return null;
+    }
+
+    public List<BaseViewModel> getViewModels() {
+        return Arrays.asList(collection.getAll());
     }
 }
