@@ -49,6 +49,10 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
         return context.getString(resourceId, formatArgs);
     }
 
+    protected final String getQuantityString(int id, int quantity, Object... formatArgs) {
+        return context.getResources().getQuantityString(id, quantity, formatArgs);
+    }
+
     @ColorInt
     protected final int getColor(int resourceId) {
         return context.getResources().getColor(resourceId);
