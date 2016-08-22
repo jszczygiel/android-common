@@ -42,7 +42,7 @@ public class AnimationHelper {
     public static Tuple<Integer, Integer> getCenter(View view) {
         int[] outLocation = new int[2];
         view.getLocationOnScreen(outLocation);
-        return new Tuple<>(outLocation[0] + view.getWidth() / 2, outLocation[1]);
+        return new Tuple<>(outLocation[0] + view.getWidth() / 2, outLocation[1]+view.getHeight()/2);
     }
 
     public static int getColor(View view) {
