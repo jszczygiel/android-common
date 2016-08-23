@@ -110,7 +110,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
                 @Override
                 public void onAnimationEnd(Animator a) {
                     RevelSimpleFragmentActivityImpl.super.finish();
-                    container.setVisibility(View.INVISIBLE);
+                    container.setVisibility(View.GONE);
                     overridePendingTransition(0, 0);
                 }
             });
@@ -136,7 +136,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
                 @Override
                 public void onAnimationEnd(Animator a) {
                     RevelSimpleFragmentActivityImpl.super.navigateUpTo(upIntent);
-                    container.setVisibility(View.INVISIBLE);
+                    container.setVisibility(View.GONE);
                     overridePendingTransition(0, 0);
                 }
             });

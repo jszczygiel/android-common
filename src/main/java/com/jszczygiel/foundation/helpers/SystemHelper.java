@@ -1,6 +1,7 @@
 package com.jszczygiel.foundation.helpers;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Point;
@@ -77,5 +78,18 @@ public class SystemHelper {
         InputMethodManager keyboard = (InputMethodManager)
                 message.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         keyboard.showSoftInput(message, 0);
+    }
+
+    public static String getProcessName(Context context) {
+        int pid=android.os.Process.myPid();
+        ActivityManager manager
+                = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+
+        for(ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()){
+            if(processInfo.pid == pid){
+                return processInfo.processName;
+            }
+        }
+        return "";
     }
 }
