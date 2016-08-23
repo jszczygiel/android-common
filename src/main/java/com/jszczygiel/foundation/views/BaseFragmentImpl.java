@@ -170,4 +170,5 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     public String getTitle() {
         return (String) getActivity().getTitle();
     }
+
 }

@@ -1,5 +1,6 @@
 package com.jszczygiel.foundation.views.interfaces;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -23,4 +24,6 @@ public interface BaseFragment<T extends BasePresenter> {
     void setResult(int resultCode);
 
     void showToast(int stringRes, String... formattedArgs);
+
+    Activity getActivity();
 }
