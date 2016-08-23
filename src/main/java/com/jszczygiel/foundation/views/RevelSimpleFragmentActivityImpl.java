@@ -53,15 +53,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
             @Override
             public void run() {
                 if (!isFinishing()) {
-                    if (color != Color.TRANSPARENT) {
-                        transition = new TransitionDrawable(new Drawable[]{new ColorDrawable(color), getFragmentView().getBackground()});
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            getFragmentView().setBackground(transition);
-                        } else {
-                            getFragmentView().setBackgroundDrawable(transition);
-                        }
-                        transition.startTransition(AnimationHelper.DURATION);
-                    }
+
                     if (animator == null) {
                         animator = AnimationHelper.circularReveal(container, x, y, 0, point.y, new AnimationHelper.SimpleAnimatorListener() {
                             @Override
@@ -71,6 +63,15 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
                             }
                         });
                         animator.start();
+                    }
+                    if (color != Color.TRANSPARENT) {
+                        transition = new TransitionDrawable(new Drawable[]{new ColorDrawable(color), getFragmentView().getBackground()});
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            getFragmentView().setBackground(transition);
+                        } else {
+                            getFragmentView().setBackgroundDrawable(transition);
+                        }
+                        transition.startTransition(AnimationHelper.DURATION);
                     }
                 }
             }
@@ -105,17 +106,17 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
             super.finish();
             overridePendingTransition(0, 0);
         } else if (animator == null) {
-            if (transition != null) {
-                transition.reverseTransition(AnimationHelper.DURATION);
-            }
             animator = AnimationHelper.circularReveal(container, x, y, point.y, 0, new AnimationHelper.SimpleAnimatorListener() {
                 @Override
                 public void onAnimationEnd(Animator a) {
-                    container.setVisibility(View.GONE);
                     RevelSimpleFragmentActivityImpl.super.finish();
+                    container.setVisibility(View.INVISIBLE);
                     overridePendingTransition(0, 0);
                 }
             });
+            if (transition != null) {
+                transition.reverseTransition(AnimationHelper.DURATION);
+            }
             animator.start();
         }
     }
@@ -131,17 +132,17 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
             overridePendingTransition(0, 0);
             return super.navigateUpTo(upIntent);
         } else if (animator == null) {
-            if (transition != null) {
-                transition.reverseTransition(AnimationHelper.DURATION);
-            }
             animator = AnimationHelper.circularReveal(container, x, y, point.y, 0, new AnimationHelper.SimpleAnimatorListener() {
                 @Override
                 public void onAnimationEnd(Animator a) {
-                    container.setVisibility(View.GONE);
                     RevelSimpleFragmentActivityImpl.super.navigateUpTo(upIntent);
+                    container.setVisibility(View.INVISIBLE);
                     overridePendingTransition(0, 0);
                 }
             });
+            if (transition != null) {
+                transition.reverseTransition(AnimationHelper.DURATION);
+            }
             animator.start();
         }
         return true;

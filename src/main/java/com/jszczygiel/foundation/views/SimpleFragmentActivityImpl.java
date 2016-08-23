@@ -74,19 +74,26 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
 
     @Override
     public void onBackPressed() {
+
         Intent upIntent = NavUtils.getParentActivityIntent(this);
-        if (upIntent != null && NavUtils.shouldUpRecreateTask(this, upIntent) || isTaskRoot()) {
-            // This activity is NOT part of this app's task, so create a new task
-            // when navigating up, with a synthesized back stack.
-            TaskStackBuilder.create(this)
-                    // Add all of this activity's parents to the back stack
-                    .addNextIntentWithParentStack(upIntent)
-                    // Navigate up to the closest parent
-                    .startActivities();
+        if (upIntent != null) {
+            if (NavUtils.shouldUpRecreateTask(this, upIntent) || isTaskRoot()) {
+                // This activity is NOT part of this app's task, so create a new task
+                // when navigating up, with a synthesized back stack.
+                TaskStackBuilder.create(this)
+                        // Add all of this activity's parents to the back stack
+                        .addNextIntentWithParentStack(upIntent)
+                        // Navigate up to the closest parent
+                        .startActivities();
+            } else {
+                // This activity is part of this app's task, so simply
+                // navigate up to the logical parent activity.
+                if(!fragment.onBackPressed()){
+                    super.onBackPressed();
+                }
+            }
         } else {
-            // This activity is part of this app's task, so simply
-            // navigate up to the logical parent activity.
-            if (!fragment.onBackPressed()) {
+            if(!fragment.onBackPressed()){
                 super.onBackPressed();
             }
         }
