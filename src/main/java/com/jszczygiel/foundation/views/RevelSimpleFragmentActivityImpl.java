@@ -22,7 +22,7 @@ import com.jszczygiel.foundation.helpers.SystemHelper;
 
 import java.util.Random;
 
-public abstract class RevelSimpleFragmentActivityImpl<T extends Fragment> extends SimpleFragmentActivityImpl<T> {
+public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl> extends SimpleFragmentActivityImpl<T> {
     public static final String EXTRA_REVEAL_OPTIONS = "extra_revel_options";
     protected Point point;
     Random random = new Random();

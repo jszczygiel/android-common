@@ -147,9 +147,10 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
 
     protected abstract int getLayoutId();
 
-    public void onBackPressed() {
+    public boolean onBackPressed() {
         SystemHelper.hideKeyboard(getActivity(), getActivity().getCurrentFocus());
-        getActivity().onBackPressed();
+        getActivity().finish();
+        return true;
     }
 
     public void setIntent(Intent intent) {
