@@ -14,11 +14,12 @@ import android.view.animation.Animation;
 import com.jszczygiel.compkit.animators.animation.ViewAnimationUtils;
 import com.jszczygiel.foundation.containers.Tuple;
 
-
 public class AnimationHelper {
 
     public static final int DURATION = 266;
-    public static final int LONG_DURATION = DURATION * 4;
+    public static final int LONG_DURATION = DURATION * 2;
+
+    public static final int VERY_LONG_DURATION = DURATION * 4;
 
     private AnimationHelper() {
     }
@@ -26,7 +27,7 @@ public class AnimationHelper {
     public static Animator circularReveal(View view, int centerX, int centerY, int startRadius, int endRadius, SimpleAnimatorListener callback) {
         Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, centerY, startRadius, endRadius, View.LAYER_TYPE_HARDWARE);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.setDuration(DURATION);
+        animator.setDuration(LONG_DURATION);
         animator.addListener(callback);
         return animator;
     }
@@ -42,7 +43,7 @@ public class AnimationHelper {
     public static Tuple<Integer, Integer> getCenter(View view) {
         int[] outLocation = new int[2];
         view.getLocationOnScreen(outLocation);
-        return new Tuple<>(outLocation[0] + view.getWidth() / 2, outLocation[1]+view.getHeight()/2);
+        return new Tuple<>(outLocation[0] + view.getWidth() / 2, outLocation[1] + view.getHeight() / 2);
     }
 
     public static int getColor(View view) {
@@ -71,7 +72,7 @@ public class AnimationHelper {
         } else {
             collapsingToolbar.setBackgroundDrawable(transitionDrawable);
         }
-        transitionDrawable.startTransition(LONG_DURATION);
+        transitionDrawable.startTransition(VERY_LONG_DURATION);
 
     }
 
