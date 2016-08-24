@@ -17,7 +17,6 @@ import com.jszczygiel.foundation.helpers.SystemHelper;
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseFragment;
 
-
 public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment implements BaseFragment<T> {
 
     /**
@@ -113,7 +112,6 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
         }
     }
 
-
     @Override
     @CallSuper
     public void onDestroy() {
@@ -122,6 +120,11 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
             clear();
         }
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 
     public boolean isStaticView() {
@@ -159,4 +162,6 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
         return (String) getActivity().getTitle();
     }
 
+    public void onNewIntent(Intent intent) {
+    }
 }

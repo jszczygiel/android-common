@@ -3,8 +3,11 @@ package com.jszczygiel.foundation.helpers;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Point;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcManager;
 import android.os.Build;
 import android.view.Display;
 import android.view.View;
@@ -81,15 +84,32 @@ public class SystemHelper {
     }
 
     public static String getProcessName(Context context) {
-        int pid=android.os.Process.myPid();
+        int pid = android.os.Process.myPid();
         ActivityManager manager
                 = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
-        for(ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()){
-            if(processInfo.pid == pid){
+        for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
+            if (processInfo.pid == pid) {
                 return processInfo.processName;
             }
         }
         return "";
+    }
+
+    public static boolean hasNfc(Context context) {
+        try {
+            NfcManager manager = (NfcManager) context.getSystemService(Context.NFC_SERVICE);
+            NfcAdapter adapter = manager.getDefaultAdapter();
+            return adapter != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean hasCamera(Context context) {
+        PackageManager pm = context.getPackageManager();
+
+        return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
     }
 }

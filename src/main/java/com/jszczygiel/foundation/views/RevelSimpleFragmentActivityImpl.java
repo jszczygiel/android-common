@@ -19,9 +19,17 @@ import com.jszczygiel.compkit.viewmodels.RevelOptions;
 import com.jszczygiel.foundation.helpers.SystemHelper;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
 
 public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl> extends SimpleFragmentActivityImpl<T> {
     public static final String EXTRA_REVEAL_OPTIONS = "extra_revel_options";
+    private static final long FRAME = 16;
     protected Point point;
     Random random = new Random();
     private ViewGroup container;
@@ -31,6 +39,8 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
     private boolean isReveled;
     private TransitionDrawable transition;
     private RevelOptions revelOptions;
+    private Subscription subscription;
+    private View revealLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,42 +54,62 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
         x = getX();
         y = getY();
 
-        final int color = revelOptions == null ? Color.TRANSPARENT : revelOptions.getFromColor();
-
+        revealLayout=findViewById(R.id.revel_layout);
         container = (ViewGroup) findViewById(R.id.activity_simple_root);
-        container.post(new Runnable() {
-            @Override
-            public void run() {
-                if (!isFinishing()) {
 
-                    if (animator == null) {
-                        animator = AnimationHelper.circularReveal(container, x, y, 0, point.y, new AnimationHelper.SimpleAnimatorListener() {
-                            @Override
-                            public void onAnimationEnd(Animator a) {
-                                animator = null;
-                                isReveled = true;
-                            }
-                        });
-                        animator.start();
-                    }
-                    if (color != Color.TRANSPARENT) {
-                        transition = new TransitionDrawable(new Drawable[]{new ColorDrawable(color), getFragmentView().getBackground()});
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            getFragmentView().setBackground(transition);
-                        } else {
-                            getFragmentView().setBackgroundDrawable(transition);
+        if (savedInstanceState == null) {
+            container.setVisibility(View.INVISIBLE);
+            subscription = Observable.interval(FRAME, TimeUnit.MILLISECONDS)
+                    .filter(new Func1<Long, Boolean>() {
+                        @Override
+                        public Boolean call(Long filter) {
+                            return RevelSimpleFragmentActivityImpl.this.getFragment().isVisible();
                         }
-                        transition.startTransition(AnimationHelper.DURATION);
-                    }
-                }
-            }
-        });
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Long>() {
+                        @Override
+                        public void call(Long next) {
+                            subscription.unsubscribe();
+                            circularRevealActivity();
+                        }
+                    });
 
+        }
+    }
+
+    private void circularRevealActivity() {
+        if (animator == null) {
+            animator = AnimationHelper.circularReveal(container, x, y, getWidth(), point.y, new AnimationHelper.SimpleAnimatorListener() {
+                @Override
+                public void onAnimationEnd(Animator a) {
+                    animator = null;
+                    isReveled = true;
+
+                }
+            });
+            container.setVisibility(View.VISIBLE);
+            animator.start();
+        }
+        final int color = revelOptions == null ? Color.TRANSPARENT : revelOptions.getFromColor();
+        if (color != Color.TRANSPARENT) {
+            transition = new TransitionDrawable(new Drawable[]{new ColorDrawable(color), getFragmentView().getBackground()});
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                getFragmentView().setBackground(transition);
+            } else {
+                getFragmentView().setBackgroundDrawable(transition);
+            }
+            transition.startTransition(AnimationHelper.LONG_DURATION);
+        }
     }
 
     @Override
     public int getLayoutId() {
         return R.layout.activity_reveal;
+    }
+
+    public int getWidth() {
+        return revelOptions == null ? 0 : revelOptions.getWidth();
     }
 
     public int getX() {
@@ -101,48 +131,42 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
                 animator.cancel();
                 animator = null;
             }
-            super.finish();
-            overridePendingTransition(0, 0);
+            finishAfterTransition();
         } else if (animator == null) {
-            animator = AnimationHelper.circularReveal(container, x, y, point.y, 0, new AnimationHelper.SimpleAnimatorListener() {
+            animator = AnimationHelper.circularReveal(container, x, y, point.y, getWidth(), new AnimationHelper.SimpleAnimatorListener() {
                 @Override
                 public void onAnimationEnd(Animator a) {
-                    RevelSimpleFragmentActivityImpl.super.finish();
-                    container.setVisibility(View.GONE);
-                    overridePendingTransition(0, 0);
+
+                    if (revealLayout != null) {
+                        revealLayout.setVisibility(View.GONE);
+                    }
+                    finishAfterTransition();
                 }
             });
             if (transition != null) {
-                transition.reverseTransition(AnimationHelper.DURATION);
+                transition.reverseTransition(AnimationHelper.LONG_DURATION);
             }
+
             animator.start();
         }
     }
 
     @Override
+    public void finishAfterTransition() {
+        Observable.just(true).delay(100, TimeUnit.MILLISECONDS).subscribe(new Action1<Boolean>() {
+            @Override
+            public void call(Boolean o) {
+                RevelSimpleFragmentActivityImpl.super.finish();
+                RevelSimpleFragmentActivityImpl.this.overridePendingTransition(0, 0);
+            }
+        });
+
+    }
+
+    @Override
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public boolean navigateUpTo(final Intent upIntent) {
-        if (!isReveled) {
-            if (animator != null) {
-                animator.cancel();
-                animator = null;
-            }
-            overridePendingTransition(0, 0);
-            return super.navigateUpTo(upIntent);
-        } else if (animator == null) {
-            animator = AnimationHelper.circularReveal(container, x, y, point.y, 0, new AnimationHelper.SimpleAnimatorListener() {
-                @Override
-                public void onAnimationEnd(Animator a) {
-                    RevelSimpleFragmentActivityImpl.super.navigateUpTo(upIntent);
-                    container.setVisibility(View.GONE);
-                    overridePendingTransition(0, 0);
-                }
-            });
-            if (transition != null) {
-                transition.reverseTransition(AnimationHelper.DURATION);
-            }
-            animator.start();
-        }
+        finish();
         return true;
     }
 

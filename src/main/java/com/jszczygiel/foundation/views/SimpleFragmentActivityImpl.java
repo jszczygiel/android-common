@@ -113,4 +113,8 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
                 .commit();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        getFragment().onNewIntent(intent);
+    }
 }

@@ -1,14 +1,16 @@
 package com.jszczygiel.compkit.animators;
 
 import android.animation.Animator;
+import android.animation.TimeInterpolator;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
+import android.support.v4.view.animation.FastOutLinearInInterpolator;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 
 import com.jszczygiel.compkit.animators.animation.ViewAnimationUtils;
@@ -16,17 +18,19 @@ import com.jszczygiel.foundation.containers.Tuple;
 
 public class AnimationHelper {
 
-    public static final int DURATION = 266;
-    public static final int LONG_DURATION = DURATION * 2;
+    public static final int DURATION = 200;
+    public static final int LONG_DURATION = 400;
 
     public static final int VERY_LONG_DURATION = DURATION * 4;
+    private static final TimeInterpolator FAST_OUT = new FastOutLinearInInterpolator();
+    private static final TimeInterpolator LINEAR_OUT = new LinearOutSlowInInterpolator();
 
     private AnimationHelper() {
     }
 
     public static Animator circularReveal(View view, int centerX, int centerY, int startRadius, int endRadius, SimpleAnimatorListener callback) {
         Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, centerY, startRadius, endRadius, View.LAYER_TYPE_HARDWARE);
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setInterpolator(startRadius < endRadius ? FAST_OUT : LINEAR_OUT);
         animator.setDuration(LONG_DURATION);
         animator.addListener(callback);
         return animator;
@@ -59,8 +63,8 @@ public class AnimationHelper {
         return Color.TRANSPARENT;
     }
 
-    public static void transitionBackground(View collapsingToolbar, Drawable background) {
-        Drawable drawable = collapsingToolbar.getBackground();
+    public static void transitionBackground(View view, Drawable background) {
+        Drawable drawable = view.getBackground();
         if (drawable instanceof TransitionDrawable) {
             drawable = ((TransitionDrawable) drawable).getDrawable(1);
         } else if (drawable == null) {
@@ -68,9 +72,9 @@ public class AnimationHelper {
         }
         TransitionDrawable transitionDrawable = new TransitionDrawable(new Drawable[]{drawable, background});
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            collapsingToolbar.setBackground(transitionDrawable);
+            view.setBackground(transitionDrawable);
         } else {
-            collapsingToolbar.setBackgroundDrawable(transitionDrawable);
+            view.setBackgroundDrawable(transitionDrawable);
         }
         transitionDrawable.startTransition(VERY_LONG_DURATION);
 

@@ -22,18 +22,21 @@ public class RevelOptions implements Parcelable {
     };
     final int x;
     final int y;
+    final int width;
     final int fromColor;
 
     public RevelOptions(int y, int x) {
         this.y = y;
         this.x = x;
         this.fromColor = Color.TRANSPARENT;
+        this.width = 0;
     }
 
     public RevelOptions(int x, int y, int fromColor) {
         this.x = x;
         this.y = y;
         this.fromColor = fromColor;
+        this.width = 0;
     }
 
     public RevelOptions(View view) {
@@ -41,12 +44,14 @@ public class RevelOptions implements Parcelable {
         Tuple<Integer, Integer> positon = AnimationHelper.getCenter(view);
         this.x = positon.getFirst();
         this.y = positon.getSecond();
+        this.width = Math.min(view.getWidth() / 2, view.getHeight() / 2);
     }
 
     protected RevelOptions(Parcel in) {
         x = in.readInt();
         y = in.readInt();
         fromColor = in.readInt();
+        width = in.readInt();
     }
 
     public int getX() {
@@ -71,6 +76,10 @@ public class RevelOptions implements Parcelable {
         parcel.writeInt(x);
         parcel.writeInt(y);
         parcel.writeInt(fromColor);
+        parcel.writeInt(width);
     }
 
+    public int getWidth() {
+        return width;
+    }
 }
