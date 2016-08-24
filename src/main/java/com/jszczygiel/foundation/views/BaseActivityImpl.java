@@ -8,8 +8,6 @@ import com.jszczygiel.foundation.helpers.SystemHelper;
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseActivity;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public abstract class BaseActivityImpl<T extends BasePresenter> extends AppCompatActivity implements BaseActivity<T> {
 
@@ -18,14 +16,12 @@ public abstract class BaseActivityImpl<T extends BasePresenter> extends AppCompa
      */
     private T presenter;
     private boolean isTablet;
-    private Unbinder unbinder;
 
     @Override
     @CallSuper
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
-        unbinder = ButterKnife.bind(this);
         setPresenter();
         setUpPresenter(presenter);
         getPresenter().onAttach(this);
@@ -75,7 +71,6 @@ public abstract class BaseActivityImpl<T extends BasePresenter> extends AppCompa
     @CallSuper
     public void onDestroy() {
         super.onDestroy();
-        unbinder.unbind();
         getPresenter().onDetach();
         presenter = null;
     }

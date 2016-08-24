@@ -17,8 +17,6 @@ import com.jszczygiel.foundation.helpers.SystemHelper;
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseFragment;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment implements BaseFragment<T> {
 
@@ -27,7 +25,6 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
      */
     private T presenter;
     private boolean isTablet;
-    private Unbinder unbinder;
     private TransitionDrawable transition;
 
     @Override
@@ -103,8 +100,6 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutId(), container, false);
-
-        unbinder = ButterKnife.bind(this, view);
         return view;
     }
 
@@ -118,13 +113,6 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
-    }
 
     @Override
     @CallSuper

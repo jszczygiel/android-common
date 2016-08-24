@@ -11,9 +11,9 @@ import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 
+import com.jszczygiel.compkit.animators.animation.ViewAnimationUtils;
 import com.jszczygiel.foundation.containers.Tuple;
 
-import io.codetail.animation.ViewAnimationUtils;
 
 public class AnimationHelper {
 
