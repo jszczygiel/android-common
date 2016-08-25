@@ -77,10 +77,16 @@ public class SystemHelper {
         }
     }
 
-    public static void showKeyboard(EditText message) {
-        InputMethodManager keyboard = (InputMethodManager)
-                message.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        keyboard.showSoftInput(message, 0);
+    public static void showKeyboard(final EditText message) {
+        message.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager keyboard = (InputMethodManager)
+                        message.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                keyboard.showSoftInput(message, 0);
+            }
+        }, 100);
+
     }
 
     public static String getProcessName(Context context) {

@@ -17,6 +17,7 @@ import com.jszczygiel.R;
 import com.jszczygiel.compkit.animators.AnimationHelper;
 import com.jszczygiel.compkit.viewmodels.RevelOptions;
 import com.jszczygiel.foundation.helpers.SystemHelper;
+import com.jszczygiel.foundation.rx.schedulers.SchedulerHelper;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -54,7 +55,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
         x = getX();
         y = getY();
 
-        revealLayout=findViewById(R.id.revel_layout);
+        revealLayout = findViewById(R.id.revel_layout);
         container = (ViewGroup) findViewById(R.id.activity_simple_root);
 
         if (savedInstanceState == null) {
@@ -67,6 +68,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
                             return RevelSimpleFragmentActivityImpl.this.getFragment().isVisible();
                         }
                     })
+                    .subscribeOn(SchedulerHelper.uiScheduler())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<Long>() {
                         @Override
@@ -86,6 +88,9 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
                 public void onAnimationEnd(Animator a) {
                     animator = null;
                     isReveled = true;
+                    if (getFragment() != null && getFragment().getView() != null) {
+                        getFragment().getView().requestLayout();
+                    }
 
                 }
             });

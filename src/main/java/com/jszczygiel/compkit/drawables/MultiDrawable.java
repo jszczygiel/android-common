@@ -9,7 +9,7 @@ public class MultiDrawable extends LayerDrawable implements Drawable.Callback {
 
     private final int drawableCount;
     private int[] alphas;
-    private int drawableAlpha;
+    private int drawableAlpha=255;
 
     public MultiDrawable(Drawable[] drawables) {
         super(drawables);
@@ -36,7 +36,6 @@ public class MultiDrawable extends LayerDrawable implements Drawable.Callback {
                 drawable.draw(canvas);
             }
         }
-
         invalidateSelf();
     }
 
