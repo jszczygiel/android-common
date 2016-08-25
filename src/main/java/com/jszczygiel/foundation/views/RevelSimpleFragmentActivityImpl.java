@@ -60,6 +60,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
         if (savedInstanceState == null) {
             container.setVisibility(View.INVISIBLE);
             subscription = Observable.interval(FRAME, TimeUnit.MILLISECONDS)
+                    .onBackpressureDrop()
                     .filter(new Func1<Long, Boolean>() {
                         @Override
                         public Boolean call(Long filter) {
