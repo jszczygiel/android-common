@@ -9,7 +9,7 @@ public class MultiDrawable extends LayerDrawable implements Drawable.Callback {
 
     private final int drawableCount;
     private int[] alphas;
-    private int drawableAlpha=255;
+    private int drawableAlpha = 255;
 
     public MultiDrawable(Drawable[] drawables) {
         super(drawables);
@@ -29,11 +29,13 @@ public class MultiDrawable extends LayerDrawable implements Drawable.Callback {
 
     @Override
     public void draw(Canvas canvas) {
-        for (int i = 0; i < drawableCount; i++) {
-            Drawable drawable = getDrawable(i);
-            drawable.setAlpha(alphas[i] * drawableAlpha / 255);
-            if (alphas[i] != 0) {
-                drawable.draw(canvas);
+        if(drawableAlpha!=0) {
+            for (int i = 0; i < drawableCount; i++) {
+                Drawable drawable = getDrawable(i);
+                drawable.setAlpha(alphas[i] * drawableAlpha / 255);
+                if (alphas[i] != 0) {
+                    drawable.draw(canvas);
+                }
             }
         }
         invalidateSelf();
