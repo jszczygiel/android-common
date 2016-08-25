@@ -82,11 +82,6 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
         return false;
     }
 
-    @Override
-    public int count() {
-        return models.size();
-    }
-
     protected Map<String, T> getModels() {
         return models;
     }

@@ -28,6 +28,5 @@ public interface Repo<T> {
 
     boolean isPublic();
 
-    int count();
 
 }
