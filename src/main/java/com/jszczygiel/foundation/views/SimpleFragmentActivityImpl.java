@@ -2,6 +2,7 @@ package com.jszczygiel.foundation.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
@@ -46,6 +47,7 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
         } else {
             fragment = (T) getSupportFragmentManager().getFragments().get(0);
         }
+
     }
 
     public int getLayoutId() {
@@ -74,7 +76,6 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
 
     @Override
     public void onBackPressed() {
-
         Intent upIntent = NavUtils.getParentActivityIntent(this);
         if (upIntent != null) {
             if (NavUtils.shouldUpRecreateTask(this, upIntent) || isTaskRoot()) {
@@ -89,12 +90,12 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
                 // This activity is part of this app's task, so simply
                 // navigate up to the logical parent activity.
                 if(!fragment.onBackPressed()){
-                    super.onBackPressed();
+                    ActivityCompat.finishAfterTransition(this);
                 }
             }
         } else {
             if(!fragment.onBackPressed()){
-                super.onBackPressed();
+                ActivityCompat.finishAfterTransition(this);
             }
         }
     }

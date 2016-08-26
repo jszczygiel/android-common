@@ -1,12 +1,12 @@
 package com.jszczygiel.compkit.viewmodels;
 
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
 
 import com.jszczygiel.compkit.animators.AnimationHelper;
-import com.jszczygiel.foundation.containers.Tuple;
 
 public class RevelOptions implements Parcelable {
     public static final Creator<RevelOptions> CREATOR = new Creator<RevelOptions>() {
@@ -41,9 +41,9 @@ public class RevelOptions implements Parcelable {
 
     public RevelOptions(View view) {
         this.fromColor = AnimationHelper.getColor(view);
-        Tuple<Integer, Integer> positon = AnimationHelper.getCenter(view);
-        this.x = positon.getFirst();
-        this.y = positon.getSecond();
+        Point positon = AnimationHelper.getCenter(view);
+        this.x = positon.x;
+        this.y = positon.y;
         this.width = Math.min(view.getWidth() / 2, view.getHeight() / 2);
     }
 

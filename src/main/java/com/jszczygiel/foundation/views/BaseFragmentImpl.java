@@ -7,6 +7,7 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,7 +78,7 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
 
     @Override
     public void finish() {
-        getActivity().finish();
+        ActivityCompat.finishAfterTransition(getActivity());
     }
 
     @Override
@@ -140,7 +141,7 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
 
     public boolean onBackPressed() {
         SystemHelper.hideKeyboard(getActivity(), getActivity().getCurrentFocus());
-        getActivity().finish();
+        finish();
         return true;
     }
 

@@ -3,6 +3,7 @@ package com.jszczygiel.compkit.animators;
 import android.animation.Animator;
 import android.animation.TimeInterpolator;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -14,7 +15,6 @@ import android.view.ViewPropertyAnimator;
 import android.view.animation.Animation;
 
 import com.jszczygiel.compkit.animators.animation.ViewAnimationUtils;
-import com.jszczygiel.foundation.containers.Tuple;
 
 public class AnimationHelper {
 
@@ -44,10 +44,10 @@ public class AnimationHelper {
         return view.animate().alpha(0).setListener(callback);
     }
 
-    public static Tuple<Integer, Integer> getCenter(View view) {
+    public static Point getCenter(View view) {
         int[] outLocation = new int[2];
-        view.getLocationOnScreen(outLocation);
-        return new Tuple<>(outLocation[0] + view.getWidth() / 2, outLocation[1] + view.getHeight() / 2);
+        view.getLocationInWindow(outLocation);
+        return new Point(outLocation[0] + view.getWidth() / 2, outLocation[1] + view.getHeight() / 2);
     }
 
     public static int getColor(View view) {
