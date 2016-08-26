@@ -86,4 +86,8 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
         return models;
     }
 
+    @Override
+    public void notify(T model) {
+        subject.onNext(new Tuple<>(SubjectAction.CHANGED, model));
+    }
 }

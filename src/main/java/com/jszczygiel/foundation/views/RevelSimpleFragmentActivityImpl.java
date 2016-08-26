@@ -82,30 +82,32 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
     }
 
     private void circularRevealActivity() {
-        if (animator == null) {
-            animator = AnimationHelper.circularReveal(container, x, y, getWidth(), point.y, new AnimationHelper.SimpleAnimatorListener() {
-                @Override
-                public void onAnimationEnd(Animator a) {
-                    animator = null;
-                    isReveled = true;
-                    if (getFragment() != null && getFragment().getView() != null) {
-                        getFragment().getView().requestLayout();
-                    }
+        if (!isFinishing()) {
+            if (animator == null) {
+                animator = AnimationHelper.circularReveal(container, x, y, getWidth(), point.y, new AnimationHelper.SimpleAnimatorListener() {
+                    @Override
+                    public void onAnimationEnd(Animator a) {
+                        animator = null;
+                        isReveled = true;
+                        if (getFragment() != null && getFragment().getView() != null) {
+                            getFragment().getView().requestLayout();
+                        }
 
-                }
-            });
-            container.setVisibility(View.VISIBLE);
-            animator.start();
-        }
-        final int color = revelOptions == null ? Color.TRANSPARENT : revelOptions.getFromColor();
-        if (color != Color.TRANSPARENT) {
-            transition = new TransitionDrawable(new Drawable[]{new ColorDrawable(color), getFragmentView().getBackground()});
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                getFragmentView().setBackground(transition);
-            } else {
-                getFragmentView().setBackgroundDrawable(transition);
+                    }
+                });
+                container.setVisibility(View.VISIBLE);
+                animator.start();
             }
-            transition.startTransition(AnimationHelper.LONG_DURATION);
+            final int color = revelOptions == null ? Color.TRANSPARENT : revelOptions.getFromColor();
+            if (color != Color.TRANSPARENT) {
+                transition = new TransitionDrawable(new Drawable[]{new ColorDrawable(color), getFragmentView().getBackground()});
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    getFragmentView().setBackground(transition);
+                } else {
+                    getFragmentView().setBackgroundDrawable(transition);
+                }
+                transition.startTransition(AnimationHelper.LONG_DURATION);
+            }
         }
     }
 
@@ -143,8 +145,8 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
                 @Override
                 public void onAnimationEnd(Animator a) {
 
-                    if (revealLayout != null) {
-                        revealLayout.setVisibility(View.GONE);
+                    if (container != null) {
+                        container.setVisibility(View.GONE);
                     }
                     finishAfterTransition();
                 }
@@ -159,14 +161,8 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
 
     @Override
     public void finishAfterTransition() {
-        Observable.just(true).delay(100, TimeUnit.MILLISECONDS).subscribe(new Action1<Boolean>() {
-            @Override
-            public void call(Boolean o) {
-                RevelSimpleFragmentActivityImpl.super.finish();
-                RevelSimpleFragmentActivityImpl.this.overridePendingTransition(0, 0);
-            }
-        });
-
+        super.finish();
+        overridePendingTransition(0, 0);
     }
 
     @Override
