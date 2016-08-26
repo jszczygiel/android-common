@@ -28,5 +28,5 @@ public interface Repo<T> {
 
     boolean isPublic();
 
-
+    void notify(T model);
 }
