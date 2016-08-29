@@ -1,7 +1,6 @@
 package com.jszczygiel.foundation.views;
 
 import android.content.Intent;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.ColorInt;
@@ -25,7 +24,6 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
      */
     private T presenter;
     private boolean isTablet;
-    private TransitionDrawable transition;
 
     @Override
     @CallSuper
@@ -92,8 +90,13 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     }
 
     @Override
-    public void showToast(int stringRes, String... formattedArgs) {
-        Toast.makeText(getContext(), getString(stringRes, formattedArgs), Toast.LENGTH_LONG).show();
+    public void showToast(final int stringRes, final String... formattedArgs) {
+        getView().post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext(), getString(stringRes, formattedArgs), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Nullable

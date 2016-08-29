@@ -2,12 +2,12 @@ package com.jszczygiel.compkit.customviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 import com.jszczygiel.R;
 
-public class AspectRatioImageView extends ImageView {
+public class AspectRatioImageView extends AppCompatImageView {
     // NOTE: These must be kept in sync with the AspectRatioImageView attributes in attrs.xml.
     public static final int MEASUREMENT_WIDTH = 0;
     public static final int MEASUREMENT_HEIGHT = 1;
