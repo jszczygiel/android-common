@@ -9,7 +9,7 @@
         android:id="@+id/activity_simple_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
+        android:layout_gravity="center"
         app:layout_marginBottomPercent="15%"
         app:layout_marginEndPercent="15%"
         app:layout_marginStartPercent="15%"

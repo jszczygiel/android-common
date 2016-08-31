@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.MenuItem;
 
 import com.jszczygiel.R;
@@ -21,6 +22,11 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
 
     public T getFragment() {
         return fragment;
+    }
+
+    static
+    {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     @Override
