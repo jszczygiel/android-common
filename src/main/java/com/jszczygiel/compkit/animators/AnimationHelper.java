@@ -46,7 +46,7 @@ public class AnimationHelper {
 
     public static Point getCenter(View view) {
         int[] outLocation = new int[2];
-        view.getLocationInWindow(outLocation);
+        view.getLocationOnScreen(outLocation);
         return new Point(outLocation[0] + view.getWidth() / 2, outLocation[1] + view.getHeight() / 2);
     }
 
