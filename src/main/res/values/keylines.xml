@@ -11,6 +11,7 @@
     <dimen name="keyline_space_grid_2">16dp</dimen>
     <dimen name="keyline_space_grid_2_half">20dp</dimen>
     <dimen name="keyline_space_grid_3">24dp</dimen>
+    <dimen name="keyline_space_grid_3_half">28dp</dimen>
     <dimen name="keyline_space_grid_4">32dp</dimen>
     <dimen name="keyline_space_grid_5">40dp</dimen>
     <dimen name="keyline_space_grid_6">48dp</dimen>
@@ -30,6 +31,7 @@
     <dimen name="keyline_space_grid_negative_half">-4dp</dimen>
     <dimen name="keyline_space_grid_negative_1">-8dp</dimen>
     <dimen name="keyline_space_grid_negative_2">-16dp</dimen>
+    <dimen name="keyline_space_grid_negative_2_half">-20dp</dimen>
     <dimen name="keyline_space_grid_negative_3">-24dp</dimen>
     <dimen name="keyline_space_grid_negative_3_half">-28dp</dimen>
     <dimen name="keyline_space_grid_negative_4">-32dp</dimen>
