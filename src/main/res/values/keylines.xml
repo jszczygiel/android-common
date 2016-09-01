@@ -13,6 +13,7 @@
     <dimen name="keyline_space_grid_3">24dp</dimen>
     <dimen name="keyline_space_grid_3_half">28dp</dimen>
     <dimen name="keyline_space_grid_4">32dp</dimen>
+    <dimen name="keyline_space_grid_4_half">36dp</dimen>
     <dimen name="keyline_space_grid_5">40dp</dimen>
     <dimen name="keyline_space_grid_6">48dp</dimen>
     <dimen name="keyline_space_grid_6_half">52dp</dimen>
