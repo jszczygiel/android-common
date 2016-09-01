@@ -24,8 +24,7 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
         return fragment;
     }
 
-    static
-    {
+    static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
@@ -37,15 +36,18 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
             Bundle extras = getIntent().getExtras();
 
             fragment = newFragmentInstance();
+            boolean noArguments = false;
             Bundle fragmentExtras = fragment.getArguments();
             if (fragmentExtras == null) {
+                noArguments = true;
                 fragmentExtras = new Bundle();
             }
             if (extras != null) {
                 fragmentExtras.putAll(extras);
             }
-
-            fragment.setArguments(fragmentExtras);
+            if (noArguments) {
+                fragment.setArguments(fragmentExtras);
+            }
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.add(R.id.activity_simple_root, fragment);
@@ -95,12 +97,12 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
             } else {
                 // This activity is part of this app's task, so simply
                 // navigate up to the logical parent activity.
-                if(!fragment.onBackPressed()){
+                if (!fragment.onBackPressed()) {
                     ActivityCompat.finishAfterTransition(this);
                 }
             }
         } else {
-            if(!fragment.onBackPressed()){
+            if (!fragment.onBackPressed()) {
                 ActivityCompat.finishAfterTransition(this);
             }
         }
