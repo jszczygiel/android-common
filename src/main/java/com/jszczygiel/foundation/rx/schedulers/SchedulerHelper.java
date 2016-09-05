@@ -12,10 +12,13 @@ public class SchedulerHelper {
 
     private static final Scheduler uiScheduler;
 
+    private static final Scheduler databaseScheduler;
+
     static {
         int cores = SystemHelper.getNumberOfCores();
         parserScheduler = Schedulers.from(Executors.newFixedThreadPool(cores * 2 - 1));
-        uiScheduler = Schedulers.from(Executors.newFixedThreadPool(cores == 1 ? 1 : cores / 2));
+        uiScheduler = Schedulers.from(Executors.newFixedThreadPool(cores == 1 ? 2 : cores / 2 + 1));
+        databaseScheduler = Schedulers.from(Executors.newFixedThreadPool(1));
     }
 
     private SchedulerHelper() {
@@ -27,5 +30,9 @@ public class SchedulerHelper {
 
     public static Scheduler parserScheduler() {
         return parserScheduler;
+    }
+
+    public static Scheduler getDatabaseScheduler() {
+        return databaseScheduler;
     }
 }
