@@ -21,7 +21,7 @@ public class AnimationHelper {
     public static final int DURATION = 200;
     public static final int LONG_DURATION = 400;
 
-    public static final int VERY_LONG_DURATION = DURATION * 4;
+    public static final int VERY_LONG_DURATION = DURATION * 6;
     private static final TimeInterpolator FAST_OUT = new FastOutLinearInInterpolator();
     private static final TimeInterpolator LINEAR_OUT = new LinearOutSlowInInterpolator();
 

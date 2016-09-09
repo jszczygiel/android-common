@@ -18,6 +18,7 @@ public class MultiDrawable extends LayerDrawable implements Drawable.Callback {
         for (int i = 0; i < drawableCount; i++) {
             setId(i, i);
         }
+        invalidateSelf();
     }
 
     public void setAlphas(@IntRange(from = 0, to = 255) int[] alphas) {
@@ -25,11 +26,12 @@ public class MultiDrawable extends LayerDrawable implements Drawable.Callback {
             throw new IllegalArgumentException("alphas length and drawableCount are not equal");
         }
         this.alphas = alphas;
+        invalidateSelf();
     }
 
     @Override
     public void draw(Canvas canvas) {
-        if(drawableAlpha!=0) {
+        if (drawableAlpha != 0) {
             for (int i = 0; i < drawableCount; i++) {
                 Drawable drawable = getDrawable(i);
                 drawable.setAlpha(alphas[i] * drawableAlpha / 255);
@@ -38,11 +40,11 @@ public class MultiDrawable extends LayerDrawable implements Drawable.Callback {
                 }
             }
         }
-        invalidateSelf();
     }
 
     @Override
     public void setAlpha(int alpha) {
         this.drawableAlpha = alpha;
+        invalidateSelf();
     }
 }
