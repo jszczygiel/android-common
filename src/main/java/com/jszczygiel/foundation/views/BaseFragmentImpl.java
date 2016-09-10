@@ -119,11 +119,10 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     @Override
     @CallSuper
     public void onDestroy() {
-        super.onDestroy();
         if (!isStaticView()) {
             clear();
         }
-
+        super.onDestroy();
     }
 
     @Override
