@@ -6,6 +6,8 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.PluralsRes;
+import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -90,13 +92,27 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     }
 
     @Override
-    public void showToast(final int stringRes, final String... formattedArgs) {
+    public void showToast(@StringRes final int resId, final String... formatArgs) {
         getView().post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getContext(), getString(stringRes, formattedArgs), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(resId, formatArgs), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public void showToast(@PluralsRes final int id, final int quantity, final String... formatArgs) {
+        getView().post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext(), getQuantityString(id, quantity, formatArgs), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public String getQuantityString(@PluralsRes int id, int quantity, Object... formatArgs) {
+        return getResources().getQuantityString(id, quantity, formatArgs);
     }
 
     @Nullable
