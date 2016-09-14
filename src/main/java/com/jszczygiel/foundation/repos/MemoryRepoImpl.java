@@ -8,6 +8,7 @@ import com.jszczygiel.foundation.rx.PublishSubject;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
 import rx.Observable;
@@ -53,8 +54,13 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
     }
 
     @Override
-    public Observable<T> remove(String id) {
-        return Observable.just(models.remove(id)).map(new Func1<T, T>() {
+    public Observable<T> remove(final String id) {
+        return Observable.fromCallable(new Callable<T>() {
+            @Override
+            public T call() throws Exception {
+                return models.remove(id);
+            }
+        }).map(new Func1<T, T>() {
             @Override
             public T call(T model) {
                 subject.onNext(new Tuple<>(SubjectAction.REMOVED, model));
