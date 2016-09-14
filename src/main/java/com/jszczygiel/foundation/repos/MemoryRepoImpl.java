@@ -33,7 +33,7 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
 
     @Override
     public Observable<T> get(final String id) {
-        Observable.fromCallable(new Func0<T>() {
+        return Observable.fromCallable(new Func0<T>() {
             @Override
             public T call() {
                 return models.get(id);
