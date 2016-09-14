@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import rx.Observable;
+import rx.functions.Func0;
 import rx.functions.Func1;
 
 public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
@@ -31,8 +32,13 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
     }
 
     @Override
-    public Observable<T> get(String id) {
-        return Observable.just(models.get(id));
+    public Observable<T> get(final String id) {
+        Observable.fromCallable(new Func0<T>() {
+            @Override
+            public T call() {
+                return models.get(id);
+            }
+        });
     }
 
     @Override
