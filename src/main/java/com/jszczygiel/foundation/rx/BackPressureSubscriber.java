@@ -5,6 +5,7 @@ import android.support.annotation.CallSuper;
 import com.jszczygiel.foundation.helpers.LoggerHelper;
 
 import rx.Subscriber;
+import rx.exceptions.OnErrorNotImplementedException;
 
 public class BackPressureSubscriber<T> extends Subscriber<T> {
     @Override
@@ -21,6 +22,7 @@ public class BackPressureSubscriber<T> extends Subscriber<T> {
     @Override
     public void onError(Throwable error) {
         LoggerHelper.log(error);
+        throw new OnErrorNotImplementedException(error);
     }
 
     @Override
