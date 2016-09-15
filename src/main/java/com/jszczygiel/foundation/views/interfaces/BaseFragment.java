@@ -8,6 +8,8 @@ import android.support.annotation.StringRes;
 
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 
+import rx.Subscription;
+
 public interface BaseFragment<T extends BasePresenter> {
     void setUpPresenter(T presenter);
 
@@ -31,4 +33,8 @@ public interface BaseFragment<T extends BasePresenter> {
     void showToast(@StringRes int resId, String... formatArgs);
 
     void showToast(@PluralsRes int id, int quantity, String... formatArgs);
+
+    void addSubscriptionToLifeCycle(Subscription subscription);
+
+    void removeSubscriptionFromLifeCycle(Subscription subscription);
 }

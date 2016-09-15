@@ -19,6 +19,9 @@ import com.jszczygiel.foundation.helpers.SystemHelper;
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseFragment;
 
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
+
 public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment implements BaseFragment<T> {
 
     /**
@@ -26,6 +29,7 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
      */
     private T presenter;
     private boolean isTablet;
+    CompositeSubscription subscriptionList;
 
     @Override
     @CallSuper
@@ -33,6 +37,7 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
         super.onCreate(savedInstanceState);
         setPresenter();
         setUpPresenter(presenter);
+        subscriptionList = new CompositeSubscription();
         getPresenter().onAttach(this);
     }
 
@@ -146,6 +151,7 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     }
 
     public void clear() {
+        subscriptionList.unsubscribe();
         getPresenter().onDetach();
         presenter = null;
     }
@@ -178,4 +184,17 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
 
     public void onNewIntent(Intent intent) {
     }
+
+    @Override
+    public void addSubscriptionToLifeCycle(Subscription subscription) {
+        subscriptionList.add(subscription);
+    }
+
+    @Override
+    public void removeSubscriptionFromLifeCycle(Subscription subscription) {
+        if (subscription != null) {
+            subscriptionList.remove(subscription);
+        }
+    }
+
 }

@@ -5,22 +5,20 @@ import android.support.annotation.CallSuper;
 
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 public abstract class BasePresenterImpl<T> implements BasePresenter<T> {
 
     protected boolean isTablet;
     protected int orientation;
     T view;
-    Set<Subscription> subscriptionList;
+    CompositeSubscription subscriptionList;
 
     @CallSuper
     @Override
     public void onAttach(T view) {
-        subscriptionList = new HashSet<>();
+        subscriptionList = new CompositeSubscription();
         this.view = view;
     }
 
@@ -28,11 +26,7 @@ public abstract class BasePresenterImpl<T> implements BasePresenter<T> {
     @Override
     public void onDetach() {
         this.view = null;
-        for (Subscription subscription : subscriptionList) {
-            if (subscription != null && !subscription.isUnsubscribed()) {
-                subscription.unsubscribe();
-            }
-        }
+        subscriptionList.unsubscribe();
     }
 
     @Override
@@ -58,9 +52,6 @@ public abstract class BasePresenterImpl<T> implements BasePresenter<T> {
     @Override
     public void removeSubscriptionFromLifeCycle(Subscription subscription) {
         if (subscription != null) {
-            if (!subscription.isUnsubscribed()) {
-                subscription.unsubscribe();
-            }
             subscriptionList.remove(subscription);
         }
     }
