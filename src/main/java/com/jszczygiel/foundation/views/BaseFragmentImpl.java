@@ -101,7 +101,9 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
         getView().post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getContext(), getString(resId, formatArgs), Toast.LENGTH_LONG).show();
+                if (isAvailable()) {
+                    Toast.makeText(getContext(), getString(resId, formatArgs), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -111,7 +113,9 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
         getView().post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getContext(), getQuantityString(id, quantity, formatArgs), Toast.LENGTH_LONG).show();
+                if (isAvailable()) {
+                    Toast.makeText(getContext(), getQuantityString(id, quantity, formatArgs), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
