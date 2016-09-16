@@ -16,6 +16,7 @@ import android.widget.EditText;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class SystemHelper {
@@ -94,9 +95,22 @@ public class SystemHelper {
         ActivityManager manager
                 = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
-        for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
-            if (processInfo.pid == pid) {
-                return processInfo.processName;
+        List<ActivityManager.RunningServiceInfo> runningServiceInfos = manager.getRunningServices(Integer.MAX_VALUE);
+        if (runningServiceInfos != null) {
+            for (ActivityManager.RunningServiceInfo runningServiceInfo : runningServiceInfos) {
+                if (runningServiceInfo.pid == pid) {
+                    return runningServiceInfo.process;
+
+                }
+            }
+        }
+
+        List<ActivityManager.RunningAppProcessInfo> processInfos = manager.getRunningAppProcesses();
+        if (processInfos != null) {
+            for (ActivityManager.RunningAppProcessInfo processInfo : processInfos) {
+                if (processInfo.pid == pid) {
+                    return processInfo.processName;
+                }
             }
         }
         return "";
