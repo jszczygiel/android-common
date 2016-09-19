@@ -76,7 +76,6 @@ public class AnimationHelper {
         } else {
             view.setBackgroundDrawable(transitionDrawable);
         }
-        transitionDrawable.setCrossFadeEnabled(true);
         transitionDrawable.startTransition(VERY_LONG_DURATION);
 
     }
