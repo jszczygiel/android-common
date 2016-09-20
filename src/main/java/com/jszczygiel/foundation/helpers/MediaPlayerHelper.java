@@ -2,6 +2,7 @@ package com.jszczygiel.foundation.helpers;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -103,5 +104,19 @@ public class MediaPlayerHelper {
 
         ringtoneCursor.close();
         return path;
+    }
+
+    public static boolean isPhoneSilent(Context context) {
+        AudioManager audioService = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        boolean ringerModeSilent = false, streamSilent=false;
+        if (audioService.getRingerMode() == AudioManager.RINGER_MODE_SILENT) {
+            ringerModeSilent=true;
+        }
+        int current = audioService.getStreamVolume(AudioManager.STREAM_ALARM);
+        if (current <= 1) {
+            streamSilent=true;
+        }
+
+        return streamSilent||ringerModeSilent;
     }
 }
