@@ -120,9 +120,6 @@ public class MediaPlayerHelper {
     public static boolean isPhoneSilent(Context context) {
         AudioManager audioService = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         boolean ringerModeSilent = false, streamSilent = false;
-        if (audioService.getRingerMode() == AudioManager.RINGER_MODE_SILENT) {
-            ringerModeSilent = true;
-        }
         int current = audioService.getStreamVolume(AudioManager.STREAM_ALARM);
         if (current <= 1) {
             streamSilent = true;
