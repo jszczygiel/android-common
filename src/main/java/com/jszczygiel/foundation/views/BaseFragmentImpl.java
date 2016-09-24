@@ -73,7 +73,7 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
 
     @Override
     public boolean isAvailable() {
-        return !isDetached() && !isRemoving() && getPresenter() != null;
+        return !isDetached() && !isRemoving() && getPresenter() != null && getActivity() != null && !getActivity().isFinishing();
     }
 
     @Override
