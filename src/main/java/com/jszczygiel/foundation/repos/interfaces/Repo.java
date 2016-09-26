@@ -10,6 +10,8 @@ public interface Repo<T> {
 
     void setUserId(String userId);
 
+    Observable<T> get(String id, String referenceId);
+
     Observable<T> get(String id);
 
     Observable<T> getAll();
