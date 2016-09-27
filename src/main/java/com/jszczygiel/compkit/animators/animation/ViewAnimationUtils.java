@@ -2,6 +2,7 @@ package com.jszczygiel.compkit.animators.animation;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.os.Build;
 import android.view.View;
 
 import static android.os.Build.VERSION.SDK_INT;
@@ -66,9 +67,9 @@ public final class ViewAnimationUtils {
     RevealViewGroup viewGroup = (RevealViewGroup) view.getParent();
     ViewRevealManager rm = viewGroup.getViewRevealManager();
 
-    if (!rm.hasCustomerRevealAnimator() && LOLLIPOP_PLUS) {
-      return android.view.ViewAnimationUtils.createCircularReveal(view, centerX, centerY,
-          startRadius, endRadius);
+    if (!rm.hasCustomerRevealAnimator() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        return android.view.ViewAnimationUtils.createCircularReveal(view, centerX, centerY,
+            startRadius, endRadius);
     }
 
     ViewRevealManager.RevealValues viewData = new ViewRevealManager.RevealValues(view, centerX, centerY, startRadius, endRadius);

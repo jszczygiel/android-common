@@ -80,6 +80,7 @@ public class CircularImageView extends ImageView {
 
         int color = attributes.getColor(R.styleable.CircularImageView_civ_inner_color, Color.WHITE);
         backgroundPaint.setColor(color);
+        attributes.recycle();
     }
 
     //endregion

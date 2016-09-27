@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -139,7 +140,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
                 animator.cancel();
                 animator = null;
             }
-            finishAfterTransition();
+            ActivityCompat.finishAfterTransition(RevelSimpleFragmentActivityImpl.this);
         } else if (animator == null) {
             animator = AnimationHelper.circularReveal(container, x, y, point.y, getWidth(), new AnimationHelper.SimpleAnimatorListener() {
                 @Override
@@ -148,7 +149,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
                     if (container != null) {
                         container.setVisibility(View.GONE);
                     }
-                    finishAfterTransition();
+                    ActivityCompat.finishAfterTransition(RevelSimpleFragmentActivityImpl.this);
                 }
             });
             if (transition != null) {
@@ -159,11 +160,6 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
         }
     }
 
-    @Override
-    public void finishAfterTransition() {
-        super.finish();
-        overridePendingTransition(0, 0);
-    }
 
     @Override
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
