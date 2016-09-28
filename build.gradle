@@ -35,11 +35,14 @@ apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
-group='com.github.jszczygiel'
+group = 'com.github.jszczygiel'
 
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
+    dataBinding {
+        enabled = true
+    }
 
     defaultConfig {
         minSdkVersion 15

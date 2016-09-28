@@ -35,6 +35,12 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         emptyView = (ViewGroup) view.findViewById(R.id.empty);
 
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
         WrapContentLinearLayoutManager linearLayoutManager = new WrapContentLinearLayoutManager(getContext(), isReverse());
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = newAdapterInstance();
@@ -69,7 +75,7 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
         for (RecyclerView.ItemDecoration decorator : createItemDecoratorsInstances()) {
             recyclerView.addItemDecoration(decorator);
         }
-        return view;
+        super.onViewCreated(view, savedInstanceState);
     }
 
     public ItemTouchHelper createTouchHelperInstance() {
