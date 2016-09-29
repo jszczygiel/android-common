@@ -8,16 +8,10 @@ import rx.Scheduler;
 import rx.schedulers.Schedulers;
 
 public class SchedulerHelper {
-    private static final Scheduler parserScheduler;
-
-    private static final Scheduler uiScheduler;
 
     private static final Scheduler databaseScheduler;
 
     static {
-        int cores = SystemHelper.getNumberOfCores();
-        parserScheduler = Schedulers.from(Executors.newFixedThreadPool(cores * 2 - 1));
-        uiScheduler = Schedulers.from(Executors.newFixedThreadPool(cores == 1 ? 2 : cores / 2 + 1));
         databaseScheduler = Schedulers.from(Executors.newFixedThreadPool(1));
     }
 
@@ -25,11 +19,11 @@ public class SchedulerHelper {
     }
 
     public static Scheduler uiScheduler() {
-        return uiScheduler;
+        return Schedulers.newThread();
     }
 
     public static Scheduler parserScheduler() {
-        return parserScheduler;
+        return Schedulers.newThread();
     }
 
     public static Scheduler getDatabaseScheduler() {
