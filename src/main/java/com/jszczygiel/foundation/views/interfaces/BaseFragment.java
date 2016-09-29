@@ -1,10 +1,10 @@
 package com.jszczygiel.foundation.views.interfaces;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.PluralsRes;
 import android.support.annotation.StringRes;
+import android.support.v4.app.FragmentActivity;
 
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 
@@ -27,8 +27,7 @@ public interface BaseFragment<T extends BasePresenter> {
 
     void setResult(int resultCode);
 
-
-    Activity getActivity();
+    FragmentActivity getActivity();
 
     void showToast(@StringRes int resId, String... formatArgs);
 
