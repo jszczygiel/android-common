@@ -40,6 +40,9 @@ group='com.github.jszczygiel'
 android {
     compileSdkVersion 24
     buildToolsVersion rootProject.ext.buildToolsVersion
+    dataBinding {
+        enabled = true
+    }
 
     defaultConfig {
         minSdkVersion 15
