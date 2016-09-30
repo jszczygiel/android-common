@@ -15,9 +15,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import rx.Observable;
-import rx.functions.Func1;
-
 public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     protected static final String LIST = "extra_list";
@@ -255,12 +252,13 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
     }
 
     public BaseViewModel getItemById(final String itemId) {
-        return Observable.from(collection).filter(new Func1<BaseViewModel, Boolean>() {
-            @Override
-            public Boolean call(BaseViewModel filter) {
-                return filter.getId().equals(itemId);
+        for (int i = 0; i < collection.size(); i++) {
+            BaseViewModel item = collection.getSafe(i);
+            if (itemId.equals(item.getId())) {
+                return item;
             }
-        }).defaultIfEmpty(null).toBlocking().first();
+        }
+        return null;
     }
 
     public Bundle getBundle() {
@@ -294,6 +292,6 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
     }
 
     public List<BaseViewModel> getViewModels() {
-        return Arrays.asList(Arrays.copyOfRange(collection.getAll(),0,collection.size()));
+        return Arrays.asList(Arrays.copyOfRange(collection.getAll(), 0, collection.size()));
     }
 }
