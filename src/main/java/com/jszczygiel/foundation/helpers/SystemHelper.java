@@ -2,6 +2,7 @@ package com.jszczygiel.foundation.helpers;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -131,5 +132,14 @@ public class SystemHelper {
         PackageManager pm = context.getPackageManager();
 
         return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
+    }
+
+    public static boolean isScreenLocked(Context context) {
+        KeyguardManager myKM = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+        if (myKM.inKeyguardRestrictedInputMode()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
