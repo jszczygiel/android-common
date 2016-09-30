@@ -18,7 +18,6 @@ import com.jszczygiel.R;
 import com.jszczygiel.compkit.animators.AnimationHelper;
 import com.jszczygiel.compkit.viewmodels.RevelOptions;
 import com.jszczygiel.foundation.helpers.SystemHelper;
-import com.jszczygiel.foundation.rx.schedulers.SchedulerHelper;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +27,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl> extends SimpleFragmentActivityImpl<T> {
     public static final String EXTRA_REVEAL_OPTIONS = "extra_revel_options";
@@ -69,7 +69,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
                             return RevelSimpleFragmentActivityImpl.this.getFragment().isVisible();
                         }
                     })
-                    .subscribeOn(SchedulerHelper.uiScheduler())
+                    .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<Long>() {
                         @Override

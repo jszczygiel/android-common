@@ -18,13 +18,6 @@ public class SchedulerHelper {
     private SchedulerHelper() {
     }
 
-    public static Scheduler uiScheduler() {
-        return Schedulers.newThread();
-    }
-
-    public static Scheduler parserScheduler() {
-        return Schedulers.newThread();
-    }
 
     public static Scheduler getDatabaseScheduler() {
         return databaseScheduler;
