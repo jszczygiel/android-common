@@ -142,4 +142,8 @@ public class SystemHelper {
             return false;
         }
     }
+
+    public static boolean hasFlashLight(Context context) {
+        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+    }
 }
