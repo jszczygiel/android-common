@@ -108,12 +108,6 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        setIntent(null);
-    }
-
     public void replaceFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
