@@ -38,7 +38,7 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
         setPresenter();
         setUpPresenter(presenter);
         subscriptionList = new CompositeSubscription();
-        getPresenter().onAttach(this);
+        getPresenter().onAttach(this, getArguments());
     }
 
     private void setPresenter() {

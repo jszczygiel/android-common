@@ -17,7 +17,7 @@ public abstract class BasePresenterImpl<T> implements BasePresenter<T> {
 
     @CallSuper
     @Override
-    public void onAttach(T view) {
+    public void onAttach(T view, Bundle arguments) {
         subscriptionList = new CompositeSubscription();
         this.view = view;
     }

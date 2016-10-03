@@ -5,7 +5,7 @@ import android.os.Bundle;
 import rx.Subscription;
 
 public interface BasePresenter<T> {
-    void onAttach(T view);
+    void onAttach(T view, Bundle arguments);
 
     void onDetach();
 

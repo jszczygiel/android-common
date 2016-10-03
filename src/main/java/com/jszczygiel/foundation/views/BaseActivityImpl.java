@@ -24,7 +24,7 @@ public abstract class BaseActivityImpl<T extends BasePresenter> extends AppCompa
         setContentView(getLayoutId());
         setPresenter();
         setUpPresenter(presenter);
-        getPresenter().onAttach(this);
+        getPresenter().onAttach(this, getIntent().getExtras());
     }
 
     protected abstract int getLayoutId();

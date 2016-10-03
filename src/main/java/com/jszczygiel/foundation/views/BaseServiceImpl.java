@@ -20,7 +20,7 @@ public abstract class BaseServiceImpl<T extends BasePresenter> extends Service i
 
         setPresenter();
         setUpPresenter(presenter);
-        presenter.onAttach(this);
+        presenter.onAttach(this, null);
     }
 
     @Override
