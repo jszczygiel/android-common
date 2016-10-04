@@ -11,7 +11,7 @@ public class SchedulerHelper {
     private static final Scheduler databaseWriterScheduler;
 
     static {
-        databaseReaderScheduler = Schedulers.from(Executors.newFixedThreadPool(2));
+        databaseReaderScheduler = Schedulers.from(Executors.newFixedThreadPool(3));
         databaseWriterScheduler = Schedulers.from(Executors.newFixedThreadPool(1));
     }
 
