@@ -6,13 +6,8 @@ import java.util.List;
 
 import rx.Observable;
 
-public interface Repo<T> {
+public interface Repo<T extends BaseModel> {
 
-    void setUserId(String userId);
-
-    String getUserId();
-
-    Observable<T> get(String id, String referenceId);
 
     Observable<T> get(String id);
 
@@ -29,8 +24,6 @@ public interface Repo<T> {
     Observable<List<T>> observeAll();
 
     void clear();
-
-    boolean isPublic();
 
     void notify(T model);
 }

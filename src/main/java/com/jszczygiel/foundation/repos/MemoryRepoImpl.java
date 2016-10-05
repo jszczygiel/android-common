@@ -28,11 +28,6 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
     }
 
     @Override
-    public void setUserId(String userId) {
-
-    }
-
-    @Override
     public Observable<T> get(final String id) {
         return Observable.fromCallable(new Func0<T>() {
             @Override
@@ -87,11 +82,6 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
     @Override
     public void clear() {
         models.clear();
-    }
-
-    @Override
-    public boolean isPublic() {
-        return false;
     }
 
     protected Map<String, T> getModels() {
