@@ -78,8 +78,7 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-core:2.8.3'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.3'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.3'
-    compile 'com.pushtorefresh.storio:sqlite:1.10.0'
-    compile 'com.pushtorefresh.storio:sqlite-annotations:1.10.0'
+    compile 'com.squareup.sqlbrite:sqlbrite:0.7.0'
 
     //rx
     compile 'io.reactivex:rxandroid:1.1.0'

@@ -1,9 +1,10 @@
 package com.jszczygiel.foundation;
 
 import android.app.Application;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.CallSuper;
 
-public class BaseApplication extends Application {
+public abstract class BaseApplication extends Application {
 
     private static BaseApplication INSTANCE;
     private boolean isDebug;
@@ -25,5 +26,9 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         INSTANCE = this;
+    }
+
+    public SQLiteOpenHelper getSQLiteOpenHelper() {
+        return null;
     }
 }
