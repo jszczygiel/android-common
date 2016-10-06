@@ -102,7 +102,7 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
             @Override
             public void run() {
                 if (isAvailable()) {
-                    Toast.makeText(getContext(), getString(resId, formatArgs), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(resId, (Object[])formatArgs), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -114,7 +114,7 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
             @Override
             public void run() {
                 if (isAvailable()) {
-                    Toast.makeText(getContext(), getQuantityString(id, quantity, formatArgs), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getQuantityString(id, quantity, (Object[])formatArgs), Toast.LENGTH_LONG).show();
                 }
             }
         });
