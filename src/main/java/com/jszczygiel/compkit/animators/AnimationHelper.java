@@ -8,13 +8,24 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.Animation;
 
 import com.jszczygiel.compkit.animators.animation.ViewAnimationUtils;
+
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
 
 public class AnimationHelper {
 
@@ -92,6 +103,41 @@ public class AnimationHelper {
         int green = (int) ((Color.green(color) * (1 - factor) / 255 + factor) * 255);
         int blue = (int) ((Color.blue(color) * (1 - factor) / 255 + factor) * 255);
         return Color.argb(Color.alpha(color), red, green, blue);
+    }
+
+    public static void swipe(final ViewGroup view, final int y, int seconds, final int keyline) {
+        final int frames = seconds / 16;
+        final long downTime = SystemClock.uptimeMillis();
+        final long eventTime = SystemClock.uptimeMillis();
+        final FastOutSlowInInterpolator interpolator = new FastOutSlowInInterpolator();
+
+        Observable.range(0, frames)
+                .delay(new Func1<Integer, Observable<Integer>>() {
+                    @Override
+                    public Observable<Integer> call(Integer integer) {
+                        return Observable.just(integer).delay(integer == frames - 1 ? 1000 : 16, TimeUnit.MILLISECONDS);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer next) {
+                        int x = (int) (interpolator.getInterpolation((float) next / (float) frames) * keyline);
+                        MotionEvent event;
+                        if (next == 0) {
+                            event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, x, y, 0);
+
+                        } else if (next == frames - 1) {
+                            event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_CANCEL, x, y, 0);
+
+                        } else {
+                            event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_MOVE, x, y, 0);
+
+                        }
+                        view.dispatchTouchEvent(event);
+
+                    }
+                });
     }
 
     public static class SimpleAnimatorListener implements Animator.AnimatorListener {
