@@ -105,7 +105,7 @@ public class AnimationHelper {
         return Color.argb(Color.alpha(color), red, green, blue);
     }
 
-    public static void swipe(final ViewGroup view, final int y, int seconds, final int keyline) {
+    public static void swipe(final ViewGroup view, final int y, int seconds, int holdTimeSeconds, final int keyline) {
         final int frames = seconds / 16;
         final long downTime = SystemClock.uptimeMillis();
         final long eventTime = SystemClock.uptimeMillis();
@@ -115,7 +115,7 @@ public class AnimationHelper {
                 .delay(new Func1<Integer, Observable<Integer>>() {
                     @Override
                     public Observable<Integer> call(Integer integer) {
-                        return Observable.just(integer).delay(integer == frames - 1 ? 1000 : 16, TimeUnit.MILLISECONDS);
+                        return Observable.just(integer).delay(integer == frames - 1 ? holdTimeSeconds*1000 : 16, TimeUnit.MILLISECONDS);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
