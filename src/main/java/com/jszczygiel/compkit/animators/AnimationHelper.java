@@ -105,8 +105,8 @@ public class AnimationHelper {
         return Color.argb(Color.alpha(color), red, green, blue);
     }
 
-    public static void swipe(final ViewGroup view, final int y, int seconds, final int holdTimeSeconds, final int keyline) {
-        final int frames = seconds / 16;
+    public static void swipe(final ViewGroup view, final int y, int swipeSeconds, final int holdTimeSeconds, final int keyline) {
+        final int frames = swipeSeconds * 1000 / 16;
         final long downTime = SystemClock.uptimeMillis();
         final long eventTime = SystemClock.uptimeMillis();
         final FastOutSlowInInterpolator interpolator = new FastOutSlowInInterpolator();
