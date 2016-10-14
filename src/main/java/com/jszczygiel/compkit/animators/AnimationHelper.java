@@ -19,12 +19,12 @@ import android.view.ViewPropertyAnimator;
 import android.view.animation.Animation;
 
 import com.jszczygiel.compkit.animators.animation.ViewAnimationUtils;
-import com.jszczygiel.foundation.rx.BackPressureSubscriber;
 
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 
 public class AnimationHelper {
@@ -120,9 +120,9 @@ public class AnimationHelper {
                 })
                 .onBackpressureDrop()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BackPressureSubscriber<Integer>() {
+                .subscribe(new Action1<Integer>() {
                     @Override
-                    public void onNext(Integer next) {
+                    public void call(Integer next) {
                         int x = (int) (interpolator.getInterpolation((float) next / (float) frames) * keyline);
                         MotionEvent event;
                         if (next == 0) {
@@ -136,7 +136,11 @@ public class AnimationHelper {
 
                         }
                         view.dispatchTouchEvent(event);
-                        super.onNext(next);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable error) {
+                        error.printStackTrace();
                     }
                 });
     }
