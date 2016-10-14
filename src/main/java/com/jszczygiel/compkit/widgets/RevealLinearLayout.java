@@ -1,27 +1,27 @@
-package com.jszczygiel.compkit.customviews;
+package com.jszczygiel.compkit.widgets;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.jszczygiel.compkit.animators.animation.RevealViewGroup;
 import com.jszczygiel.compkit.animators.animation.ViewRevealManager;
 
-public class RevealFrameLayout extends FrameLayout implements RevealViewGroup {
+public class RevealLinearLayout extends LinearLayout implements RevealViewGroup {
   private ViewRevealManager manager;
 
-  public RevealFrameLayout(Context context) {
+  public RevealLinearLayout(Context context) {
     this(context, null);
   }
 
-  public RevealFrameLayout(Context context, AttributeSet attrs) {
+  public RevealLinearLayout(Context context, AttributeSet attrs) {
     this(context, attrs, 0);
   }
 
-  public RevealFrameLayout(Context context, AttributeSet attrs, int defStyle) {
-    super(context, attrs, defStyle);
+  public RevealLinearLayout(Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs);
     manager = new ViewRevealManager();
   }
 

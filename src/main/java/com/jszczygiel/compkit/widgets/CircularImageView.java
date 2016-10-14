@@ -1,4 +1,4 @@
-package com.jszczygiel.compkit.customviews;
+package com.jszczygiel.compkit.widgets;
 
 import android.content.Context;
 import android.content.res.TypedArray;
