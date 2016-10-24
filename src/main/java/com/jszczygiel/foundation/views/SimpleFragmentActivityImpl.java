@@ -19,6 +19,7 @@ import com.jszczygiel.R;
 public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> extends AppCompatActivity {
 
     private T fragment;
+    private boolean isVisible;
 
     public T getFragment() {
         return fragment;
@@ -119,5 +120,21 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
     @Override
     protected void onNewIntent(Intent intent) {
         getFragment().onNewIntent(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isVisible = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isVisible = false;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
     }
 }
