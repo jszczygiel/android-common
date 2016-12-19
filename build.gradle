@@ -38,7 +38,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.jszczygiel'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion rootProject.ext.compileApi
     buildToolsVersion rootProject.ext.buildToolsVersion
     dataBinding {
         enabled = true
