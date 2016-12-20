@@ -8,6 +8,7 @@ public class WrapContentLinearLayoutManager extends LinearLayoutManager {
 
     public WrapContentLinearLayoutManager(Context context, boolean reverseLayout) {
         super(context, VERTICAL, reverseLayout);
+        setItemPrefetchEnabled(false);
     }
 
     @Override

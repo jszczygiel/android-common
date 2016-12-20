@@ -20,8 +20,15 @@ import com.jszczygiel.foundation.presenters.interfaces.BaseListPresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseListFragment;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends BaseFragmentImpl<T> implements BaseListFragment<T> {
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+
+public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends
+        BaseFragmentImpl<T> implements BaseListFragment<T> {
 
     protected BaseRecyclerAdapter adapter;
     RecyclerView recyclerView;
@@ -30,7 +37,8 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         emptyView = (ViewGroup) view.findViewById(R.id.empty);
@@ -41,7 +49,8 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        WrapContentLinearLayoutManager linearLayoutManager = new WrapContentLinearLayoutManager(getContext(), isReverse());
+        WrapContentLinearLayoutManager linearLayoutManager = new WrapContentLinearLayoutManager(
+                getContext(), isReverse());
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = newAdapterInstance();
         recyclerView.setAdapter(adapter);
@@ -68,7 +77,8 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
 
             @Override
             public void onItemsVisibilityChanged(int firstVisibleItem, int lastVisibleItem) {
-                BaseListFragmentImpl.this.onItemsVisibilityChanged(firstVisibleItem, lastVisibleItem);
+                BaseListFragmentImpl.this.onItemsVisibilityChanged(firstVisibleItem,
+                        lastVisibleItem);
             }
         });
 
@@ -143,6 +153,23 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
     @Override
     public void addOrUpdate(BaseViewModel model) {
         adapter.addOrUpdate(model);
+        Observable.just(recyclerView.getChildCount() == 0)
+                .filter(new Func1<Boolean, Boolean>() {
+                    @Override
+                    public Boolean call(Boolean aBoolean) {
+                        return aBoolean;
+                    }
+                })
+                .delay(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean next) {
+                        if (recyclerView.getChildCount() == 0) {
+                            recyclerView.requestLayout();
+                        }
+                    }
+                });
     }
 
     @Override
@@ -177,7 +204,8 @@ public abstract class BaseListFragmentImpl<T extends BaseListPresenter> extends 
         if (recyclerView == null) {
             return RecyclerView.NO_POSITION;
         }
-        return ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+        return ((LinearLayoutManager) recyclerView.getLayoutManager())
+                .findFirstVisibleItemPosition();
     }
 
     @Override
