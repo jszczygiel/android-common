@@ -28,7 +28,8 @@ public class AspectRatioImageView extends AppCompatImageView {
         super(context, attrs);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AspectRatioContainer);
-        aspectRatio = a.getFloat(R.styleable.AspectRatioContainer_aspectRatio, DEFAULT_ASPECT_RATIO);
+        aspectRatio = a.getFloat(R.styleable.AspectRatioContainer_aspectRatio,
+                DEFAULT_ASPECT_RATIO);
         dominantMeasurement = a.getInt(R.styleable.AspectRatioContainer_dominantMeasurement,
                 DEFAULT_DOMINANT_MEASUREMENT);
         a.recycle();
@@ -52,7 +53,8 @@ public class AspectRatioImageView extends AppCompatImageView {
                 break;
 
             default:
-                throw new IllegalStateException("Unknown measurement with ID " + dominantMeasurement);
+                throw new IllegalStateException(
+                        "Unknown measurement with ID " + dominantMeasurement);
         }
 
         setMeasuredDimension(newWidth, newHeight);

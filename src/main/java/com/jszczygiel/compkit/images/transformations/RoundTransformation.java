@@ -17,11 +17,6 @@ public class RoundTransformation extends BitmapTransformation {
         this.padding = padding;
     }
 
-    @Override
-    protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
-        return circleCrop(pool, toTransform, padding);
-    }
-
     private static Bitmap circleCrop(BitmapPool pool, Bitmap source, float padding) {
         if (source == null) {
             return null;
@@ -41,11 +36,17 @@ public class RoundTransformation extends BitmapTransformation {
 
         Canvas canvas = new Canvas(result);
         Paint paint = new Paint();
-        paint.setShader(new BitmapShader(squared, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP));
+        paint.setShader(new BitmapShader(squared, BitmapShader.TileMode.CLAMP,
+                BitmapShader.TileMode.CLAMP));
         paint.setAntiAlias(true);
         float r = size / 2f;
         canvas.drawCircle(r, r, r - padding, paint);
         return result;
+    }
+
+    @Override
+    protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
+        return circleCrop(pool, toTransform, padding);
     }
 
     @Override

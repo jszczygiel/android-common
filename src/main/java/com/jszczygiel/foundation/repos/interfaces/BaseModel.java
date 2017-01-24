@@ -7,5 +7,6 @@ public interface BaseModel {
     String getId();
 
     Map<String, Object> toMap(Object next);
+
     Map<String, Object> toMap();
 }

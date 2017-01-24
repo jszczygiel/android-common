@@ -8,7 +8,8 @@ import com.jszczygiel.foundation.helpers.SystemHelper;
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseActivity;
 
-public abstract class BaseActivityImpl<T extends BasePresenter> extends AppCompatActivity implements BaseActivity<T> {
+public abstract class BaseActivityImpl<T extends BasePresenter> extends AppCompatActivity
+        implements BaseActivity<T> {
 
     /**
      * instance of presenter

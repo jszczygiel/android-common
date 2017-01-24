@@ -8,7 +8,7 @@ public abstract class BaseBindedViewHolder<T, K extends ViewDataBinding> extends
 
     public BaseBindedViewHolder(K binding, Context context) {
         super(binding.getRoot(), context);
-        this.binding=binding;
+        this.binding = binding;
     }
 
     public K getBinding() {

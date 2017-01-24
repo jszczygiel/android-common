@@ -6,7 +6,8 @@ import com.jszczygiel.foundation.helpers.SystemHelper;
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseService;
 
-public abstract class BaseServiceImpl<T extends BasePresenter> extends Service implements BaseService<T> {
+public abstract class BaseServiceImpl<T extends BasePresenter> extends Service implements
+        BaseService<T> {
 
     /**
      * instance of presenter

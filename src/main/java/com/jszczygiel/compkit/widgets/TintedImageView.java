@@ -22,7 +22,8 @@ import com.jszczygiel.compkit.images.ImageBuilder;
 public class TintedImageView extends AppCompatImageView {
 
     public static final int[] STATE_PRESSED = new int[]{android.R.attr.state_pressed};
-    public static final int[] STATE_PRESSED_DISABLED = new int[]{android.R.attr.state_pressed, -android.R.attr.state_enabled};
+    public static final int[] STATE_PRESSED_DISABLED = new int[]{android.R.attr.state_pressed,
+            -android.R.attr.state_enabled};
     public static final int[] STATE_DISABLED = new int[]{-android.R.attr.state_enabled};
 
     protected ColorStateList colorStateList;
@@ -48,8 +49,10 @@ public class TintedImageView extends AppCompatImageView {
         try {
             ta = context.obtainStyledAttributes(attrs, R.styleable.TintedImageView, 0, 0);
 
-            int tintColour = ta.getColor(R.styleable.TintedImageView_tintColour, ContextCompat.getColor(context, android.R.color.black));
-            int selectedTintColour = ta.getColor(R.styleable.TintedImageView_selectedTintColour, ContextCompat.getColor(context, android.R.color.black));
+            int tintColour = ta.getColor(R.styleable.TintedImageView_tintColour,
+                    ContextCompat.getColor(context, android.R.color.black));
+            int selectedTintColour = ta.getColor(R.styleable.TintedImageView_selectedTintColour,
+                    ContextCompat.getColor(context, android.R.color.black));
 
             colorStateList = ColorHelper.ColorStateListBuilder
                     .forStates(STATE_PRESSED, StateSet.WILD_CARD)
@@ -148,7 +151,8 @@ public class TintedImageView extends AppCompatImageView {
         applyTint(getDrawable());
     }
 
-    public void setColorTint(@ColorInt int pressedColor, @ColorInt int defaultColor, @ColorInt int disabledColor) {
+    public void setColorTint(@ColorInt int pressedColor, @ColorInt int defaultColor,
+                             @ColorInt int disabledColor) {
         colorStateList = ColorHelper.ColorStateListBuilder
                 .forStates(STATE_PRESSED, STATE_DISABLED, StateSet.WILD_CARD)
                 .withColors(pressedColor, disabledColor, defaultColor)

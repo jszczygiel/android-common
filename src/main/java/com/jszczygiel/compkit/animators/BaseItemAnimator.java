@@ -18,68 +18,18 @@ import java.util.List;
 public abstract class BaseItemAnimator extends SimpleItemAnimator {
 
     private static final boolean DEBUG = false;
-
+    protected ArrayList<ViewHolder> mAddAnimations = new ArrayList<>();
+    protected ArrayList<ViewHolder> mRemoveAnimations = new ArrayList<>();
+    protected Interpolator mInterpolator = new LinearInterpolator();
     private ArrayList<ViewHolder> mPendingRemovals = new ArrayList<>();
     private ArrayList<ViewHolder> mPendingAdditions = new ArrayList<>();
     private ArrayList<MoveInfo> mPendingMoves = new ArrayList<>();
     private ArrayList<ChangeInfo> mPendingChanges = new ArrayList<>();
-
     private ArrayList<ArrayList<ViewHolder>> mAdditionsList = new ArrayList<>();
     private ArrayList<ArrayList<MoveInfo>> mMovesList = new ArrayList<>();
     private ArrayList<ArrayList<ChangeInfo>> mChangesList = new ArrayList<>();
-
-    protected ArrayList<ViewHolder> mAddAnimations = new ArrayList<>();
     private ArrayList<ViewHolder> mMoveAnimations = new ArrayList<>();
-    protected ArrayList<ViewHolder> mRemoveAnimations = new ArrayList<>();
     private ArrayList<ViewHolder> mChangeAnimations = new ArrayList<>();
-
-    protected Interpolator mInterpolator = new LinearInterpolator();
-
-    private static class MoveInfo {
-
-        public ViewHolder holder;
-        public int fromX, fromY, toX, toY;
-
-        private MoveInfo(ViewHolder holder, int fromX, int fromY, int toX, int toY) {
-            this.holder = holder;
-            this.fromX = fromX;
-            this.fromY = fromY;
-            this.toX = toX;
-            this.toY = toY;
-        }
-    }
-
-    private static class ChangeInfo {
-
-        public ViewHolder oldHolder, newHolder;
-        public int fromX, fromY, toX, toY;
-
-        private ChangeInfo(ViewHolder oldHolder, ViewHolder newHolder) {
-            this.oldHolder = oldHolder;
-            this.newHolder = newHolder;
-        }
-
-        private ChangeInfo(ViewHolder oldHolder, ViewHolder newHolder, int fromX, int fromY, int toX,
-                           int toY) {
-            this(oldHolder, newHolder);
-            this.fromX = fromX;
-            this.fromY = fromY;
-            this.toX = toX;
-            this.toY = toY;
-        }
-
-        @Override
-        public String toString() {
-            return "ChangeInfo{" +
-                    "oldHolder=" + oldHolder +
-                    ", newHolder=" + newHolder +
-                    ", fromX=" + fromX +
-                    ", fromY=" + fromY +
-                    ", toX=" + toX +
-                    ", toY=" + toY +
-                    '}';
-        }
-    }
 
     public BaseItemAnimator() {
         super();
@@ -115,7 +65,8 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
                 @Override
                 public void run() {
                     for (MoveInfo moveInfo : moves) {
-                        animateMoveImpl(moveInfo.holder, moveInfo.fromX, moveInfo.fromY, moveInfo.toX,
+                        animateMoveImpl(moveInfo.holder, moveInfo.fromX, moveInfo.fromY,
+                                moveInfo.toX,
                                 moveInfo.toY);
                     }
                     moves.clear();
@@ -477,7 +428,8 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         // animations should be ended by the cancel above.
         if (mRemoveAnimations.remove(item) && DEBUG) {
             throw new IllegalStateException(
-                    "after animation is cancelled, item should not be in " + "mRemoveAnimations list");
+                    "after animation is cancelled, item should not be in " + "mRemoveAnimations " +
+                            "list");
         }
 
         if (mAddAnimations.remove(item) && DEBUG) {
@@ -487,12 +439,14 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
 
         if (mChangeAnimations.remove(item) && DEBUG) {
             throw new IllegalStateException(
-                    "after animation is cancelled, item should not be in " + "mChangeAnimations list");
+                    "after animation is cancelled, item should not be in " + "mChangeAnimations " +
+                            "list");
         }
 
         if (mMoveAnimations.remove(item) && DEBUG) {
             throw new IllegalStateException(
-                    "after animation is cancelled, item should not be in " + "mMoveAnimations list");
+                    "after animation is cancelled, item should not be in " + "mMoveAnimations " +
+                            "list");
         }
         dispatchFinishedWhenDone();
     }
@@ -514,8 +468,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
 
     /**
      * Check the state of currently pending and running animations. If there are none
-     * pending/running, call #dispatchAnimationsFinished() to notify any
-     * listeners.
+     * pending/running, call #dispatchAnimationsFinished() to notify any listeners.
      */
     private void dispatchFinishedWhenDone() {
         if (!isRunning()) {
@@ -582,7 +535,8 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
                 View view = item.itemView;
                 ViewCompat.setAlpha(view, 1);
                 dispatchAddFinished(item);
-                //this check prevent exception when removal already happened during finishing animation
+                //this check prevent exception when removal already happened during finishing
+                // animation
                 if (j < additions.size()) {
                     additions.remove(j);
                 }
@@ -614,6 +568,53 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
     void cancelAll(List<ViewHolder> viewHolders) {
         for (int i = viewHolders.size() - 1; i >= 0; i--) {
             ViewCompat.animate(viewHolders.get(i).itemView).cancel();
+        }
+    }
+
+    private static class MoveInfo {
+
+        public ViewHolder holder;
+        public int fromX, fromY, toX, toY;
+
+        private MoveInfo(ViewHolder holder, int fromX, int fromY, int toX, int toY) {
+            this.holder = holder;
+            this.fromX = fromX;
+            this.fromY = fromY;
+            this.toX = toX;
+            this.toY = toY;
+        }
+    }
+
+    private static class ChangeInfo {
+
+        public ViewHolder oldHolder, newHolder;
+        public int fromX, fromY, toX, toY;
+
+        private ChangeInfo(ViewHolder oldHolder, ViewHolder newHolder) {
+            this.oldHolder = oldHolder;
+            this.newHolder = newHolder;
+        }
+
+        private ChangeInfo(ViewHolder oldHolder, ViewHolder newHolder, int fromX, int fromY,
+                           int toX,
+                           int toY) {
+            this(oldHolder, newHolder);
+            this.fromX = fromX;
+            this.fromY = fromY;
+            this.toX = toX;
+            this.toY = toY;
+        }
+
+        @Override
+        public String toString() {
+            return "ChangeInfo{" +
+                    "oldHolder=" + oldHolder +
+                    ", newHolder=" + newHolder +
+                    ", fromX=" + fromX +
+                    ", fromY=" + fromY +
+                    ", toX=" + toX +
+                    ", toY=" + toY +
+                    '}';
         }
     }
 

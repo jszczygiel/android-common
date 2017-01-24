@@ -27,16 +27,13 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * A Sorted list implementation that can keep items in order and also notify for changes in the
- * list
+ * A Sorted list implementation that can keep items in order and also notify for changes in the list
  * such that it can be bound to a {@link android.support.v7.widget.RecyclerView.Adapter
- * RecyclerView.Adapter}.
- * <p>
- * It keeps items ordered using the {@link Callback#compare(Object, Object)} method and uses
- * binary search to retrieve items. If the sorting criteria of your items may change, make sure you
- * call appropriate methods while editing them to avoid data inconsistencies.
- * <p>
- * You can control the order of items and change notifications via the {@link Callback} parameter.
+ * RecyclerView.Adapter}. <p> It keeps items ordered using the {@link Callback#compare(Object,
+ * Object)} method and uses binary search to retrieve items. If the sorting criteria of your items
+ * may change, make sure you call appropriate methods while editing them to avoid data
+ * inconsistencies. <p> You can control the order of items and change notifications via the {@link
+ * Callback} parameter.
  */
 @SuppressWarnings("unchecked")
 public class SortedList<T extends BaseViewModel> implements Iterable<T> {
@@ -96,22 +93,18 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
     }
 
     /**
-     * Adds the given item to the list. If this is a new item, SortedList calls
-     * {@link Callback#onInserted(int, int)}.
-     * <p>
-     * If the item already exists in the list and its sorting criteria is not changed, it is
-     * replaced with the existing Item. SortedList uses
-     * {@link Callback#areItemsTheSame(Object, Object)} to check if two items are the same item
-     * and uses {@link Callback#areContentsTheSame(Object, Object)} to decide whether it should
-     * call {@link Callback#onChanged(int, int)} or not. In both cases, it always removes the
-     * reference to the old item and puts the new item into the backing array even if
-     * {@link Callback#areContentsTheSame(Object, Object)} returns false.
-     * <p>
-     * If the sorting criteria of the item is changed, SortedList won't be able to find
-     * its duplicate in the list which will result in having a duplicate of the Item in the list.
-     * If you need to update sorting criteria of an item that already exists in the list,
-     * use {@link #updateItemAt(int, Object)}. You can find the index of the item using
-     * {@link #indexOf(Object)} before you update the object.
+     * Adds the given item to the list. If this is a new item, SortedList calls {@link
+     * Callback#onInserted(int, int)}. <p> If the item already exists in the list and its sorting
+     * criteria is not changed, it is replaced with the existing Item. SortedList uses {@link
+     * Callback#areItemsTheSame(Object, Object)} to check if two items are the same item and uses
+     * {@link Callback#areContentsTheSame(Object, Object)} to decide whether it should call {@link
+     * Callback#onChanged(int, int)} or not. In both cases, it always removes the reference to the
+     * old item and puts the new item into the backing array even if {@link
+     * Callback#areContentsTheSame(Object, Object)} returns false. <p> If the sorting criteria of
+     * the item is changed, SortedList won't be able to find its duplicate in the list which will
+     * result in having a duplicate of the Item in the list. If you need to update sorting criteria
+     * of an item that already exists in the list, use {@link #updateItemAt(int, Object)}. You can
+     * find the index of the item using {@link #indexOf(Object)} before you update the object.
      *
      * @param item The item to be added into the list.
      * @return The index of the newly added item.
@@ -238,10 +231,8 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
     /**
      * Adds the given items to the list. Equivalent to calling {@link SortedList#add} in a loop,
      * except the callback events may be in a different order/granularity since addAll can batch
-     * them for better performance.
-     * <p>
-     * If allowed, may modify the input array and even take the ownership over it in order
-     * to avoid extra memory allocation during sorting and deduplication.
+     * them for better performance. <p> If allowed, may modify the input array and even take the
+     * ownership over it in order to avoid extra memory allocation during sorting and deduplication.
      * </p>
      *
      * @param items          Array of items to be added into the list.
@@ -293,17 +284,13 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
     }
 
     /**
-     * Batches adapter updates that happen between calling this method until calling
-     * {@link #endBatchedUpdates()}. For example, if you add multiple items in a loop
-     * and they are placed into consecutive indices, SortedList calls
-     * {@link Callback#onInserted(int, int)} only once with the proper item count. If an event
-     * cannot be merged with the previous event, the previous event is dispatched
-     * to the callback instantly.
-     * <p>
-     * After running your data updates, you <b>must</b> call {@link #endBatchedUpdates()}
-     * which will dispatch any deferred data change event to the current callback.
-     * <p>
-     * A sample implementation may look like this:
+     * Batches adapter updates that happen between calling this method until calling {@link
+     * #endBatchedUpdates()}. For example, if you add multiple items in a loop and they are placed
+     * into consecutive indices, SortedList calls {@link Callback#onInserted(int, int)} only once
+     * with the proper item count. If an event cannot be merged with the previous event, the
+     * previous event is dispatched to the callback instantly. <p> After running your data updates,
+     * you <b>must</b> call {@link #endBatchedUpdates()} which will dispatch any deferred data
+     * change event to the current callback. <p> A sample implementation may look like this:
      * <pre>
      *     mSortedList.beginBatchedUpdates();
      *     try {
@@ -315,14 +302,11 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
      *         mSortedList.endBatchedUpdates();
      *     }
      * </pre>
-     * <p>
-     * Instead of using this method to batch calls, you can use a Callback that extends
-     * {@link BatchedCallback}. In that case, you must make sure that you are manually calling
-     * {@link BatchedCallback#dispatchLastEvent()} right after you complete your data changes.
-     * Failing to do so may create data inconsistencies with the Callback.
-     * <p>
-     * If the current Callback in an instance of {@link BatchedCallback}, calling this method
-     * has no effect.
+     * <p> Instead of using this method to batch calls, you can use a Callback that extends {@link
+     * BatchedCallback}. In that case, you must make sure that you are manually calling {@link
+     * BatchedCallback#dispatchLastEvent()} right after you complete your data changes. Failing to
+     * do so may create data inconsistencies with the Callback. <p> If the current Callback in an
+     * instance of {@link BatchedCallback}, calling this method has no effect.
      */
     public void beginBatchedUpdates() {
         throwIfMerging();
@@ -336,8 +320,8 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
     }
 
     /**
-     * Remove duplicate items, leaving only the last item from each group of "same" items.
-     * Move the remaining items to the beginning of the array.
+     * Remove duplicate items, leaving only the last item from each group of "same" items. Move the
+     * remaining items to the beginning of the array.
      *
      * @return Number of deduplicated items at the beginning of the array.
      */
@@ -537,19 +521,13 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
 
     /**
      * Updates the item at the given index and calls {@link Callback#onChanged(int, int)} and/or
-     * {@link Callback#onMoved(int, int)} if necessary.
-     * <p>
-     * You can use this method if you need to change an existing Item such that its position in the
-     * list may change.
-     * <p>
-     * If the new object is a different object (<code>get(index) != item</code>) and
-     * {@link Callback#areContentsTheSame(Object, Object)} returns <code>true</code>, SortedList
-     * avoids calling {@link Callback#onChanged(int, int)} otherwise it calls
-     * {@link Callback#onChanged(int, int)}.
-     * <p>
-     * If the new position of the item is different than the provided <code>index</code>,
-     * SortedList
-     * calls {@link Callback#onMoved(int, int)}.
+     * {@link Callback#onMoved(int, int)} if necessary. <p> You can use this method if you need to
+     * change an existing Item such that its position in the list may change. <p> If the new object
+     * is a different object (<code>get(index) != item</code>) and {@link
+     * Callback#areContentsTheSame(Object, Object)} returns <code>true</code>, SortedList avoids
+     * calling {@link Callback#onChanged(int, int)} otherwise it calls {@link
+     * Callback#onChanged(int, int)}. <p> If the new position of the item is different than the
+     * provided <code>index</code>, SortedList calls {@link Callback#onMoved(int, int)}.
      *
      * @param index The index of the item to replace
      * @param item  The item to replace the item at the given Index.
@@ -593,24 +571,18 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
 
     /**
      * This method can be used to recalculate the position of the item at the given index, without
-     * triggering an {@link Callback#onChanged(int, int)} callback.
-     * <p>
-     * If you are editing objects in the list such that their position in the list may change but
-     * you don't want to trigger an onChange animation, you can use this method to re-position it.
-     * If the item changes position, SortedList will call {@link Callback#onMoved(int, int)}
-     * without
-     * calling {@link Callback#onChanged(int, int)}.
-     * <p>
-     * A sample usage may look like:
-     * <p>
+     * triggering an {@link Callback#onChanged(int, int)} callback. <p> If you are editing objects
+     * in the list such that their position in the list may change but you don't want to trigger an
+     * onChange animation, you can use this method to re-position it. If the item changes position,
+     * SortedList will call {@link Callback#onMoved(int, int)} without calling {@link
+     * Callback#onChanged(int, int)}. <p> A sample usage may look like: <p>
      * <pre>
      *     final int position = mSortedList.indexOf(item);
      *     item.incrementPriority(); // assume items are sorted by priority
      *     mSortedList.recalculatePositionOfItemAt(position);
      * </pre>
      * In the example above, because the sorting criteria of the item has been changed,
-     * mSortedList.indexOf(item) will not be able to find the item. This is why the code above
-     * first
+     * mSortedList.indexOf(item) will not be able to find the item. This is why the code above first
      * gets the position before editing the item, edits it and informs the SortedList that item
      * should be repositioned.
      *
@@ -733,12 +705,9 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
     }
 
     /**
-     * The class that controls the behavior of the {@link SortedList}.
-     * <p>
-     * It defines how items should be sorted and how duplicates should be handled.
-     * <p>
-     * SortedList calls the callback methods on this class to notify changes about the underlying
-     * data.
+     * The class that controls the behavior of the {@link SortedList}. <p> It defines how items
+     * should be sorted and how duplicates should be handled. <p> SortedList calls the callback
+     * methods on this class to notify changes about the underlying data.
      */
     public static abstract class Callback<T2> implements Comparator<T2> {
 
@@ -748,9 +717,8 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
          *
          * @param o1 The first object to compare.
          * @param o2 The second object to compare.
-         * @return a negative integer, zero, or a positive integer as the
-         * first argument is less than, equal to, or greater than the
-         * second.
+         * @return a negative integer, zero, or a positive integer as the first argument is less
+         * than, equal to, or greater than the second.
          */
         abstract public int compare(T2 o1, T2 o2);
 
@@ -787,17 +755,13 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
         abstract public void onChanged(int position, int count);
 
         /**
-         * Called by the SortedList when it wants to check whether two items have the same data
-         * or not. SortedList uses this information to decide whether it should call
-         * {@link #onChanged(int, int)} or not.
-         * <p>
-         * SortedList uses this method to check equality instead of {@link Object#equals(Object)}
-         * so
-         * that you can change its behavior depending on your UI.
-         * <p>
-         * For example, if you are using SortedList with a {@link android.support.v7.widget.RecyclerView.Adapter
-         * RecyclerView.Adapter}, you should
-         * return whether the items' visual representations are the same or not.
+         * Called by the SortedList when it wants to check whether two items have the same data or
+         * not. SortedList uses this information to decide whether it should call {@link
+         * #onChanged(int, int)} or not. <p> SortedList uses this method to check equality instead
+         * of {@link Object#equals(Object)} so that you can change its behavior depending on your
+         * UI. <p> For example, if you are using SortedList with a {@link
+         * android.support.v7.widget.RecyclerView.Adapter RecyclerView.Adapter}, you should return
+         * whether the items' visual representations are the same or not.
          *
          * @param oldItem The previous representation of the object.
          * @param newItem The new object that replaces the previous one.
@@ -806,8 +770,7 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
         abstract public boolean areContentsTheSame(T2 oldItem, T2 newItem);
 
         /**
-         * Called by the SortedList to decide whether two object represent the same Item or not.
-         * <p>
+         * Called by the SortedList to decide whether two object represent the same Item or not. <p>
          * For example, if your items have unique ids, this method should check their equality.
          *
          * @param item1 The first item to check.
@@ -818,20 +781,17 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
     }
 
     /**
-     * A callback implementation that can batch notify events dispatched by the SortedList.
-     * <p>
-     * This class can be useful if you want to do multiple operations on a SortedList but don't
-     * want to dispatch each event one by one, which may result in a performance issue.
-     * <p>
-     * For example, if you are going to add multiple items to a SortedList, BatchedCallback call
-     * convert individual <code>onInserted(index, 1)</code> calls into one
-     * <code>onInserted(index, N)</code> if items are added into consecutive indices. This change
-     * can help RecyclerView resolve changes much more easily.
-     * <p>
-     * If consecutive changes in the SortedList are not suitable for batching, BatchingCallback
-     * dispatches them as soon as such case is detected. After your edits on the SortedList is
-     * complete, you <b>must</b> always call {@link BatchedCallback#dispatchLastEvent()} to flush
-     * all changes to the Callback.
+     * A callback implementation that can batch notify events dispatched by the SortedList. <p> This
+     * class can be useful if you want to do multiple operations on a SortedList but don't want to
+     * dispatch each event one by one, which may result in a performance issue. <p> For example, if
+     * you are going to add multiple items to a SortedList, BatchedCallback call convert individual
+     * <code>onInserted(index, 1)</code> calls into one <code>onInserted(index, N)</code> if items
+     * are added into consecutive indices. This change can help RecyclerView resolve changes much
+     * more easily. <p> If consecutive changes in the SortedList are not suitable for batching,
+     * BatchingCallback dispatches them as soon as such case is detected. After your edits on the
+     * SortedList is complete, you <b>must</b> always call
+     * {@link BatchedCallback#dispatchLastEvent()}
+     * to flush all changes to the Callback.
      */
     public static class BatchedCallback<T2> extends Callback<T2> {
 
@@ -849,8 +809,8 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
          * Creates a new BatchedCallback that wraps the provided Callback.
          *
          * @param wrappedCallback The Callback which should received the data change callbacks.
-         *                        Other method calls (e.g. {@link #compare(Object, Object)} from
-         *                        the SortedList are directly forwarded to this Callback.
+         *                        Other method calls (e.g. {@link #compare(Object, Object)} from the
+         *                        SortedList are directly forwarded to this Callback.
          */
         public BatchedCallback(Callback<T2> wrappedCallback) {
             mWrappedCallback = wrappedCallback;
@@ -921,8 +881,8 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
         }
 
         /**
-         * This method dispatches any pending event notifications to the wrapped Callback.
-         * You <b>must</b> always call this method after you are done with editing the SortedList.
+         * This method dispatches any pending event notifications to the wrapped Callback. You
+         * <b>must</b> always call this method after you are done with editing the SortedList.
          */
         public void dispatchLastEvent() {
             if (mLastEventType == TYPE_NONE) {

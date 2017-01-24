@@ -27,9 +27,9 @@ import rx.schedulers.Schedulers;
 
 public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<T> {
 
-    private static final int DATA_COLUMN = 1;
     protected static final String ID = "ID";
     protected static final String DATA = "DATA";
+    private static final int DATA_COLUMN = 1;
     private final PublishSubject<Tuple<Integer, T>> subject;
     private final PublishSubject<List<T>> collectionSubject;
     private final BriteDatabase database;
@@ -49,7 +49,8 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
     @Override
     public Observable<T> get(String id) {
         LoggerHelper.logDebug("local:" + this.getClass().toString() + " get:" + id);
-        return database.createQuery(getTableName(), "SELECT * FROM " + getTableName() + " WHERE id = ?", id)
+        return database.createQuery(getTableName(),
+                "SELECT * FROM " + getTableName() + " WHERE id = ?", id)
                 .take(1)
                 .switchMap(new Func1<SqlBrite.Query, Observable<? extends T>>() {
                     @Override
@@ -60,7 +61,9 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
                                 Cursor cursor = map.run();
                                 if (cursor.moveToFirst()) {
                                     try {
-                                        emitter.onNext(JsonMapper.INSTANCE.fromJson(cursor.getString(DATA_COLUMN), LocalStorageRepoImpl.this.getType()));
+                                        emitter.onNext(JsonMapper.INSTANCE.fromJson(
+                                                cursor.getString(DATA_COLUMN),
+                                                LocalStorageRepoImpl.this.getType()));
                                     } catch (JSONException e) {
                                         emitter.onError(e);
                                         return;
@@ -87,7 +90,9 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
                                 Cursor cursor = map.run();
                                 while (cursor.moveToNext()) {
                                     try {
-                                        emitter.onNext(JsonMapper.INSTANCE.fromJson(cursor.getString(DATA_COLUMN), LocalStorageRepoImpl.this.getType()));
+                                        emitter.onNext(JsonMapper.INSTANCE.fromJson(
+                                                cursor.getString(DATA_COLUMN),
+                                                LocalStorageRepoImpl.this.getType()));
                                     } catch (JSONException e) {
                                         emitter.onError(e);
                                         return;
@@ -114,14 +119,15 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
     @Override
     public Observable<T> remove(final String id) {
         LoggerHelper.logDebug("local:" + this.getClass().toString() + " remove:" + id);
-        return get(id).observeOn(SchedulerHelper.getDatabaseWriterScheduler()).map(new Func1<T, T>() {
-            @Override
-            public T call(T map) {
-                database.delete(getTableName(), "id = ?", id);
-                subject.onNext(new Tuple<>(SubjectAction.REMOVED, map));
-                return map;
-            }
-        }).observeOn(Schedulers.newThread());
+        return get(id).observeOn(SchedulerHelper.getDatabaseWriterScheduler()).map(
+                new Func1<T, T>() {
+                    @Override
+                    public T call(T map) {
+                        database.delete(getTableName(), "id = ?", id);
+                        subject.onNext(new Tuple<>(SubjectAction.REMOVED, map));
+                        return map;
+                    }
+                }).observeOn(Schedulers.newThread());
     }
 
     @Override

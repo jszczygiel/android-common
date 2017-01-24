@@ -42,17 +42,21 @@ public class PublishSubject<T> extends Subject<T, T> {
     @Override
     public boolean hasObservers() {
         return state.subscribers != null;
-    }    @Override
+    }
+
+    @Override
     public void onNext(T t) {
         state.onNext(t);
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        state.onError(e);
     }
 
     @IntDef({BUFFER, ERROR, DROP})
     @Retention(RetentionPolicy.SOURCE)
     public @interface BackPressureStrategy {
-    }    @Override
-    public void onError(Throwable e) {
-        state.onError(e);
     }
 
     static class State<T> implements OnSubscribe<T>, Observer<T>, Producer, Subscription {
@@ -142,7 +146,9 @@ public class PublishSubject<T> extends Subject<T, T> {
                 }
                 subscribers = b;
             }
-        }        @SuppressWarnings("unchecked")
+        }
+
+        @SuppressWarnings("unchecked")
         SubscriberState<T>[] terminate() {
             synchronized (this) {
                 SubscriberState<T>[] a = subscribers;
@@ -165,7 +171,9 @@ public class PublishSubject<T> extends Subject<T, T> {
             for (SubscriberState<T> innerState : subscribers) {
                 innerState.unsubscribe();
             }
-        }        @Override
+        }
+
+        @Override
         public void onNext(T t) {
             if (done) {
                 return;
@@ -197,9 +205,6 @@ public class PublishSubject<T> extends Subject<T, T> {
                 innerState.onCompleted();
             }
         }
-
-
-
 
 
         @Override
@@ -411,8 +416,6 @@ public class PublishSubject<T> extends Subject<T, T> {
             return false;
         }
     }
-
-
 
 
 }

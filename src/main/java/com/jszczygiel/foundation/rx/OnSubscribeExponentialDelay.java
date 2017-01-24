@@ -67,7 +67,9 @@ public class OnSubscribeExponentialDelay implements Observable.OnSubscribe<Long>
         }, initialDelay, period, period.unit());
     }
 
-    public Subscription schedulePeriodically(final Scheduler.Worker worker, final Action0 action, long initialDelay, Delay periodDelay, final TimeUnit unit) {
+    public Subscription schedulePeriodically(final Scheduler.Worker worker, final Action0 action,
+                                             long initialDelay, Delay periodDelay,
+                                             final TimeUnit unit) {
         final Delay period = periodDelay;
         final long firstNowNanos = TimeUnit.MILLISECONDS.toNanos(worker.now());
         final long firstStartInNanos = firstNowNanos + unit.toNanos(initialDelay);
@@ -88,7 +90,8 @@ public class OnSubscribeExponentialDelay implements Observable.OnSubscribe<Long>
                     long nowNanos = TimeUnit.MILLISECONDS.toNanos(worker.now());
                     // If the clock moved in a direction quite a bit, rebase the repetition period
                     if (nowNanos + CLOCK_DRIFT_TOLERANCE_NANOS < lastNowNanos
-                            || nowNanos >= lastNowNanos + periodInNanos + CLOCK_DRIFT_TOLERANCE_NANOS) {
+                            || nowNanos >= lastNowNanos + periodInNanos +
+                            CLOCK_DRIFT_TOLERANCE_NANOS) {
                         nextTick = nowNanos + periodInNanos;
                             /*
                              * Shift the start point back by the drift as if the whole thing

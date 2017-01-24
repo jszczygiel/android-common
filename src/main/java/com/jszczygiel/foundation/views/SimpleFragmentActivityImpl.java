@@ -16,17 +16,18 @@ import com.jszczygiel.R;
 /**
  * Class responsible for displaying fragment inside. Passes all extras sent in intent to fragment.
  */
-public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> extends AppCompatActivity {
+public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> extends
+        AppCompatActivity {
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     private T fragment;
     private boolean isVisible;
 
     public T getFragment() {
         return fragment;
-    }
-
-    static {
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     @Override

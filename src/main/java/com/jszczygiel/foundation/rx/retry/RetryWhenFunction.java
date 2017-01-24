@@ -4,9 +4,9 @@ import rx.Observable;
 import rx.functions.Func1;
 
 /**
- * Combine a {@link Retry#errorsWithAttempts(Observable, int) mapping of errors to their attempt number} with
- * a flatmap that {@link RetryWithDelayHandler induces a retry delay} into a function that can be passed to
- * an Observable's {@link Observable#retryWhen(Func1) retryWhen operation}.
+ * Combine a {@link Retry#errorsWithAttempts(Observable, int) mapping of errors to their attempt
+ * number} with a flatmap that {@link RetryWithDelayHandler induces a retry delay} into a function
+ * that can be passed to an Observable's {@link Observable#retryWhen(Func1) retryWhen operation}.
  *
  * @author Simon Baslé
  * @see RetryBuilder how to construct such a function in a fluent manner.

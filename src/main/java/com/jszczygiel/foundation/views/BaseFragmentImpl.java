@@ -22,14 +22,15 @@ import com.jszczygiel.foundation.views.interfaces.BaseFragment;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
-public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment implements BaseFragment<T> {
+public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment implements
+        BaseFragment<T> {
 
+    CompositeSubscription subscriptionList;
     /**
      * instance of presenter
      */
     private T presenter;
     private boolean isTablet;
-    CompositeSubscription subscriptionList;
 
     @Override
     @CallSuper
@@ -73,7 +74,8 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
 
     @Override
     public boolean isAvailable() {
-        return !isDetached() && !isRemoving() && getPresenter() != null && getActivity() != null && !getActivity().isFinishing();
+        return !isDetached() && !isRemoving() && getPresenter() != null && getActivity() != null
+                && !getActivity().isFinishing();
     }
 
     @Override
@@ -102,19 +104,23 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
             @Override
             public void run() {
                 if (isAvailable()) {
-                    Toast.makeText(getContext(), getString(resId, (Object[])formatArgs), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(resId, (Object[]) formatArgs),
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
     @Override
-    public void showToast(@PluralsRes final int id, final int quantity, final String... formatArgs) {
+    public void showToast(@PluralsRes final int id, final int quantity,
+                          final String... formatArgs) {
         getView().post(new Runnable() {
             @Override
             public void run() {
                 if (isAvailable()) {
-                    Toast.makeText(getContext(), getQuantityString(id, quantity, (Object[])formatArgs), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),
+                            getQuantityString(id, quantity, (Object[]) formatArgs),
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -126,7 +132,8 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutId(), container, false);
         return view;
     }

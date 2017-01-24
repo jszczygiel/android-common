@@ -17,11 +17,6 @@ public class PaddingTransformation extends BitmapTransformation {
         this.padding = padding;
     }
 
-    @Override
-    protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
-        return rectangleCrop(pool, toTransform, padding);
-    }
-
     private static Bitmap rectangleCrop(BitmapPool pool, Bitmap source, float padding) {
         if (source == null) {
             return null;
@@ -41,10 +36,16 @@ public class PaddingTransformation extends BitmapTransformation {
 
         Canvas canvas = new Canvas(result);
         Paint paint = new Paint();
-        paint.setShader(new BitmapShader(squared, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP));
+        paint.setShader(new BitmapShader(squared, BitmapShader.TileMode.CLAMP,
+                BitmapShader.TileMode.CLAMP));
         paint.setAntiAlias(true);
         canvas.drawRect(padding, padding, size - padding, size - padding, paint);
         return result;
+    }
+
+    @Override
+    protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
+        return rectangleCrop(pool, toTransform, padding);
     }
 
     @Override

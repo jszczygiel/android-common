@@ -12,7 +12,8 @@ import android.view.ViewGroup;
 import com.jszczygiel.foundation.presenters.interfaces.BaseListPresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseListFragment;
 
-public abstract class BaseBindedListFragmentImpl<T extends BaseListPresenter, K extends ViewDataBinding> extends BaseListFragmentImpl<T> implements BaseListFragment<T> {
+public abstract class BaseBindedListFragmentImpl<T extends BaseListPresenter, K extends
+        ViewDataBinding> extends BaseListFragmentImpl<T> implements BaseListFragment<T> {
 
     private K binding;
 
@@ -22,7 +23,8 @@ public abstract class BaseBindedListFragmentImpl<T extends BaseListPresenter, K 
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(
                 inflater, getLayoutId(), container, false);
         recyclerView = getRecyclerView();
