@@ -58,8 +58,14 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
                         return Observable.fromEmitter(new Action1<AsyncEmitter<T>>() {
                             @Override
                             public void call(AsyncEmitter<T> emitter) {
-                                Cursor cursor = map.run();
-                                if (cursor.moveToFirst()) {
+                                final Cursor cursor = map.run();
+                                emitter.setCancellation(new AsyncEmitter.Cancellable() {
+                                    @Override
+                                    public void cancel() throws Exception {
+                                        cursor.close();
+                                    }
+                                });
+                                if (!cursor.isClosed() && cursor.moveToFirst()) {
                                     try {
                                         emitter.onNext(JsonMapper.INSTANCE.fromJson(
                                                 cursor.getString(DATA_COLUMN),
@@ -87,8 +93,14 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
                         return Observable.fromEmitter(new Action1<AsyncEmitter<T>>() {
                             @Override
                             public void call(AsyncEmitter<T> emitter) {
-                                Cursor cursor = map.run();
-                                while (cursor.moveToNext()) {
+                                final Cursor cursor = map.run();
+                                emitter.setCancellation(new AsyncEmitter.Cancellable() {
+                                    @Override
+                                    public void cancel() throws Exception {
+                                        cursor.close();
+                                    }
+                                });
+                                while (!cursor.isClosed() && cursor.moveToNext()) {
                                     try {
                                         emitter.onNext(JsonMapper.INSTANCE.fromJson(
                                                 cursor.getString(DATA_COLUMN),
