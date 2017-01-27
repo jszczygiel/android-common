@@ -19,6 +19,8 @@ public interface BasePresenter<T> {
 
     void removeSubscriptionFromLifeCycle(Subscription subscription);
 
+    void clearSubscriptions();
+
     void onSaveInstanceState(Bundle outState);
 
     void onRestoreInstanceState(Bundle savedInstanceState);
