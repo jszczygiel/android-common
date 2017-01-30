@@ -34,28 +34,30 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
-        Bundle extras = getIntent().getExtras();
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
 
-        fragment = newFragmentInstance();
-        boolean noArguments = false;
-        Bundle fragmentExtras = fragment.getArguments();
-        if (fragmentExtras == null) {
-            noArguments = true;
-            fragmentExtras = new Bundle();
-        }
-        if (extras != null) {
-            fragmentExtras.putAll(extras);
-        }
-        if (noArguments) {
-            fragment.setArguments(fragmentExtras);
-        }
+            fragment = newFragmentInstance();
+            boolean noArguments = false;
+            Bundle fragmentExtras = fragment.getArguments();
+            if (fragmentExtras == null) {
+                noArguments = true;
+                fragmentExtras = new Bundle();
+            }
+            if (extras != null) {
+                fragmentExtras.putAll(extras);
+            }
+            if (noArguments) {
+                fragment.setArguments(fragmentExtras);
+            }
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.activity_simple_root, fragment);
-        transaction.commitNow();
-
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.activity_simple_root, fragment);
+            transaction.commitNow();
+        } else {
+            fragment = (T) getSupportFragmentManager().getFragments().get(0);
+        }
     }
-
 
     public int getLayoutId() {
         return R.layout.activity_simple;
