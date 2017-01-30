@@ -52,12 +52,11 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
             }
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.activity_simple_root, fragment);
+            transaction.replace(R.id.activity_simple_root, fragment);
             transaction.commitNow();
         } else {
             fragment = (T) getSupportFragmentManager().getFragments().get(0);
         }
-
     }
 
     public int getLayoutId() {
@@ -133,6 +132,11 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
     protected void onPause() {
         super.onPause();
         isVisible = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     public boolean isVisible() {
