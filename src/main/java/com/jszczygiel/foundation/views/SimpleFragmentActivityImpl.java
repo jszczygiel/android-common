@@ -16,7 +16,8 @@ import com.jszczygiel.R;
 /**
  * Class responsible for displaying fragment inside. Passes all extras sent in intent to fragment.
  */
-public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> extends AppCompatActivity {
+public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> extends
+        AppCompatActivity {
 
     private T fragment;
     private boolean isVisible;
@@ -33,31 +34,28 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
+        Bundle extras = getIntent().getExtras();
 
-            fragment = newFragmentInstance();
-            boolean noArguments = false;
-            Bundle fragmentExtras = fragment.getArguments();
-            if (fragmentExtras == null) {
-                noArguments = true;
-                fragmentExtras = new Bundle();
-            }
-            if (extras != null) {
-                fragmentExtras.putAll(extras);
-            }
-            if (noArguments) {
-                fragment.setArguments(fragmentExtras);
-            }
-
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.activity_simple_root, fragment);
-            transaction.commitNow();
-        } else {
-            fragment = (T) getSupportFragmentManager().getFragments().get(0);
+        fragment = newFragmentInstance();
+        boolean noArguments = false;
+        Bundle fragmentExtras = fragment.getArguments();
+        if (fragmentExtras == null) {
+            noArguments = true;
+            fragmentExtras = new Bundle();
+        }
+        if (extras != null) {
+            fragmentExtras.putAll(extras);
+        }
+        if (noArguments) {
+            fragment.setArguments(fragmentExtras);
         }
 
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.activity_simple_root, fragment);
+        transaction.commitNow();
+
     }
+
 
     public int getLayoutId() {
         return R.layout.activity_simple;
@@ -132,6 +130,11 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
     protected void onPause() {
         super.onPause();
         isVisible = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     public boolean isVisible() {
