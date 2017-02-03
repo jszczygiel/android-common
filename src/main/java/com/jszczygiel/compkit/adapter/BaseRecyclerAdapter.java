@@ -264,6 +264,19 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
         return null;
     }
 
+    public BaseViewModel getItemByType(int... types) {
+        for (int i = 0; i < collection.size(); i++) {
+            BaseViewModel item = collection.getSafe(i);
+            for (int type : types) {
+                if (type == item.getModelType()) {
+                    return item;
+                }
+            }
+
+        }
+        return null;
+    }
+
     public Bundle getBundle() {
         Bundle bundle = new Bundle();
         bundle.putParcelableArray(LIST, collection.getAll());
