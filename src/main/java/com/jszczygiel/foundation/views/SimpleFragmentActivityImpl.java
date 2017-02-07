@@ -34,7 +34,9 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
-        if (savedInstanceState == null) {
+        if (savedInstanceState != null && useSaveInstance()) {
+            fragment = (T) getSupportFragmentManager().getFragments().get(0);
+        } else {
             Bundle extras = getIntent().getExtras();
 
             fragment = newFragmentInstance();
@@ -54,9 +56,11 @@ public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> ext
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.activity_simple_root, fragment);
             transaction.commitNow();
-        } else {
-            fragment = (T) getSupportFragmentManager().getFragments().get(0);
         }
+    }
+
+    protected boolean useSaveInstance() {
+        return true;
     }
 
     public int getLayoutId() {
