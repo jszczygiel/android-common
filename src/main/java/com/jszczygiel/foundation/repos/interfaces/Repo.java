@@ -8,16 +8,11 @@ import rx.Observable;
 
 public interface Repo<T extends BaseModel> {
 
-
     Observable<T> get(String id);
 
     Observable<T> getAll();
 
-    void add(T model);
-
     Observable<T> remove(String id);
-
-    void update(T model);
 
     Observable<Tuple<Integer, T>> observe();
 
@@ -27,5 +22,5 @@ public interface Repo<T extends BaseModel> {
 
     void notify(T model);
 
-    void put(T alarmModel);
+    void put(T model);
 }

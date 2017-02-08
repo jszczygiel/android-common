@@ -117,8 +117,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
                 }).observeOn(Schedulers.newThread());
     }
 
-    @Override
-    public synchronized void add(T model) {
+    protected synchronized void add(T model) {
         LoggerHelper.logDebug("local:" + this.getClass().toString() + " add:" + model);
         ContentValues values = new ContentValues();
         values.put(ID, model.getId());
@@ -142,8 +141,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
                 }).observeOn(Schedulers.newThread());
     }
 
-    @Override
-    public synchronized void update(T model) {
+    protected synchronized void update(T model) {
         LoggerHelper.logDebug("local:" + this.getClass().toString() + " update:" + model);
         ContentValues values = new ContentValues();
         values.put(ID, model.getId());
