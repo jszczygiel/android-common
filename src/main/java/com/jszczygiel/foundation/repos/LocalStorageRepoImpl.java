@@ -156,15 +156,17 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
     public void put(final T model) {
         LoggerHelper.logDebug("local:" + this.getClass().toString() + " put:" + model);
         database.createQuery(getTableName(), "SELECT * FROM " + getTableName() + " WHERE id" +
-                " = ?", model.getId()).map(new Func1<SqlBrite.Query, Integer>() {
-            @Override
-            public Integer call(SqlBrite.Query map) {
-                Cursor cursor = map.run();
-                int count = cursor.getCount();
-                cursor.close();
-                return count;
-            }
-        }).subscribe(new Action1<Integer>() {
+                " = ?", model.getId())
+                .take(1)
+                .map(new Func1<SqlBrite.Query, Integer>() {
+                    @Override
+                    public Integer call(SqlBrite.Query map) {
+                        Cursor cursor = map.run();
+                        int count = cursor.getCount();
+                        cursor.close();
+                        return count;
+                    }
+                }).subscribe(new Action1<Integer>() {
             @Override
             public void call(Integer count) {
                 if (count == 0) {
