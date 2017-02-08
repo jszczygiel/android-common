@@ -26,4 +26,6 @@ public interface Repo<T extends BaseModel> {
     void clear();
 
     void notify(T model);
+
+    void put(T alarmModel);
 }
