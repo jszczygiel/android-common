@@ -19,9 +19,10 @@ import org.json.JSONException;
 
 import java.util.List;
 
-import rx.AsyncEmitter;
+import rx.Emitter;
 import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Cancellable;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -55,11 +56,11 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
                 .switchMap(new Func1<SqlBrite.Query, Observable<? extends T>>() {
                     @Override
                     public Observable<? extends T> call(final SqlBrite.Query map) {
-                        return Observable.fromEmitter(new Action1<AsyncEmitter<T>>() {
+                        return Observable.fromEmitter(new Action1<Emitter<T>>() {
                             @Override
-                            public void call(AsyncEmitter<T> emitter) {
+                            public void call(Emitter<T> emitter) {
                                 final Cursor cursor = map.run();
-                                emitter.setCancellation(new AsyncEmitter.Cancellable() {
+                                emitter.setCancellation(new Cancellable() {
                                     @Override
                                     public void cancel() throws Exception {
                                         cursor.close();
@@ -77,7 +78,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
                                 }
                                 emitter.onCompleted();
                             }
-                        }, AsyncEmitter.BackpressureMode.LATEST);
+                        }, Emitter.BackpressureMode.LATEST);
                     }
                 }).observeOn(Schedulers.newThread());
     }
@@ -90,11 +91,11 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
                 .switchMap(new Func1<SqlBrite.Query, Observable<? extends T>>() {
                     @Override
                     public Observable<? extends T> call(final SqlBrite.Query map) {
-                        return Observable.fromEmitter(new Action1<AsyncEmitter<T>>() {
+                        return Observable.fromEmitter(new Action1<Emitter<T>>() {
                             @Override
-                            public void call(AsyncEmitter<T> emitter) {
+                            public void call(Emitter<T> emitter) {
                                 final Cursor cursor = map.run();
-                                emitter.setCancellation(new AsyncEmitter.Cancellable() {
+                                emitter.setCancellation(new Cancellable() {
                                     @Override
                                     public void cancel() throws Exception {
                                         cursor.close();
@@ -112,7 +113,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
                                 }
                                 emitter.onCompleted();
                             }
-                        }, AsyncEmitter.BackpressureMode.BUFFER);
+                        }, Emitter.BackpressureMode.BUFFER);
                     }
                 }).observeOn(Schedulers.newThread());
     }
