@@ -43,7 +43,7 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
     }
 
     protected void add(T model) {
-        models.put(model.getId(), model);
+        models.put(model.id(), model);
         subject.onNext(new Tuple<>(SubjectAction.ADDED, model));
     }
 

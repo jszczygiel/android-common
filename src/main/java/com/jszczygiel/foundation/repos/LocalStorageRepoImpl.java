@@ -121,7 +121,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
     protected synchronized void add(T model) {
         LoggerHelper.logDebug("local:" + this.getClass().toString() + " add:" + model);
         ContentValues values = new ContentValues();
-        values.put(ID, model.getId());
+        values.put(ID, model.id());
         values.put(DATA, JsonMapper.INSTANCE.toJson(model));
         database.insert(getTableName(), values);
         subject.onNext(new Tuple<>(SubjectAction.ADDED, model));
@@ -145,9 +145,9 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
     protected synchronized void update(T model) {
         LoggerHelper.logDebug("local:" + this.getClass().toString() + " update:" + model);
         ContentValues values = new ContentValues();
-        values.put(ID, model.getId());
+        values.put(ID, model.id());
         values.put(DATA, JsonMapper.INSTANCE.toJson(model));
-        database.update(getTableName(), values, "id = ?", model.getId());
+        database.update(getTableName(), values, "id = ?", model.id());
         subject.onNext(new Tuple<>(SubjectAction.CHANGED, model));
     }
 
@@ -155,7 +155,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
     public void put(final T model) {
         LoggerHelper.logDebug("local:" + this.getClass().toString() + " put:" + model);
         database.createQuery(getTableName(), "SELECT * FROM " + getTableName() + " WHERE id" +
-                " = ?", model.getId())
+                " = ?", model.id())
                 .take(1)
                 .map(new Func1<SqlBrite.Query, Integer>() {
                     @Override

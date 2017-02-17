@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface BaseModel {
 
-    String getId();
+    String id();
 
     Map<String, Object> toMap(Object next);
 
