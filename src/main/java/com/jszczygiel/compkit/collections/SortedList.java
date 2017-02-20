@@ -664,7 +664,7 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
         for (int i = 0; i < mData.length; i++) {
             T t = mData[i];
             if (t != null) {
-                if (t.getId().equals(id)) {
+                if (t.id().equals(id)) {
                     removeItemAtIndex(i, true);
                     return true;
                 }

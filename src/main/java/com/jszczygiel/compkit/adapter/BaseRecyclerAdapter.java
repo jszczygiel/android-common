@@ -164,7 +164,7 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
     @CallSuper
     public void onBindViewHolder(BaseViewHolder holder, int position) {
         BaseViewModel item = collection.get(position);
-        holder.itemView.setSelected(selectedId.equals(item.getId()));
+        holder.itemView.setSelected(selectedId.equals(item.id()));
         holder.onBind(item, getListener());
     }
 
@@ -175,7 +175,7 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
     public void onBindViewHolder(BaseViewHolder holder, int position, List<Object> payloads) {
         super.onBindViewHolder(holder, position, payloads);
         BaseViewModel item = collection.get(position);
-        holder.itemView.setSelected(selectedId.equals(item.getId()));
+        holder.itemView.setSelected(selectedId.equals(item.id()));
         holder.onBind(item, getListener(), payloads);
     }
 
@@ -184,7 +184,7 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
         if (position < collection.size()) {
             BaseViewModel item = getItem(position);
             if (item != null) {
-                return getItem(position).getModelType();
+                return getItem(position).modelType();
             }
         }
         return NO_TYPE;
@@ -231,7 +231,7 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
             selectedId = newSelectedId;
             for (int i = 0; i < getItemCount(); i++) {
                 BaseViewModel item = getItem(i);
-                if (item.getId().equals(oldSelectedGroup) || item.getId().equals(selectedId)) {
+                if (item.id().equals(oldSelectedGroup) || item.id().equals(selectedId)) {
                     notifyItemChanged(i);
                 }
             }
@@ -257,7 +257,7 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
     public BaseViewModel getItemById(final String itemId) {
         for (int i = 0; i < collection.size(); i++) {
             BaseViewModel item = collection.getSafe(i);
-            if (itemId.equals(item.getId())) {
+            if (itemId.equals(item.id())) {
                 return item;
             }
         }
@@ -268,7 +268,7 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
         for (int i = 0; i < collection.size(); i++) {
             BaseViewModel item = collection.getSafe(i);
             for (int type : types) {
-                if (type == item.getModelType()) {
+                if (type == item.modelType()) {
                     return item;
                 }
             }
