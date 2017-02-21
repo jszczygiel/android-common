@@ -7,12 +7,12 @@ import java.lang.annotation.RetentionPolicy;
 
 public interface SubjectAction {
 
-    int ADDED = 0;
-    int CHANGED = 1;
-    int REMOVED = 2;
+  int ADDED = 0;
+  int CHANGED = 1;
+  int REMOVED = 2;
 
-    @IntDef({ADDED, CHANGED, REMOVED})
-    @Retention(RetentionPolicy.SOURCE)
-    @interface Type {
-    }
+  @IntDef({ADDED, CHANGED, REMOVED})
+  @Retention(RetentionPolicy.SOURCE)
+  @interface Type {
+  }
 }

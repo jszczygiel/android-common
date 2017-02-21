@@ -13,15 +13,15 @@ public abstract class BaseViewModel implements Parcelable {
 
   public abstract int modelType();
 
+  @Override
+  public int hashCode() {
+    return Arrays.hashCode(new Object[]{id(), modelType()});
+  }
+
   protected abstract static class BaseBuilder<T> {
 
     public abstract T setId(String value);
 
     public abstract T setModelType(int value);
-  }
-
-  @Override
-  public int hashCode() {
-    return Arrays.hashCode(new Object[]{id(), modelType()});
   }
 }

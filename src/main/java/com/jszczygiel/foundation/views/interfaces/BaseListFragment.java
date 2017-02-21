@@ -10,47 +10,47 @@ import com.jszczygiel.foundation.presenters.interfaces.BaseListPresenter;
 import java.util.List;
 
 public interface BaseListFragment<T extends BaseListPresenter> extends BaseFragment<T> {
-    void showList();
+  void showList();
 
-    void showEmpty();
+  void showEmpty();
 
-    void onLoadMore();
+  void onLoadMore();
 
-    void onScrolledToBeginning();
+  void onScrolledToBeginning();
 
-    boolean isLoading();
+  boolean isLoading();
 
-    void addOrUpdate(BaseViewModel model);
+  void addOrUpdate(BaseViewModel model);
 
-    int getItemCount();
+  int getItemCount();
 
-    void remove(BaseViewModel model);
+  void remove(BaseViewModel model);
 
-    void removeById(String id);
+  void removeById(String id);
 
-    void scrollToTop();
+  void scrollToTop();
 
-    void scrollToPosition(int position);
+  void scrollToPosition(int position);
 
-    int getCurrentPosition();
+  int getCurrentPosition();
 
-    Bundle getParcelableList();
+  Bundle getParcelableList();
 
-    void setParcelableList(Bundle bundle);
+  void setParcelableList(Bundle bundle);
 
-    void triggerItemsVisibilityUpdate();
+  void triggerItemsVisibilityUpdate();
 
-    void setSelectedItem(String selectedId);
+  void setSelectedItem(String selectedId);
 
-    String getSelectedId();
+  String getSelectedId();
 
-    BaseRecyclerAdapter newAdapterInstance();
+  BaseRecyclerAdapter newAdapterInstance();
 
-    RecyclerView.ItemAnimator createItemAnimatorInstance();
+  RecyclerView.ItemAnimator createItemAnimatorInstance();
 
-    RecyclerView.ItemDecoration[] createItemDecoratorsInstances();
+  RecyclerView.ItemDecoration[] createItemDecoratorsInstances();
 
-    boolean isReverse();
+  boolean isReverse();
 
-    List<BaseViewModel> getViewModels();
+  List<BaseViewModel> getViewModels();
 }

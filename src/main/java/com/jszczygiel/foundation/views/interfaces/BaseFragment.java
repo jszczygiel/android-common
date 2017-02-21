@@ -11,29 +11,29 @@ import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 import rx.Subscription;
 
 public interface BaseFragment<T extends BasePresenter> {
-    void setUpPresenter(T presenter);
+  void setUpPresenter(T presenter);
 
-    T getPresenter();
+  T getPresenter();
 
-    boolean isAvailable();
+  boolean isAvailable();
 
-    Context getContext();
+  Context getContext();
 
-    boolean isTablet();
+  boolean isTablet();
 
-    void finish();
+  void finish();
 
-    void setResult(int resultCode, Intent data);
+  void setResult(int resultCode, Intent data);
 
-    void setResult(int resultCode);
+  void setResult(int resultCode);
 
-    FragmentActivity getActivity();
+  FragmentActivity getActivity();
 
-    void showToast(@StringRes int resId, String... formatArgs);
+  void showToast(@StringRes int resId, String... formatArgs);
 
-    void showToast(@PluralsRes int id, int quantity, String... formatArgs);
+  void showToast(@PluralsRes int id, int quantity, String... formatArgs);
 
-    void addSubscriptionToLifeCycle(Subscription subscription);
+  void addSubscriptionToLifeCycle(Subscription subscription);
 
-    void removeSubscriptionFromLifeCycle(Subscription subscription);
+  void removeSubscriptionFromLifeCycle(Subscription subscription);
 }

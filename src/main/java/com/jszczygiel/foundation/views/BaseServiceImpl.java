@@ -7,58 +7,58 @@ import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseService;
 
 public abstract class BaseServiceImpl<T extends BasePresenter> extends Service implements
-        BaseService<T> {
+    BaseService<T> {
 
-    /**
-     * instance of presenter
-     */
-    private T presenter;
-    private boolean isTablet;
+  /**
+   * instance of presenter
+   */
+  private T presenter;
+  private boolean isTablet;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+  @Override
+  public void onCreate() {
+    super.onCreate();
 
-        setPresenter();
-        setUpPresenter(presenter);
-        presenter.onAttach(this, null);
-    }
+    setPresenter();
+    setUpPresenter(presenter);
+    presenter.onAttach(this, null);
+  }
 
-    @Override
-    public void onDestroy() {
-        getPresenter().onDetach();
-        presenter = null;
-        super.onDestroy();
-    }
+  @Override
+  public void onDestroy() {
+    getPresenter().onDetach();
+    presenter = null;
+    super.onDestroy();
+  }
 
-    private void setPresenter() {
-        this.presenter = initializePresenter();
-    }
+  private void setPresenter() {
+    this.presenter = initializePresenter();
+  }
 
-    @Override
-    public void setUpPresenter(T presenter) {
-        isTablet = SystemHelper.isTablet(this);
-        presenter.setIsTablet(isTablet);
-        presenter.setOrientation(getResources().getConfiguration().orientation);
-    }
+  @Override
+  public void setUpPresenter(T presenter) {
+    isTablet = SystemHelper.isTablet(this);
+    presenter.setIsTablet(isTablet);
+    presenter.setOrientation(getResources().getConfiguration().orientation);
+  }
 
-    /**
-     * @return provides new instance of presenter
-     */
-    public abstract T initializePresenter();
+  /**
+   * @return provides new instance of presenter
+   */
+  public abstract T initializePresenter();
 
-    @Override
-    public T getPresenter() {
-        return presenter;
-    }
+  @Override
+  public T getPresenter() {
+    return presenter;
+  }
 
-    @Override
-    public boolean isAvailable() {
-        return presenter != null;
-    }
+  @Override
+  public boolean isAvailable() {
+    return presenter != null;
+  }
 
-    @Override
-    public boolean isTablet() {
-        return isTablet;
-    }
+  @Override
+  public boolean isTablet() {
+    return isTablet;
+  }
 }

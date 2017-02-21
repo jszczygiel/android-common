@@ -14,14 +14,14 @@ import rx.functions.Func1;
  */
 public class RetryWhenFunction implements Func1<Observable<? extends Throwable>, Observable<?>> {
 
-    protected RetryWithDelayHandler handler;
+  protected RetryWithDelayHandler handler;
 
-    public RetryWhenFunction(RetryWithDelayHandler handler) {
-        this.handler = handler;
-    }
+  public RetryWhenFunction(RetryWithDelayHandler handler) {
+    this.handler = handler;
+  }
 
-    public Observable<?> call(Observable<? extends Throwable> errors) {
-        return Retry.errorsWithAttempts(errors, handler.maxAttempts + 1)
-                .flatMap(handler);
-    }
+  public Observable<?> call(Observable<? extends Throwable> errors) {
+    return Retry.errorsWithAttempts(errors, handler.maxAttempts + 1)
+        .flatMap(handler);
+  }
 }

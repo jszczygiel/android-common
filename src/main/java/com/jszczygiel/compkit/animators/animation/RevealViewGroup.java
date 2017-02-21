@@ -8,8 +8,8 @@ import android.view.ViewGroup;
  */
 public interface RevealViewGroup {
 
-    /**
-     * @return Bridge between view and circular reveal animation
-     */
-    ViewRevealManager getViewRevealManager();
+  /**
+   * @return Bridge between view and circular reveal animation
+   */
+  ViewRevealManager getViewRevealManager();
 }

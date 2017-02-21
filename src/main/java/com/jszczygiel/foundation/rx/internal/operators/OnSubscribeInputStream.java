@@ -9,34 +9,34 @@ import rx.observables.SyncOnSubscribe;
 
 public final class OnSubscribeInputStream extends SyncOnSubscribe<InputStream, byte[]> {
 
-    private final InputStream is;
-    private final int size;
+  private final InputStream is;
+  private final int size;
 
-    public OnSubscribeInputStream(InputStream is, int size) {
-        this.is = is;
-        this.size = size;
-    }
+  public OnSubscribeInputStream(InputStream is, int size) {
+    this.is = is;
+    this.size = size;
+  }
 
-    @Override
-    protected InputStream generateState() {
-        return this.is;
-    }
+  @Override
+  protected InputStream generateState() {
+    return this.is;
+  }
 
-    @Override
-    protected InputStream next(InputStream state, Observer<? super byte[]> observer) {
-        byte[] buffer = new byte[size];
-        try {
-            int count = state.read(buffer);
-            if (count == -1) {
-                observer.onCompleted();
-            } else if (count < size) {
-                observer.onNext(Arrays.copyOf(buffer, count));
-            } else {
-                observer.onNext(buffer);
-            }
-        } catch (IOException e) {
-            observer.onError(e);
-        }
-        return state;
+  @Override
+  protected InputStream next(InputStream state, Observer<? super byte[]> observer) {
+    byte[] buffer = new byte[size];
+    try {
+      int count = state.read(buffer);
+      if (count == -1) {
+        observer.onCompleted();
+      } else if (count < size) {
+        observer.onNext(Arrays.copyOf(buffer, count));
+      } else {
+        observer.onNext(buffer);
+      }
+    } catch (IOException e) {
+      observer.onError(e);
     }
+    return state;
+  }
 }

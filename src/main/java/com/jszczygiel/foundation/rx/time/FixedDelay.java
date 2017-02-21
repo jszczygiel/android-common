@@ -4,20 +4,20 @@ import java.util.concurrent.TimeUnit;
 
 public class FixedDelay extends Delay {
 
-    private final long delay;
+  private final long delay;
 
-    FixedDelay(long delay, TimeUnit unit) {
-        super(unit);
-        this.delay = delay;
-    }
+  FixedDelay(long delay, TimeUnit unit) {
+    super(unit);
+    this.delay = delay;
+  }
 
-    @Override
-    public long calculate(long attempt) {
-        return delay;
-    }
+  @Override
+  public long calculate(long attempt) {
+    return delay;
+  }
 
-    @Override
-    public String toString() {
-        return "FixedDelay{" + delay + " " + unit() + "}";
-    }
+  @Override
+  public String toString() {
+    return "FixedDelay{" + delay + " " + unit() + "}";
+  }
 }

@@ -6,13 +6,13 @@
                                             android:layout_height="match_parent">
 
     <FrameLayout
-            android:id="@+id/activity_simple_root"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            app:layout_marginBottomPercent="15%"
-            app:layout_marginEndPercent="15%"
-            app:layout_marginStartPercent="15%"
-            app:layout_marginTopPercent="15%"/>
+        android:id="@+id/activity_simple_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        app:layout_marginBottomPercent="15%"
+        app:layout_marginEndPercent="15%"
+        app:layout_marginStartPercent="15%"
+        app:layout_marginTopPercent="15%"/>
 
 </android.support.percent.PercentFrameLayout>

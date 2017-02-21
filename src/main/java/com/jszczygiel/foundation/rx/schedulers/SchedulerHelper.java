@@ -7,18 +7,18 @@ import rx.schedulers.Schedulers;
 
 public class SchedulerHelper {
 
-    private static final Scheduler databaseWriterScheduler;
+  private static final Scheduler databaseWriterScheduler;
 
 
-    static {
-        databaseWriterScheduler = Schedulers.from(Executors.newFixedThreadPool(1));
-    }
+  static {
+    databaseWriterScheduler = Schedulers.from(Executors.newFixedThreadPool(1));
+  }
 
-    private SchedulerHelper() {
-    }
+  private SchedulerHelper() {
+  }
 
 
-    public static Scheduler getDatabaseWriterScheduler() {
-        return databaseWriterScheduler;
-    }
+  public static Scheduler getDatabaseWriterScheduler() {
+    return databaseWriterScheduler;
+  }
 }

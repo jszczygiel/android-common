@@ -12,47 +12,47 @@ import org.json.JSONException;
 import java.io.IOException;
 
 public enum JsonMapper {
-    INSTANCE;
+  INSTANCE;
 
-    private final ObjectMapper mapper;
+  private final ObjectMapper mapper;
 
-    JsonMapper() {
-        mapper = new ObjectMapper();
-        mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+  JsonMapper() {
+    mapper = new ObjectMapper();
+    mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
 
+  }
+
+  public <T> T fromJson(String json, Class<T> clazz) throws JSONException {
+    try {
+      return mapper.readValue(json, clazz);
+    } catch (IOException e) {
+      LoggerHelper.log(e);
+      throw new JSONException(e.getMessage());
     }
+  }
 
-    public <T> T fromJson(String json, Class<T> clazz) throws JSONException {
-        try {
-            return mapper.readValue(json, clazz);
-        } catch (IOException e) {
-            LoggerHelper.log(e);
-            throw new JSONException(e.getMessage());
-        }
+  public <T> T fromJson(JsonParser json, Class<T> clazz) throws JSONException {
+    try {
+      return mapper.readValue(json, clazz);
+    } catch (IOException e) {
+      LoggerHelper.log(e);
+      throw new JSONException(e.getMessage());
     }
+  }
 
-    public <T> T fromJson(JsonParser json, Class<T> clazz) throws JSONException {
-        try {
-            return mapper.readValue(json, clazz);
-        } catch (IOException e) {
-            LoggerHelper.log(e);
-            throw new JSONException(e.getMessage());
-        }
+  public String toJson(Object model) {
+    try {
+      return mapper.writeValueAsString(model);
+    } catch (JsonProcessingException e) {
+      LoggerHelper.log(e);
+      return null;
     }
+  }
 
-    public String toJson(Object model) {
-        try {
-            return mapper.writeValueAsString(model);
-        } catch (JsonProcessingException e) {
-            LoggerHelper.log(e);
-            return null;
-        }
-    }
-
-    public ObjectMapper getObjectMapper() {
-        return mapper;
-    }
+  public ObjectMapper getObjectMapper() {
+    return mapper;
+  }
 
 }

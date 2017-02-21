@@ -5,27 +5,27 @@ import android.os.Bundle;
 import rx.Subscription;
 
 public interface BasePresenter<T> {
-    void onAttach(T view, Bundle arguments);
+  void onAttach(T view, Bundle arguments);
 
-    void onDetach();
+  void onDetach();
 
-    boolean isViewAvailable();
+  boolean isViewAvailable();
 
-    T getView();
+  T getView();
 
-    void setIsTablet(boolean isTablet);
+  void setIsTablet(boolean isTablet);
 
-    void addSubscriptionToLifeCycle(Subscription subscription);
+  void addSubscriptionToLifeCycle(Subscription subscription);
 
-    void removeSubscriptionFromLifeCycle(Subscription subscription);
+  void removeSubscriptionFromLifeCycle(Subscription subscription);
 
-    void clearSubscriptions();
+  void clearSubscriptions();
 
-    void onSaveInstanceState(Bundle outState);
+  void onSaveInstanceState(Bundle outState);
 
-    void onRestoreInstanceState(Bundle savedInstanceState);
+  void onRestoreInstanceState(Bundle savedInstanceState);
 
-    void setOrientation(int orientation);
+  void setOrientation(int orientation);
 
-    void onLoad(Bundle arguments);
+  void onLoad(Bundle arguments);
 }

@@ -6,13 +6,13 @@ import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 
 public interface BaseService<T extends BasePresenter> {
 
-    void setUpPresenter(T presenter);
+  void setUpPresenter(T presenter);
 
-    T getPresenter();
+  T getPresenter();
 
-    boolean isAvailable();
+  boolean isAvailable();
 
-    boolean isTablet();
+  boolean isTablet();
 
-    void startActivity(Intent intent);
+  void startActivity(Intent intent);
 }

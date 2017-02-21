@@ -13,26 +13,26 @@ import com.jszczygiel.foundation.presenters.interfaces.BaseListPresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseListFragment;
 
 public abstract class BaseBindedListFragmentImpl<T extends BaseListPresenter, K extends
-        ViewDataBinding> extends BaseListFragmentImpl<T> implements BaseListFragment<T> {
+    ViewDataBinding> extends BaseListFragmentImpl<T> implements BaseListFragment<T> {
 
-    private K binding;
+  private K binding;
 
-    public K getBinding() {
-        return binding;
-    }
+  public K getBinding() {
+    return binding;
+  }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(
-                inflater, getLayoutId(), container, false);
-        recyclerView = getRecyclerView();
-        emptyView = getEmptyView();
-        return binding.getRoot();
-    }
+  @Nullable
+  @Override
+  public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                           @Nullable Bundle savedInstanceState) {
+    binding = DataBindingUtil.inflate(
+        inflater, getLayoutId(), container, false);
+    recyclerView = getRecyclerView();
+    emptyView = getEmptyView();
+    return binding.getRoot();
+  }
 
-    protected abstract RecyclerView getRecyclerView();
+  protected abstract RecyclerView getRecyclerView();
 
-    protected abstract ViewGroup getEmptyView();
+  protected abstract ViewGroup getEmptyView();
 }

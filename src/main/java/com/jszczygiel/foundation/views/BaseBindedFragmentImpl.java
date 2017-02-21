@@ -12,21 +12,21 @@ import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseFragment;
 
 public abstract class BaseBindedFragmentImpl<T extends BasePresenter, K extends ViewDataBinding>
-        extends BaseFragmentImpl<T> implements BaseFragment<T> {
+    extends BaseFragmentImpl<T> implements BaseFragment<T> {
 
-    private K binding;
+  private K binding;
 
-    public K getBinding() {
-        return binding;
-    }
+  public K getBinding() {
+    return binding;
+  }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(
-                inflater, getLayoutId(), container, false);
-        return binding.getRoot();
-    }
+  @Nullable
+  @Override
+  public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                           @Nullable Bundle savedInstanceState) {
+    binding = DataBindingUtil.inflate(
+        inflater, getLayoutId(), container, false);
+    return binding.getRoot();
+  }
 
 }
