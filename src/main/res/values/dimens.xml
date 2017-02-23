@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="header_height">226dp</dimen>
-    <dimen name="header_height_small">192dp</dimen>
+    <dimen name="header_height_medium">192dp</dimen>
+    <dimen name="header_height_small">120dp</dimen>
 </resources>
