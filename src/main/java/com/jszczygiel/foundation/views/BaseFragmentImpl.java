@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
+import android.support.annotation.DimenRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.PluralsRes;
 import android.support.annotation.StringRes;
@@ -187,6 +188,10 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
   public void finishWithResult(int result, Intent intent) {
     getActivity().setResult(result, intent);
     finish();
+  }
+
+  protected float getDimension(@DimenRes int dimenRes) {
+    return getResources().getDimension(dimenRes);
   }
 
   public String getTitle() {
