@@ -3,13 +3,13 @@ package com.jszczygiel.foundation.json;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.jszczygiel.foundation.helpers.LoggerHelper;
-
-import org.json.JSONException;
-
 import java.io.IOException;
+import java.util.List;
+import org.json.JSONException;
 
 public enum JsonMapper {
   INSTANCE;
@@ -55,4 +55,14 @@ public enum JsonMapper {
     return mapper;
   }
 
+  public <T> List<T> listFromJson(String jsonString, Class<T> klazz) throws JSONException {
+    ObjectMapper mapper = new ObjectMapper();
+    JavaType type = mapper.getTypeFactory().constructCollectionType(List.class, klazz);
+    try {
+      return mapper.readValue(jsonString, type);
+    } catch (IOException e) {
+      LoggerHelper.log(e);
+      throw new JSONException(e.getMessage());
+    }
+  }
 }
