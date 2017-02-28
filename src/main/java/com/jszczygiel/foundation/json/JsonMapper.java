@@ -7,53 +7,55 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.jszczygiel.foundation.helpers.LoggerHelper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import java.io.IOException;
 import java.util.List;
 import org.json.JSONException;
 
 public enum JsonMapper {
-    INSTANCE;
+  INSTANCE;
 
-    private final ObjectMapper mapper;
+  private final ObjectMapper mapper;
 
-    JsonMapper() {
-        mapper = new ObjectMapper();
-        mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+  JsonMapper() {
+    mapper = new ObjectMapper();
+    mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+    mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+    mapper.registerModule(new JodaModule());
+  }
 
+  public <T> T fromJson(String json, Class<T> clazz) throws JSONException {
+    try {
+      return mapper.readValue(json, clazz);
+    } catch (IOException e) {
+      LoggerHelper.log(e);
+      throw new JSONException(e.getMessage());
     }
+  }
 
-    public <T> T fromJson(String json, Class<T> clazz) throws JSONException {
-        try {
-            return mapper.readValue(json, clazz);
-        } catch (IOException e) {
-            LoggerHelper.log(e);
-            throw new JSONException(e.getMessage());
-        }
+  public <T> T fromJson(JsonParser json, Class<T> clazz) throws JSONException {
+    try {
+      return mapper.readValue(json, clazz);
+    } catch (IOException e) {
+      LoggerHelper.log(e);
+      throw new JSONException(e.getMessage());
     }
+  }
 
-    public <T> T fromJson(JsonParser json, Class<T> clazz) throws JSONException {
-        try {
-            return mapper.readValue(json, clazz);
-        } catch (IOException e) {
-            LoggerHelper.log(e);
-            throw new JSONException(e.getMessage());
-        }
+  public String toJson(Object model) {
+    try {
+      return mapper.writeValueAsString(model);
+    } catch (JsonProcessingException e) {
+      LoggerHelper.log(e);
+      return null;
     }
+  }
 
-    public String toJson(Object model) {
-        try {
-            return mapper.writeValueAsString(model);
-        } catch (JsonProcessingException e) {
-            LoggerHelper.log(e);
-            return null;
-        }
-    }
-
-    public ObjectMapper getObjectMapper() {
-        return mapper;
-    }
+  public ObjectMapper getObjectMapper() {
+    return mapper;
+  }
 
   public <T> List<T> listFromJson(String jsonString, Class<T> klazz) throws JSONException {
     ObjectMapper mapper = new ObjectMapper();
