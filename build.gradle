@@ -74,7 +74,11 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-core:2.8.6'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.6'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.6'
+    compile ('com.fasterxml.jackson.datatype:jackson-datatype-joda:2.8.6'){
+        exclude group: 'joda-time', module: 'joda-time'
+    }
     compile 'com.squareup.sqlbrite:sqlbrite:1.1.1'
+    compile 'net.danlew:android.joda:2.9.5.1'
 
     //rx
     compile 'io.reactivex:rxandroid:1.2.1'
