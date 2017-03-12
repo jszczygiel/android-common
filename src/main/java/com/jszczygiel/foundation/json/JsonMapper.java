@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.jszczygiel.foundation.helpers.LoggerHelper;
 import java.io.IOException;
 import java.util.List;
-import org.json.JSONException;
 
 public enum JsonMapper {
   INSTANCE;
@@ -24,21 +23,21 @@ public enum JsonMapper {
 
   }
 
-  public <T> T fromJson(String json, Class<T> clazz) throws JSONException {
+  public <T> T fromJson(String json, Class<T> clazz) throws IOException {
     try {
       return mapper.readValue(json, clazz);
     } catch (IOException e) {
       LoggerHelper.log(e);
-      throw new JSONException(e.getMessage());
+      throw e;
     }
   }
 
-  public <T> T fromJson(JsonParser json, Class<T> clazz) throws JSONException {
+  public <T> T fromJson(JsonParser json, Class<T> clazz) throws IOException {
     try {
       return mapper.readValue(json, clazz);
     } catch (IOException e) {
       LoggerHelper.log(e);
-      throw new JSONException(e.getMessage());
+      throw e;
     }
   }
 
@@ -55,14 +54,14 @@ public enum JsonMapper {
     return mapper;
   }
 
-  public <T> List<T> listFromJson(String jsonString, Class<T> klazz) throws JSONException {
+  public <T> List<T> listFromJson(String jsonString, Class<T> klazz) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
     JavaType type = mapper.getTypeFactory().constructCollectionType(List.class, klazz);
     try {
       return mapper.readValue(jsonString, type);
     } catch (IOException e) {
       LoggerHelper.log(e);
-      throw new JSONException(e.getMessage());
+      throw e;
     }
   }
 }

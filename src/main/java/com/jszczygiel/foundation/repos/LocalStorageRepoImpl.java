@@ -3,7 +3,6 @@ package com.jszczygiel.foundation.repos;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.jszczygiel.foundation.containers.Tuple;
 import com.jszczygiel.foundation.enums.SubjectAction;
 import com.jszczygiel.foundation.helpers.LoggerHelper;
@@ -14,11 +13,8 @@ import com.jszczygiel.foundation.rx.PublishSubject;
 import com.jszczygiel.foundation.rx.schedulers.SchedulerHelper;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
-
-import org.json.JSONException;
-
+import java.io.IOException;
 import java.util.List;
-
 import rx.Emitter;
 import rx.Observable;
 import rx.functions.Action1;
@@ -71,7 +67,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
                     emitter.onNext(JsonMapper.INSTANCE.fromJson(
                         cursor.getString(DATA_COLUMN),
                         LocalStorageRepoImpl.this.getType()));
-                  } catch (JSONException e) {
+                  } catch (IOException e) {
                     emitter.onError(e);
                     return;
                   }
@@ -106,7 +102,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
                     emitter.onNext(JsonMapper.INSTANCE.fromJson(
                         cursor.getString(DATA_COLUMN),
                         LocalStorageRepoImpl.this.getType()));
-                  } catch (JSONException e) {
+                  } catch (IOException e) {
                     emitter.onError(e);
                     return;
                   }
