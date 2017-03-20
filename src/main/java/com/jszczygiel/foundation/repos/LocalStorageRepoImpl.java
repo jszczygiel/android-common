@@ -76,7 +76,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
               }
             }, Emitter.BackpressureMode.LATEST);
           }
-        }).observeOn(Schedulers.newThread());
+        });
   }
 
   @Override
@@ -111,7 +111,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
               }
             }, Emitter.BackpressureMode.BUFFER);
           }
-        }).observeOn(Schedulers.newThread());
+        });
   }
 
   protected synchronized void add(T model) {
@@ -127,7 +127,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
   @Override
   public Observable<T> remove(final String id) {
     LoggerHelper.logDebug("local:" + this.getClass().toString() + " remove:" + id);
-    return get(id).observeOn(SchedulerHelper.getDatabaseWriterScheduler()).map(
+    return get(id).observeOn(SchedulerHelper.databaseWriterScheduler()).map(
         new Func1<T, T>() {
           @Override
           public T call(T map) {
@@ -135,7 +135,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
             subject.onNext(new Tuple<>(SubjectAction.REMOVED, map));
             return map;
           }
-        }).observeOn(Schedulers.newThread());
+        });
   }
 
   protected synchronized void update(T model) {

@@ -70,7 +70,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
               return RevelSimpleFragmentActivityImpl.this.getFragment().isVisible();
             }
           })
-          .subscribeOn(Schedulers.newThread())
+          .subscribeOn(Schedulers.computation())
           .observeOn(AndroidSchedulers.mainThread())
           .subscribe(new Action1<Long>() {
             @Override
