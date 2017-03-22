@@ -14,13 +14,13 @@ import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-
 import java.io.File;
 import java.io.FileFilter;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class SystemHelper {
+
   public static boolean isTablet(Context context) {
     return (context.getResources().getConfiguration().screenLayout
         & Configuration.SCREENLAYOUT_SIZE_MASK)
@@ -60,6 +60,7 @@ public class SystemHelper {
   private static int getNumCoresOldPhones() {
     //Private Class to display only CPU devices in the directory listing
     class CpuFilter implements FileFilter {
+
       @Override
       public boolean accept(File pathname) {
         //Check if filename is "cpu", followed by a single digit number
@@ -124,7 +125,7 @@ public class SystemHelper {
       NfcManager manager = (NfcManager) context.getSystemService(Context.NFC_SERVICE);
       NfcAdapter adapter = manager.getDefaultAdapter();
       return adapter != null;
-    } catch (Exception e) {
+    } catch (Exception | Error e) {
       e.printStackTrace();
     }
     return false;
