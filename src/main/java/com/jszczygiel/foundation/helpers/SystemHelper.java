@@ -10,6 +10,8 @@ import android.graphics.Point;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
 import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class SystemHelper {
@@ -49,6 +52,18 @@ public class SystemHelper {
       // Use saurabh64's answer
       return getNumCoresOldPhones();
     }
+  }
+
+  public static boolean isRTL(Context ctx) {
+    Configuration config = ctx.getResources().getConfiguration();
+    if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
+      return config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+    }
+    return false;
+  }
+
+  public static boolean isArabic() {
+    return Locale.getDefault().getISO3Language().equals("ara");
   }
 
   /**
