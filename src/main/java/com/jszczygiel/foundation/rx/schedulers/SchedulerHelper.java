@@ -9,13 +9,13 @@ public class SchedulerHelper {
   private static final Scheduler databaseWriterScheduler;
   private static final Scheduler uiDelayScheduler;
   private static final Scheduler repoObserverScheduler;
-  private static final Scheduler initScheduler;
+  private static final Scheduler subscribeOn;
 
   static {
     databaseWriterScheduler = Schedulers.from(Executors.newFixedThreadPool(1));
-    uiDelayScheduler = Schedulers.from(Executors.newFixedThreadPool(3));
-    repoObserverScheduler = Schedulers.from(Executors.newFixedThreadPool(3));
-    initScheduler = Schedulers.from(Executors.newFixedThreadPool(3));
+    uiDelayScheduler = Schedulers.from(Executors.newFixedThreadPool(4));
+    repoObserverScheduler = Schedulers.from(Executors.newFixedThreadPool(4));
+    subscribeOn = Schedulers.from(Executors.newFixedThreadPool(5));
   }
 
   private SchedulerHelper() {
@@ -32,7 +32,12 @@ public class SchedulerHelper {
   public static Scheduler repoObserverScheduler() {
     return repoObserverScheduler;
   }
-  public static Scheduler initScheduler() {
-    return initScheduler;
+
+  public static Scheduler appScheduler() {
+    return subscribeOn;
+  }
+
+  public static Scheduler computation() {
+    return Schedulers.computation();
   }
 }

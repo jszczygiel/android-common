@@ -1,16 +1,14 @@
 package com.jszczygiel.foundation.rx;
 
+import com.jszczygiel.foundation.rx.schedulers.SchedulerHelper;
 import com.jszczygiel.foundation.rx.time.Delay;
-
 import java.util.concurrent.TimeUnit;
-
 import rx.Observable;
 import rx.Scheduler;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.exceptions.Exceptions;
 import rx.functions.Action0;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.MultipleAssignmentSubscription;
 
 public class OnSubscribeExponentialDelay implements Observable.OnSubscribe<Long> {
@@ -36,7 +34,7 @@ public class OnSubscribeExponentialDelay implements Observable.OnSubscribe<Long>
   }
 
   public OnSubscribeExponentialDelay(long initialDelay, Delay period) {
-    this(initialDelay, period, Schedulers.computation());
+    this(initialDelay, period, SchedulerHelper.computation());
   }
 
   public OnSubscribeExponentialDelay(long initialDelay, Delay period, Scheduler scheduler) {
