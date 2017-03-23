@@ -15,11 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.jszczygiel.foundation.helpers.SystemHelper;
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseFragment;
-
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -101,30 +99,20 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
 
   @Override
   public void showToast(@StringRes final int resId, final String... formatArgs) {
-    getView().post(new Runnable() {
-      @Override
-      public void run() {
-        if (isAvailable()) {
-          Toast.makeText(getContext(), getString(resId, (Object[]) formatArgs),
-              Toast.LENGTH_LONG).show();
-        }
-      }
-    });
+    if (isAvailable()) {
+      Toast.makeText(getContext(), getString(resId, (Object[]) formatArgs),
+          Toast.LENGTH_LONG).show();
+    }
   }
 
   @Override
   public void showToast(@PluralsRes final int id, final int quantity,
-                        final String... formatArgs) {
-    getView().post(new Runnable() {
-      @Override
-      public void run() {
-        if (isAvailable()) {
-          Toast.makeText(getContext(),
-              getQuantityString(id, quantity, (Object[]) formatArgs),
-              Toast.LENGTH_LONG).show();
-        }
-      }
-    });
+      final String... formatArgs) {
+    if (isAvailable()) {
+      Toast.makeText(getContext(),
+          getQuantityString(id, quantity, (Object[]) formatArgs),
+          Toast.LENGTH_LONG).show();
+    }
   }
 
   public String getQuantityString(@PluralsRes int id, int quantity, Object... formatArgs) {
@@ -134,7 +122,7 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                           @Nullable Bundle savedInstanceState) {
+      @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(getLayoutId(), container, false);
     return view;
   }
