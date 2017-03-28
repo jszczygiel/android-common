@@ -146,10 +146,12 @@ public class SystemHelper {
     return false;
   }
 
-  public static boolean hasCamera(Context context) {
-    PackageManager pm = context.getPackageManager();
+  public static boolean hasRearCamera(Context context) {
+    return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+  }
 
-    return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
+  public static boolean hasFrontCamera(Context context) {
+    return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT);
   }
 
   public static boolean isScreenLocked(Context context) {
