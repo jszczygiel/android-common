@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.regex.Pattern;
 
 public class SystemHelper {
@@ -63,7 +64,11 @@ public class SystemHelper {
   }
 
   public static boolean isArabic() {
-    return Locale.getDefault().getISO3Language().equals("ara");
+    try {
+      return Locale.getDefault().getISO3Language().equals("ara");
+    } catch (MissingResourceException e) {
+      return false;
+    }
   }
 
   /**
