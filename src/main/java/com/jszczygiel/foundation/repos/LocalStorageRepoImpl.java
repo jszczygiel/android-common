@@ -32,8 +32,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
   private final BriteDatabase database;
 
   public LocalStorageRepoImpl(SQLiteOpenHelper sqliteHelper) {
-
-    database = SqlBrite.create().wrapDatabaseHelper(sqliteHelper, Schedulers.io());
+    database = new SqlBrite.Builder().build().wrapDatabaseHelper(sqliteHelper, Schedulers.io());
 
     collectionSubject = PublishSubject.createWith(PublishSubject.BUFFER);
     subject = PublishSubject.createWith(PublishSubject.BUFFER);
