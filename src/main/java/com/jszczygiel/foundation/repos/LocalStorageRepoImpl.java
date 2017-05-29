@@ -51,7 +51,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
         .switchMap(new Func1<SqlBrite.Query, Observable<? extends T>>() {
           @Override
           public Observable<? extends T> call(final SqlBrite.Query map) {
-            return Observable.fromEmitter(new Action1<Emitter<T>>() {
+            return Observable.create(new Action1<Emitter<T>>() {
               @Override
               public void call(Emitter<T> emitter) {
                 final Cursor cursor = map.run();
@@ -86,7 +86,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
         .switchMap(new Func1<SqlBrite.Query, Observable<? extends T>>() {
           @Override
           public Observable<? extends T> call(final SqlBrite.Query map) {
-            return Observable.fromEmitter(new Action1<Emitter<T>>() {
+            return Observable.create(new Action1<Emitter<T>>() {
               @Override
               public void call(Emitter<T> emitter) {
                 final Cursor cursor = map.run();
