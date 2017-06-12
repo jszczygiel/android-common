@@ -31,6 +31,8 @@ public interface BaseFragment<T extends BasePresenter> {
 
   void showToast(@StringRes int resId, String... formatArgs);
 
+  void showShortToast(@StringRes int resId, String... formatArgs);
+
   void showToast(@PluralsRes int id, int quantity, String... formatArgs);
 
   void addSubscriptionToLifeCycle(Subscription subscription);
