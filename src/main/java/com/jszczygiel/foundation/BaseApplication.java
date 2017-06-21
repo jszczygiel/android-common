@@ -28,7 +28,4 @@ public abstract class BaseApplication extends Application {
     INSTANCE = this;
   }
 
-  public SQLiteOpenHelper getSQLiteOpenHelper() {
-    return null;
-  }
 }
