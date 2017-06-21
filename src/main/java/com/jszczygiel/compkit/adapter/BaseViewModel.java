@@ -1,7 +1,6 @@
 package com.jszczygiel.compkit.adapter;
 
 import android.os.Parcelable;
-
 import java.util.Arrays;
 
 public abstract class BaseViewModel implements Parcelable {
@@ -15,7 +14,7 @@ public abstract class BaseViewModel implements Parcelable {
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(new Object[]{id(), modelType()});
+    return Arrays.hashCode(new Object[] {id(), modelType()});
   }
 
   protected abstract static class BaseBuilder<T> {

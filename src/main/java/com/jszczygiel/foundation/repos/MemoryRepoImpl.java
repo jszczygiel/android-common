@@ -5,12 +5,10 @@ import com.jszczygiel.foundation.enums.SubjectAction;
 import com.jszczygiel.foundation.repos.interfaces.BaseModel;
 import com.jszczygiel.foundation.repos.interfaces.Repo;
 import com.jszczygiel.foundation.rx.PublishSubject;
-
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
-
 import rx.Observable;
 import rx.functions.Func0;
 import rx.functions.Func1;
@@ -29,12 +27,13 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
 
   @Override
   public Observable<T> get(final String id) {
-    return Observable.fromCallable(new Func0<T>() {
-      @Override
-      public T call() {
-        return models.get(id);
-      }
-    });
+    return Observable.fromCallable(
+        new Func0<T>() {
+          @Override
+          public T call() {
+            return models.get(id);
+          }
+        });
   }
 
   @Override
@@ -49,18 +48,21 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
 
   @Override
   public Observable<T> remove(final String id) {
-    return Observable.fromCallable(new Callable<T>() {
-      @Override
-      public T call() throws Exception {
-        return models.remove(id);
-      }
-    }).map(new Func1<T, T>() {
-      @Override
-      public T call(T model) {
-        subject.onNext(new Tuple<>(SubjectAction.REMOVED, model));
-        return model;
-      }
-    });
+    return Observable.fromCallable(
+            new Callable<T>() {
+              @Override
+              public T call() throws Exception {
+                return models.remove(id);
+              }
+            })
+        .map(
+            new Func1<T, T>() {
+              @Override
+              public T call(T model) {
+                subject.onNext(new Tuple<>(SubjectAction.REMOVED, model));
+                return model;
+              }
+            });
   }
 
   protected void update(T model) {
@@ -68,9 +70,7 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
   }
 
   @Override
-  public void put(T model) {
-
-  }
+  public void put(T model) {}
 
   @Override
   public Observable<Tuple<Integer, T>> observe() {

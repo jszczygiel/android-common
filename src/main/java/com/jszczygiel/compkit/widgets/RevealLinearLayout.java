@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import com.jszczygiel.compkit.animators.animation.RevealViewGroup;
 import com.jszczygiel.compkit.animators.animation.ViewRevealManager;
 

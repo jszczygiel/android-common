@@ -3,8 +3,7 @@ package com.jszczygiel.foundation.helpers;
 import com.jszczygiel.foundation.BaseApplication;
 
 public class TranslationHelper {
-  private TranslationHelper() {
-  }
+  private TranslationHelper() {}
 
   public static String getString(int resourceId) {
     return BaseApplication.getInstance().getString(resourceId);
@@ -17,5 +16,4 @@ public class TranslationHelper {
   public static String getString(int resourceId, Object... formatArgs) {
     return BaseApplication.getInstance().getString(resourceId, formatArgs);
   }
-
 }

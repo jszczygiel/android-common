@@ -1,5 +1,7 @@
 package com.jszczygiel.compkit.helpers;
 
+import static android.graphics.PorterDuff.Mode;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -9,8 +11,6 @@ import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.v4.graphics.drawable.DrawableCompat;
-
-import static android.graphics.PorterDuff.Mode;
 
 public class ColorHelper {
 
@@ -57,7 +57,7 @@ public class ColorHelper {
       int[][] stateList = new int[states.length][];
 
       for (int i = 0; i < states.length; i++) {
-        stateList[i] = new int[]{states[i]};
+        stateList[i] = new int[] {states[i]};
       }
 
       return new ColorStateListBuilder(stateList);

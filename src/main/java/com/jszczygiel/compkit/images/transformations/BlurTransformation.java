@@ -2,7 +2,6 @@ package com.jszczygiel.compkit.images.transformations;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 
@@ -252,5 +251,4 @@ public class BlurTransformation extends BitmapTransformation {
   public String getId() {
     return getClass().getName();
   }
-
 }

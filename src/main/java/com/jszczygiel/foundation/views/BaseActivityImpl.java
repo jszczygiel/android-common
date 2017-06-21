@@ -3,7 +3,6 @@ package com.jszczygiel.foundation.views;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.v7.app.AppCompatActivity;
-
 import com.jszczygiel.foundation.helpers.SystemHelper;
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseActivity;
@@ -11,10 +10,9 @@ import com.jszczygiel.foundation.views.interfaces.BaseActivity;
 public abstract class BaseActivityImpl<T extends BasePresenter> extends AppCompatActivity
     implements BaseActivity<T> {
 
-  /**
-   * instance of presenter
-   */
+  /** instance of presenter */
   private T presenter;
+
   private boolean isTablet;
 
   @Override
@@ -47,9 +45,7 @@ public abstract class BaseActivityImpl<T extends BasePresenter> extends AppCompa
     presenter.setOrientation(getResources().getConfiguration().orientation);
   }
 
-  /**
-   * @return provides new instance of presenter
-   */
+  /** @return provides new instance of presenter */
   public abstract T initializePresenter();
 
   @Override
@@ -86,6 +82,4 @@ public abstract class BaseActivityImpl<T extends BasePresenter> extends AppCompa
     super.onRestoreInstanceState(savedInstanceState);
     getPresenter().onRestoreInstanceState(savedInstanceState);
   }
-
-
 }

@@ -1,7 +1,6 @@
 package com.jszczygiel.foundation.containers;
 
 import android.support.annotation.NonNull;
-
 import com.jszczygiel.foundation.helpers.CompareHelper;
 
 public class Tuple<T1, T2> implements Comparable<Tuple<T1, T2>> {
@@ -48,8 +47,8 @@ public class Tuple<T1, T2> implements Comparable<Tuple<T1, T2>> {
 
     Tuple<?, ?> tuple = (Tuple<?, ?>) o;
 
-    return o1 != null ? o1.equals(tuple.o1) : tuple.o1 == null && (o2 != null ? o2.equals(
-        tuple.o2) : tuple.o2 == null);
-
+    return o1 != null
+        ? o1.equals(tuple.o1)
+        : tuple.o1 == null && (o2 != null ? o2.equals(tuple.o2) : tuple.o2 == null);
   }
 }

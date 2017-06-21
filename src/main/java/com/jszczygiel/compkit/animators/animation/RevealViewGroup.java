@@ -2,14 +2,9 @@ package com.jszczygiel.compkit.animators.animation;
 
 import android.view.ViewGroup;
 
-
-/**
- * Indicator for internal API that {@link ViewGroup} support Circular Reveal animation
- */
+/** Indicator for internal API that {@link ViewGroup} support Circular Reveal animation */
 public interface RevealViewGroup {
 
-  /**
-   * @return Bridge between view and circular reveal animation
-   */
+  /** @return Bridge between view and circular reveal animation */
   ViewRevealManager getViewRevealManager();
 }

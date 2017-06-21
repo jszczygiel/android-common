@@ -14,17 +14,16 @@ import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.StateSet;
-
 import com.jszczygiel.R;
 import com.jszczygiel.compkit.helpers.ColorHelper;
 import com.jszczygiel.compkit.images.ImageBuilder;
 
 public class TintedImageView extends AppCompatImageView {
 
-  public static final int[] STATE_PRESSED = new int[]{android.R.attr.state_pressed};
-  public static final int[] STATE_PRESSED_DISABLED = new int[]{android.R.attr.state_pressed,
-      -android.R.attr.state_enabled};
-  public static final int[] STATE_DISABLED = new int[]{-android.R.attr.state_enabled};
+  public static final int[] STATE_PRESSED = new int[] {android.R.attr.state_pressed};
+  public static final int[] STATE_PRESSED_DISABLED =
+      new int[] {android.R.attr.state_pressed, -android.R.attr.state_enabled};
+  public static final int[] STATE_DISABLED = new int[] {-android.R.attr.state_enabled};
 
   protected ColorStateList colorStateList;
 
@@ -49,15 +48,19 @@ public class TintedImageView extends AppCompatImageView {
     try {
       ta = context.obtainStyledAttributes(attrs, R.styleable.TintedImageView, 0, 0);
 
-      int tintColour = ta.getColor(R.styleable.TintedImageView_tintColour,
-          ContextCompat.getColor(context, android.R.color.black));
-      int selectedTintColour = ta.getColor(R.styleable.TintedImageView_selectedTintColour,
-          ContextCompat.getColor(context, android.R.color.black));
+      int tintColour =
+          ta.getColor(
+              R.styleable.TintedImageView_tintColour,
+              ContextCompat.getColor(context, android.R.color.black));
+      int selectedTintColour =
+          ta.getColor(
+              R.styleable.TintedImageView_selectedTintColour,
+              ContextCompat.getColor(context, android.R.color.black));
 
-      colorStateList = ColorHelper.ColorStateListBuilder
-          .forStates(STATE_PRESSED, StateSet.WILD_CARD)
-          .withColors(selectedTintColour, tintColour)
-          .toList();
+      colorStateList =
+          ColorHelper.ColorStateListBuilder.forStates(STATE_PRESSED, StateSet.WILD_CARD)
+              .withColors(selectedTintColour, tintColour)
+              .toList();
     } finally {
       if (ta != null) {
         ta.recycle();
@@ -128,7 +131,6 @@ public class TintedImageView extends AppCompatImageView {
     } else {
       imageLoader.load(placeHolder).into(this);
     }
-
   }
 
   public void setColorTintList(ColorStateList colors) {
@@ -136,27 +138,28 @@ public class TintedImageView extends AppCompatImageView {
   }
 
   public void setColorTint(@ColorInt int color) {
-    colorStateList = ColorHelper.ColorStateListBuilder
-        .forStates(STATE_PRESSED, StateSet.WILD_CARD)
-        .withColors(color, color)
-        .toList();
+    colorStateList =
+        ColorHelper.ColorStateListBuilder.forStates(STATE_PRESSED, StateSet.WILD_CARD)
+            .withColors(color, color)
+            .toList();
     applyTint(getDrawable());
   }
 
   public void setColorTint(@ColorInt int pressedColor, @ColorInt int defaultColor) {
-    colorStateList = ColorHelper.ColorStateListBuilder
-        .forStates(STATE_PRESSED, StateSet.WILD_CARD)
-        .withColors(pressedColor, defaultColor)
-        .toList();
+    colorStateList =
+        ColorHelper.ColorStateListBuilder.forStates(STATE_PRESSED, StateSet.WILD_CARD)
+            .withColors(pressedColor, defaultColor)
+            .toList();
     applyTint(getDrawable());
   }
 
-  public void setColorTint(@ColorInt int pressedColor, @ColorInt int defaultColor,
-                           @ColorInt int disabledColor) {
-    colorStateList = ColorHelper.ColorStateListBuilder
-        .forStates(STATE_PRESSED, STATE_DISABLED, StateSet.WILD_CARD)
-        .withColors(pressedColor, disabledColor, defaultColor)
-        .toList();
+  public void setColorTint(
+      @ColorInt int pressedColor, @ColorInt int defaultColor, @ColorInt int disabledColor) {
+    colorStateList =
+        ColorHelper.ColorStateListBuilder.forStates(
+                STATE_PRESSED, STATE_DISABLED, StateSet.WILD_CARD)
+            .withColors(pressedColor, disabledColor, defaultColor)
+            .toList();
     applyTint(getDrawable());
   }
 

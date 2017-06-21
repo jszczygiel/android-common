@@ -24,8 +24,8 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
     firstCompletlyVisible = mLinearLayoutManager.findFirstCompletelyVisibleItemPosition();
 
-    if (!isLoading() && (totalItemCount - visibleItemCount) <= (firstVisibleItem +
-        visibleThreshold)) {
+    if (!isLoading()
+        && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
       onLoadMore();
     }
 
@@ -33,8 +33,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
       onScrolledToBeginning();
     }
 
-    onItemsVisibilityChanged(firstCompletlyVisible,
-        firstCompletlyVisible + visibleItemCount - 1);
+    onItemsVisibilityChanged(firstCompletlyVisible, firstCompletlyVisible + visibleItemCount - 1);
   }
 
   public abstract boolean isLoading();
@@ -44,5 +43,4 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
   public abstract void onScrolledToBeginning();
 
   public abstract void onItemsVisibilityChanged(int firstVisibleItem, int lastVisibleItem);
-
 }

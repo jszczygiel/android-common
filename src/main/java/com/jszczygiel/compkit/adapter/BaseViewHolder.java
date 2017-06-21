@@ -5,7 +5,6 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.ColorInt;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import java.util.List;
 
 public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
@@ -34,8 +33,7 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
     }
   }
 
-  public void onBind(T model, BaseInteractionListener listener) {
-  }
+  public void onBind(T model, BaseInteractionListener listener) {}
 
   protected final String getString(int resourceId) {
     return context.getString(resourceId);
@@ -67,19 +65,14 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
   }
 
   /**
-   * Abstract click listener, by default this methods do nothing. This should also apply to
-   * classes that extend this one.
+   * Abstract click listener, by default this methods do nothing. This should also apply to classes
+   * that extend this one.
    */
-  public static abstract class BaseInteractionListener {
-    public void onItemClick(BaseViewModel model, View itemView) {
-    }
+  public abstract static class BaseInteractionListener {
+    public void onItemClick(BaseViewModel model, View itemView) {}
 
-    public void onDetailsClick(BaseViewModel model) {
-    }
+    public void onDetailsClick(BaseViewModel model) {}
 
-    public void onHeaderClick(View header, int position, long headerId) {
-    }
-
+    public void onHeaderClick(View header, int position, long headerId) {}
   }
-
 }

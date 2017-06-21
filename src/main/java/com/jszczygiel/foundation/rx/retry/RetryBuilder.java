@@ -1,11 +1,9 @@
 package com.jszczygiel.foundation.rx.retry;
 
 import com.jszczygiel.foundation.rx.time.Delay;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import rx.Scheduler;
 import rx.functions.Action4;
 import rx.functions.Func1;
@@ -34,9 +32,7 @@ public class RetryBuilder {
     this.retryErrorPredicate = null; //retry purely on the instanceOf
   }
 
-  /**
-   * Only errors that are instanceOf the specified types will trigger a retry
-   */
+  /** Only errors that are instanceOf the specified types will trigger a retry */
   public static RetryBuilder anyOf(Class<? extends Throwable>... types) {
     RetryBuilder retryBuilder = new RetryBuilder();
     retryBuilder.maxAttempts = 1;
@@ -47,9 +43,7 @@ public class RetryBuilder {
     return retryBuilder;
   }
 
-  /**
-   * Only errors that are NOT instanceOf the specified types will trigger a retry
-   */
+  /** Only errors that are NOT instanceOf the specified types will trigger a retry */
   public static RetryBuilder allBut(Class<? extends Throwable>... types) {
     RetryBuilder retryBuilder = new RetryBuilder();
     retryBuilder.maxAttempts = 1;
@@ -60,18 +54,14 @@ public class RetryBuilder {
     return retryBuilder;
   }
 
-  /**
-   * Any error will trigger a retry
-   */
+  /** Any error will trigger a retry */
   public static RetryBuilder any() {
     RetryBuilder retryBuilder = new RetryBuilder();
     retryBuilder.maxAttempts = 1;
     return retryBuilder;
   }
 
-  /**
-   * Any error that pass the predicate will trigger a retry
-   */
+  /** Any error that pass the predicate will trigger a retry */
   public static RetryBuilder anyMatches(Func1<Throwable, Boolean> retryErrorPredicate) {
     RetryBuilder retryBuilder = new RetryBuilder();
     retryBuilder.maxAttempts = 1;
@@ -81,9 +71,11 @@ public class RetryBuilder {
   }
 
   /**
-   * Make only one retry attempt (default). <p> If an error that can trigger a retry occurs twice
-   * in a row, it will be wrapped as the cause inside a {@link CannotRetryException}, which will
-   * be emitted via the observable's onError method.
+   * Make only one retry attempt (default).
+   *
+   * <p>If an error that can trigger a retry occurs twice in a row, it will be wrapped as the cause
+   * inside a {@link CannotRetryException}, which will be emitted via the observable's onError
+   * method.
    */
   public RetryBuilder once() {
     this.maxAttempts = 1;
@@ -91,11 +83,14 @@ public class RetryBuilder {
   }
 
   /**
-   * Make at most maxAttempts retry attempts. <p> Note that the maximum accepted value is
-   * <code>{@link Integer#MAX_VALUE} - 1</code>, the internal retry mechanism will ensure a total
-   * of <code>maxAttempts + 1</code> total attempts, accounting for the original call. <p> If an
-   * error that can trigger a retry occurs more that <i>maxAttempts</i>, it will be wrapped as the
-   * cause inside a {@link CannotRetryException}, which will be emitted via the observable's
+   * Make at most maxAttempts retry attempts.
+   *
+   * <p>Note that the maximum accepted value is <code>{@link Integer#MAX_VALUE} - 1</code>, the
+   * internal retry mechanism will ensure a total of <code>maxAttempts + 1</code> total attempts,
+   * accounting for the original call.
+   *
+   * <p>If an error that can trigger a retry occurs more that <i>maxAttempts</i>, it will be wrapped
+   * as the cause inside a {@link CannotRetryException}, which will be emitted via the observable's
    * onError method.
    */
   public RetryBuilder max(int maxAttempts) {
@@ -103,16 +98,14 @@ public class RetryBuilder {
     return this;
   }
 
-  /**
-   * Customize the retry {@link Delay}
-   */
+  /** Customize the retry {@link Delay} */
   public RetryBuilder delay(Delay delay) {
     return delay(delay, null);
   }
 
   /**
-   * Set both the {@link Delay} and the {@link Scheduler} on which the delay is waited. If the
-   * delay is null, {@link Retry#DEFAULT_DELAY} is used.
+   * Set both the {@link Delay} and the {@link Scheduler} on which the delay is waited. If the delay
+   * is null, {@link Retry#DEFAULT_DELAY} is used.
    */
   public RetryBuilder delay(Delay delay, Scheduler scheduler) {
     this.delay = (delay == null) ? Retry.DEFAULT_DELAY : delay;
@@ -120,19 +113,18 @@ public class RetryBuilder {
     return this;
   }
 
-  /**
-   * Use {@link Retry#DEFAULT_DELAY} but wait on a specific {@link Scheduler}
-   */
+  /** Use {@link Retry#DEFAULT_DELAY} but wait on a specific {@link Scheduler} */
   public RetryBuilder delay(Scheduler scheduler) {
     return delay(null, scheduler);
   }
 
   /**
    * Execute some code each time a retry is scheduled (at the moment the retriable exception is
-   * caught, but before the retry delay is applied). Only quick executing code should be
-   * performed, do not block in this action. <p> The action receives the retry attempt number
-   * (1-n), the exception that caused the retry, the delay duration and timeunit for the scheduled
-   * retry.
+   * caught, but before the retry delay is applied). Only quick executing code should be performed,
+   * do not block in this action.
+   *
+   * <p>The action receives the retry attempt number (1-n), the exception that caused the retry, the
+   * delay duration and timeunit for the scheduled retry.
    *
    * @param doOnRetryAction the side-effect action to perform whenever a retry is scheduled.
    * @see OnRetryAction if you want a shorter signature.
@@ -142,14 +134,12 @@ public class RetryBuilder {
     return this;
   }
 
-  /**
-   * Construct the resulting {@link RetryWhenFunction}
-   */
+  /** Construct the resulting {@link RetryWhenFunction} */
   public RetryWhenFunction build() {
     RetryWithDelayHandler handler;
     Func1<Throwable, Boolean> filter;
-    if ((errorsStoppingRetry == null || errorsStoppingRetry.isEmpty()) && retryErrorPredicate
-        == null) {
+    if ((errorsStoppingRetry == null || errorsStoppingRetry.isEmpty())
+        && retryErrorPredicate == null) {
       //always retry on any error
       filter = null;
     } else if (retryErrorPredicate != null) {
@@ -161,19 +151,16 @@ public class RetryBuilder {
     if (scheduler == null) {
       handler = new RetryWithDelayHandler(maxAttempts, delay, filter, doOnRetryAction);
     } else {
-      handler = new RetryWithDelayHandler(maxAttempts, delay, filter, doOnRetryAction,
-          scheduler);
+      handler = new RetryWithDelayHandler(maxAttempts, delay, filter, doOnRetryAction, scheduler);
     }
     return new RetryWhenFunction(handler);
   }
 
   /**
-   * An interface alias for <code>Action4&lt;Integer, Throwable, Long, TimeUnit&gt;</code>,
-   * suitable for {@link RetryBuilder#doOnRetry(Action4)}.
+   * An interface alias for <code>Action4&lt;Integer, Throwable, Long, TimeUnit&gt;</code>, suitable
+   * for {@link RetryBuilder#doOnRetry(Action4)}.
    */
-  public interface OnRetryAction extends Action4<Integer, Throwable, Long, TimeUnit> {
-
-  }
+  public interface OnRetryAction extends Action4<Integer, Throwable, Long, TimeUnit> {}
 
   protected static class InversePredicate implements Func1<Throwable, Boolean> {
 
@@ -200,8 +187,7 @@ public class RetryBuilder {
     private final List<Class<? extends Throwable>> errorsStoppingRetry;
     private final boolean inverse;
 
-    public ShouldStopOnError(List<Class<? extends Throwable>> filterErrorList,
-                             boolean inverse) {
+    public ShouldStopOnError(List<Class<? extends Throwable>> filterErrorList, boolean inverse) {
       this.errorsStoppingRetry = filterErrorList;
       this.inverse = inverse;
     }

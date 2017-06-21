@@ -18,8 +18,7 @@ public class SchedulerHelper {
     subscribeOn = Schedulers.from(Executors.newFixedThreadPool(5));
   }
 
-  private SchedulerHelper() {
-  }
+  private SchedulerHelper() {}
 
   public static Scheduler databaseWriterScheduler() {
     return databaseWriterScheduler;

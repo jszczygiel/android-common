@@ -1,13 +1,11 @@
 package com.jszczygiel.foundation.rx;
 
 import android.support.annotation.IntDef;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
 import rx.Observer;
 import rx.Producer;
 import rx.Subscriber;
@@ -19,12 +17,12 @@ import rx.subjects.Subject;
 
 public class PublishSubject<T> extends Subject<T, T> {
 
-  public final static int DROP = 0;
-  public final static int BUFFER = 1;
-  public final static int ERROR = 2;
-  final State<T> state;                            // (2)
+  public static final int DROP = 0;
+  public static final int BUFFER = 1;
+  public static final int ERROR = 2;
+  final State<T> state; // (2)
 
-  protected PublishSubject(State<T> state) {       // (3)
+  protected PublishSubject(State<T> state) { // (3)
     super(state);
     this.state = state;
   }
@@ -56,18 +54,20 @@ public class PublishSubject<T> extends Subject<T, T> {
 
   @IntDef({BUFFER, ERROR, DROP})
   @Retention(RetentionPolicy.SOURCE)
-  public @interface BackPressureStrategy {
-  }
+  public @interface BackPressureStrategy {}
 
   static class State<T> implements OnSubscribe<T>, Observer<T>, Producer, Subscription {
     @SuppressWarnings("rawtypes")
     static final SubscriberState[] EMPTY = new SubscriberState[0];
+
     @SuppressWarnings("rawtypes")
-    static final SubscriberState[] TERMINATED =
-        new SubscriberState[0];
+    static final SubscriberState[] TERMINATED = new SubscriberState[0];
+
     final int strategy;
+
     @SuppressWarnings("unchecked")
     volatile SubscriberState<T>[] subscribers = EMPTY;
+
     volatile boolean done;
     Throwable error;
 
@@ -77,8 +77,7 @@ public class PublishSubject<T> extends Subject<T, T> {
 
     @Override
     public void call(Subscriber<? super T> t) {
-      SubscriberState<T> innerState =
-          new SubscriberState<>(t, this);
+      SubscriberState<T> innerState = new SubscriberState<>(t, this);
       t.add(innerState);
       t.setProducer(innerState);
 
@@ -206,7 +205,6 @@ public class PublishSubject<T> extends Subject<T, T> {
       }
     }
 
-
     @Override
     public boolean isUnsubscribed() {
       boolean unsubscribed = false;
@@ -234,8 +232,7 @@ public class PublishSubject<T> extends Subject<T, T> {
     volatile boolean done;
     Throwable error;
 
-    public SubscriberState(
-        Subscriber<? super T> child, State<T> state) {
+    public SubscriberState(Subscriber<? super T> child, State<T> state) {
       this.child = child;
       this.state = state;
       this.strategy = state.strategy;
@@ -253,34 +250,35 @@ public class PublishSubject<T> extends Subject<T, T> {
       }
       switch (strategy) {
         case BUFFER:
-          queue.offer(t);                               // (1)
+          queue.offer(t); // (1)
           drain();
           break;
-        case DROP: {
-          long r = requested.get();                     // (2)
-          if (r != 0L) {
-            child.onNext(t);
-            if (r != Long.MAX_VALUE) {
-              requested.decrementAndGet();
+        case DROP:
+          {
+            long r = requested.get(); // (2)
+            if (r != 0L) {
+              child.onNext(t);
+              if (r != Long.MAX_VALUE) {
+                requested.decrementAndGet();
+              }
             }
+            break;
           }
-          break;
-        }
-        case ERROR: {
-          long r = requested.get();                     // (3)
-          if (r != 0L) {
-            child.onNext(t);
-            if (r != Long.MAX_VALUE) {
-              requested.decrementAndGet();
+        case ERROR:
+          {
+            long r = requested.get(); // (3)
+            if (r != 0L) {
+              child.onNext(t);
+              if (r != Long.MAX_VALUE) {
+                requested.decrementAndGet();
+              }
+            } else {
+              unsubscribe();
+              child.onError(new MissingBackpressureException());
             }
-          } else {
-            unsubscribe();
-            child.onError(
-                new MissingBackpressureException());
-          }
 
-          break;
-        }
+            break;
+          }
         default:
       }
     }
@@ -395,16 +393,14 @@ public class PublishSubject<T> extends Subject<T, T> {
       }
     }
 
-    boolean checkTerminated(boolean done,
-                            boolean empty,
-                            Subscriber<? super T> child) {
+    boolean checkTerminated(boolean done, boolean empty, Subscriber<? super T> child) {
       if (unsubscribed) {
-        queue.clear();                     // (1)
+        queue.clear(); // (1)
         state.remove(this);
         return true;
       }
       if (done && empty) {
-        unsubscribed = true;               // (2)
+        unsubscribed = true; // (2)
         Throwable e = error;
         if (e != null) {
           child.onError(e);
@@ -416,6 +412,4 @@ public class PublishSubject<T> extends Subject<T, T> {
       return false;
     }
   }
-
-
 }

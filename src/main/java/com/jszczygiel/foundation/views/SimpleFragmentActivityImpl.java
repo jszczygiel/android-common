@@ -10,14 +10,13 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.MenuItem;
-
 import com.jszczygiel.R;
 
 /**
  * Class responsible for displaying fragment inside. Passes all extras sent in intent to fragment.
  */
-public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl> extends
-    AppCompatActivity {
+public abstract class SimpleFragmentActivityImpl<T extends BaseFragmentImpl>
+    extends AppCompatActivity {
 
   static {
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);

@@ -2,7 +2,6 @@ package com.jszczygiel.foundation.rx.internal.operators;
 
 import java.io.IOException;
 import java.io.Reader;
-
 import rx.Observer;
 import rx.observables.SyncOnSubscribe;
 

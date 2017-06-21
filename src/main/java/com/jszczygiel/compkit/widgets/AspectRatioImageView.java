@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-
 import com.jszczygiel.R;
 
 public class AspectRatioImageView extends AppCompatImageView {
@@ -28,10 +27,10 @@ public class AspectRatioImageView extends AppCompatImageView {
     super(context, attrs);
 
     TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AspectRatioContainer);
-    aspectRatio = a.getFloat(R.styleable.AspectRatioContainer_aspectRatio,
-        DEFAULT_ASPECT_RATIO);
-    dominantMeasurement = a.getInt(R.styleable.AspectRatioContainer_dominantMeasurement,
-        DEFAULT_DOMINANT_MEASUREMENT);
+    aspectRatio = a.getFloat(R.styleable.AspectRatioContainer_aspectRatio, DEFAULT_ASPECT_RATIO);
+    dominantMeasurement =
+        a.getInt(
+            R.styleable.AspectRatioContainer_dominantMeasurement, DEFAULT_DOMINANT_MEASUREMENT);
     a.recycle();
   }
 
@@ -53,31 +52,24 @@ public class AspectRatioImageView extends AppCompatImageView {
         break;
 
       default:
-        throw new IllegalStateException(
-            "Unknown measurement with ID " + dominantMeasurement);
+        throw new IllegalStateException("Unknown measurement with ID " + dominantMeasurement);
     }
 
     setMeasuredDimension(newWidth, newHeight);
   }
 
-  /**
-   * Get the aspect ratio for this image view.
-   */
+  /** Get the aspect ratio for this image view. */
   public float getAspectRatio() {
     return aspectRatio;
   }
 
-  /**
-   * Set the aspect ratio for this image view. This will update the view instantly.
-   */
+  /** Set the aspect ratio for this image view. This will update the view instantly. */
   public void setAspectRatio(float aspectRatio) {
     this.aspectRatio = aspectRatio;
     requestLayout();
   }
 
-  /**
-   * Get the dominant measurement for the aspect ratio.
-   */
+  /** Get the dominant measurement for the aspect ratio. */
   public int getDominantMeasurement() {
     return dominantMeasurement;
   }

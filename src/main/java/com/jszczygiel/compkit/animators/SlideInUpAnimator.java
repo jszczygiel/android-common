@@ -6,8 +6,7 @@ import android.view.animation.Interpolator;
 
 public class SlideInUpAnimator extends BaseItemAnimator {
 
-  public SlideInUpAnimator() {
-  }
+  public SlideInUpAnimator() {}
 
   public SlideInUpAnimator(Interpolator interpolator) {
     mInterpolator = interpolator;
@@ -42,6 +41,4 @@ public class SlideInUpAnimator extends BaseItemAnimator {
         .setStartDelay(getAddDelay(holder))
         .start();
   }
-
-
 }

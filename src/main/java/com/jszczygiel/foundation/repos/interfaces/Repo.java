@@ -1,9 +1,7 @@
 package com.jszczygiel.foundation.repos.interfaces;
 
 import com.jszczygiel.foundation.containers.Tuple;
-
 import java.util.List;
-
 import rx.Observable;
 
 public interface Repo<T extends BaseModel> {

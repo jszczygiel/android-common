@@ -1,7 +1,6 @@
 package com.jszczygiel.foundation.helpers;
 
 import android.util.Log;
-
 import com.jszczygiel.foundation.BaseApplication;
 
 public class LoggerHelper {
@@ -31,7 +30,5 @@ public class LoggerHelper {
     if (BaseApplication.getInstance().isDebug()) {
       e.printStackTrace();
     }
-
   }
-
 }

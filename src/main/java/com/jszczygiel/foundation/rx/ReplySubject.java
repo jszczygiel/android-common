@@ -23,5 +23,4 @@ public class ReplySubject<T> {
   public T getValue() {
     return value;
   }
-
 }

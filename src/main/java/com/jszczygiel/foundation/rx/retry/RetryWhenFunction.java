@@ -21,7 +21,6 @@ public class RetryWhenFunction implements Func1<Observable<? extends Throwable>,
   }
 
   public Observable<?> call(Observable<? extends Throwable> errors) {
-    return Retry.errorsWithAttempts(errors, handler.maxAttempts + 1)
-        .flatMap(handler);
+    return Retry.errorsWithAttempts(errors, handler.maxAttempts + 1).flatMap(handler);
   }
 }

@@ -9,9 +9,7 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
-
 import com.jszczygiel.compkit.helpers.ViewHelper;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,18 +59,18 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
       moves.addAll(mPendingMoves);
       mMovesList.add(moves);
       mPendingMoves.clear();
-      Runnable mover = new Runnable() {
-        @Override
-        public void run() {
-          for (MoveInfo moveInfo : moves) {
-            animateMoveImpl(moveInfo.holder, moveInfo.fromX, moveInfo.fromY,
-                moveInfo.toX,
-                moveInfo.toY);
-          }
-          moves.clear();
-          mMovesList.remove(moves);
-        }
-      };
+      Runnable mover =
+          new Runnable() {
+            @Override
+            public void run() {
+              for (MoveInfo moveInfo : moves) {
+                animateMoveImpl(
+                    moveInfo.holder, moveInfo.fromX, moveInfo.fromY, moveInfo.toX, moveInfo.toY);
+              }
+              moves.clear();
+              mMovesList.remove(moves);
+            }
+          };
       if (removalsPending) {
         View view = moves.get(0).holder.itemView;
         ViewCompat.postOnAnimationDelayed(view, mover, getRemoveDuration());
@@ -86,16 +84,17 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
       changes.addAll(mPendingChanges);
       mChangesList.add(changes);
       mPendingChanges.clear();
-      Runnable changer = new Runnable() {
-        @Override
-        public void run() {
-          for (ChangeInfo change : changes) {
-            animateChangeImpl(change);
-          }
-          changes.clear();
-          mChangesList.remove(changes);
-        }
-      };
+      Runnable changer =
+          new Runnable() {
+            @Override
+            public void run() {
+              for (ChangeInfo change : changes) {
+                animateChangeImpl(change);
+              }
+              changes.clear();
+              mChangesList.remove(changes);
+            }
+          };
       if (removalsPending) {
         ViewHolder holder = changes.get(0).oldHolder;
         ViewCompat.postOnAnimationDelayed(holder.itemView, changer, getRemoveDuration());
@@ -109,15 +108,16 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
       additions.addAll(mPendingAdditions);
       mAdditionsList.add(additions);
       mPendingAdditions.clear();
-      Runnable adder = new Runnable() {
-        public void run() {
-          for (ViewHolder holder : additions) {
-            doAnimateAdd(holder);
-          }
-          additions.clear();
-          mAdditionsList.remove(additions);
-        }
-      };
+      Runnable adder =
+          new Runnable() {
+            public void run() {
+              for (ViewHolder holder : additions) {
+                doAnimateAdd(holder);
+              }
+              additions.clear();
+              mAdditionsList.remove(additions);
+            }
+          };
       if (removalsPending || movesPending || changesPending) {
         long removeDuration = removalsPending ? getRemoveDuration() : 0;
         long moveDuration = movesPending ? getMoveDuration() : 0;
@@ -131,11 +131,9 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
     }
   }
 
-  protected void preAnimateRemoveImpl(final RecyclerView.ViewHolder holder) {
-  }
+  protected void preAnimateRemoveImpl(final RecyclerView.ViewHolder holder) {}
 
-  protected void preAnimateAddImpl(final RecyclerView.ViewHolder holder) {
-  }
+  protected void preAnimateAddImpl(final RecyclerView.ViewHolder holder) {}
 
   protected abstract void animateRemoveImpl(final RecyclerView.ViewHolder holder);
 
@@ -226,35 +224,39 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
     // need listener functionality in VPACompat for this. Ick.
     mMoveAnimations.add(holder);
     final ViewPropertyAnimatorCompat animation = ViewCompat.animate(view);
-    animation.setDuration(getMoveDuration()).setListener(new VpaListenerAdapter() {
-      @Override
-      public void onAnimationStart(View view) {
-        dispatchMoveStarting(holder);
-      }
+    animation
+        .setDuration(getMoveDuration())
+        .setListener(
+            new VpaListenerAdapter() {
+              @Override
+              public void onAnimationStart(View view) {
+                dispatchMoveStarting(holder);
+              }
 
-      @Override
-      public void onAnimationCancel(View view) {
-        if (deltaX != 0) {
-          ViewCompat.setTranslationX(view, 0);
-        }
-        if (deltaY != 0) {
-          ViewCompat.setTranslationY(view, 0);
-        }
-      }
+              @Override
+              public void onAnimationCancel(View view) {
+                if (deltaX != 0) {
+                  ViewCompat.setTranslationX(view, 0);
+                }
+                if (deltaY != 0) {
+                  ViewCompat.setTranslationY(view, 0);
+                }
+              }
 
-      @Override
-      public void onAnimationEnd(View view) {
-        animation.setListener(null);
-        dispatchMoveFinished(holder);
-        mMoveAnimations.remove(holder);
-        dispatchFinishedWhenDone();
-      }
-    }).start();
+              @Override
+              public void onAnimationEnd(View view) {
+                animation.setListener(null);
+                dispatchMoveFinished(holder);
+                mMoveAnimations.remove(holder);
+                dispatchFinishedWhenDone();
+              }
+            })
+        .start();
   }
 
   @Override
-  public boolean animateChange(ViewHolder oldHolder, ViewHolder newHolder, int fromX, int fromY,
-                               int toX, int toY) {
+  public boolean animateChange(
+      ViewHolder oldHolder, ViewHolder newHolder, int fromX, int fromY, int toX, int toY) {
     final float prevTranslationX = ViewCompat.getTranslationX(oldHolder.itemView);
     final float prevTranslationY = ViewCompat.getTranslationY(oldHolder.itemView);
     final float prevAlpha = ViewCompat.getAlpha(oldHolder.itemView);
@@ -282,50 +284,60 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
     final ViewHolder newHolder = changeInfo.newHolder;
     final View newView = newHolder != null ? newHolder.itemView : null;
     if (view != null) {
-      final ViewPropertyAnimatorCompat oldViewAnim = ViewCompat.animate(view).setDuration(
-          getChangeDuration());
+      final ViewPropertyAnimatorCompat oldViewAnim =
+          ViewCompat.animate(view).setDuration(getChangeDuration());
       mChangeAnimations.add(changeInfo.oldHolder);
       oldViewAnim.translationX(changeInfo.toX - changeInfo.fromX);
       oldViewAnim.translationY(changeInfo.toY - changeInfo.fromY);
-      oldViewAnim.alpha(0).setListener(new VpaListenerAdapter() {
-        @Override
-        public void onAnimationStart(View view) {
-          dispatchChangeStarting(changeInfo.oldHolder, true);
-        }
+      oldViewAnim
+          .alpha(0)
+          .setListener(
+              new VpaListenerAdapter() {
+                @Override
+                public void onAnimationStart(View view) {
+                  dispatchChangeStarting(changeInfo.oldHolder, true);
+                }
 
-        @Override
-        public void onAnimationEnd(View view) {
-          oldViewAnim.setListener(null);
-          ViewCompat.setAlpha(view, 1);
-          ViewCompat.setTranslationX(view, 0);
-          ViewCompat.setTranslationY(view, 0);
-          dispatchChangeFinished(changeInfo.oldHolder, true);
-          mChangeAnimations.remove(changeInfo.oldHolder);
-          dispatchFinishedWhenDone();
-        }
-      }).start();
+                @Override
+                public void onAnimationEnd(View view) {
+                  oldViewAnim.setListener(null);
+                  ViewCompat.setAlpha(view, 1);
+                  ViewCompat.setTranslationX(view, 0);
+                  ViewCompat.setTranslationY(view, 0);
+                  dispatchChangeFinished(changeInfo.oldHolder, true);
+                  mChangeAnimations.remove(changeInfo.oldHolder);
+                  dispatchFinishedWhenDone();
+                }
+              })
+          .start();
     }
     if (newView != null) {
       final ViewPropertyAnimatorCompat newViewAnimation = ViewCompat.animate(newView);
       mChangeAnimations.add(changeInfo.newHolder);
-      newViewAnimation.translationX(0).translationY(0).setDuration(getChangeDuration()).
-          alpha(1).setListener(new VpaListenerAdapter() {
-        @Override
-        public void onAnimationStart(View view) {
-          dispatchChangeStarting(changeInfo.newHolder, false);
-        }
+      newViewAnimation
+          .translationX(0)
+          .translationY(0)
+          .setDuration(getChangeDuration())
+          .alpha(1)
+          .setListener(
+              new VpaListenerAdapter() {
+                @Override
+                public void onAnimationStart(View view) {
+                  dispatchChangeStarting(changeInfo.newHolder, false);
+                }
 
-        @Override
-        public void onAnimationEnd(View view) {
-          newViewAnimation.setListener(null);
-          ViewCompat.setAlpha(newView, 1);
-          ViewCompat.setTranslationX(newView, 0);
-          ViewCompat.setTranslationY(newView, 0);
-          dispatchChangeFinished(changeInfo.newHolder, false);
-          mChangeAnimations.remove(changeInfo.newHolder);
-          dispatchFinishedWhenDone();
-        }
-      }).start();
+                @Override
+                public void onAnimationEnd(View view) {
+                  newViewAnimation.setListener(null);
+                  ViewCompat.setAlpha(newView, 1);
+                  ViewCompat.setTranslationX(newView, 0);
+                  ViewCompat.setTranslationY(newView, 0);
+                  dispatchChangeFinished(changeInfo.newHolder, false);
+                  mChangeAnimations.remove(changeInfo.newHolder);
+                  dispatchFinishedWhenDone();
+                }
+              })
+          .start();
     }
   }
 
@@ -428,8 +440,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
     // animations should be ended by the cancel above.
     if (mRemoveAnimations.remove(item) && DEBUG) {
       throw new IllegalStateException(
-          "after animation is cancelled, item should not be in " + "mRemoveAnimations " +
-              "list");
+          "after animation is cancelled, item should not be in " + "mRemoveAnimations " + "list");
     }
 
     if (mAddAnimations.remove(item) && DEBUG) {
@@ -439,36 +450,34 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
 
     if (mChangeAnimations.remove(item) && DEBUG) {
       throw new IllegalStateException(
-          "after animation is cancelled, item should not be in " + "mChangeAnimations " +
-              "list");
+          "after animation is cancelled, item should not be in " + "mChangeAnimations " + "list");
     }
 
     if (mMoveAnimations.remove(item) && DEBUG) {
       throw new IllegalStateException(
-          "after animation is cancelled, item should not be in " + "mMoveAnimations " +
-              "list");
+          "after animation is cancelled, item should not be in " + "mMoveAnimations " + "list");
     }
     dispatchFinishedWhenDone();
   }
 
   @Override
   public boolean isRunning() {
-    return (!mPendingAdditions.isEmpty() ||
-        !mPendingChanges.isEmpty() ||
-        !mPendingMoves.isEmpty() ||
-        !mPendingRemovals.isEmpty() ||
-        !mMoveAnimations.isEmpty() ||
-        !mRemoveAnimations.isEmpty() ||
-        !mAddAnimations.isEmpty() ||
-        !mChangeAnimations.isEmpty() ||
-        !mMovesList.isEmpty() ||
-        !mAdditionsList.isEmpty() ||
-        !mChangesList.isEmpty());
+    return (!mPendingAdditions.isEmpty()
+        || !mPendingChanges.isEmpty()
+        || !mPendingMoves.isEmpty()
+        || !mPendingRemovals.isEmpty()
+        || !mMoveAnimations.isEmpty()
+        || !mRemoveAnimations.isEmpty()
+        || !mAddAnimations.isEmpty()
+        || !mChangeAnimations.isEmpty()
+        || !mMovesList.isEmpty()
+        || !mAdditionsList.isEmpty()
+        || !mChangesList.isEmpty());
   }
 
   /**
-   * Check the state of currently pending and running animations. If there are none
-   * pending/running, call #dispatchAnimationsFinished() to notify any listeners.
+   * Check the state of currently pending and running animations. If there are none pending/running,
+   * call #dispatchAnimationsFinished() to notify any listeners.
    */
   private void dispatchFinishedWhenDone() {
     if (!isRunning()) {
@@ -595,9 +604,8 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
       this.newHolder = newHolder;
     }
 
-    private ChangeInfo(ViewHolder oldHolder, ViewHolder newHolder, int fromX, int fromY,
-                       int toX,
-                       int toY) {
+    private ChangeInfo(
+        ViewHolder oldHolder, ViewHolder newHolder, int fromX, int fromY, int toX, int toY) {
       this(oldHolder, newHolder);
       this.fromX = fromX;
       this.fromY = fromY;
@@ -607,30 +615,33 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
 
     @Override
     public String toString() {
-      return "ChangeInfo{" +
-          "oldHolder=" + oldHolder +
-          ", newHolder=" + newHolder +
-          ", fromX=" + fromX +
-          ", fromY=" + fromY +
-          ", toX=" + toX +
-          ", toY=" + toY +
-          '}';
+      return "ChangeInfo{"
+          + "oldHolder="
+          + oldHolder
+          + ", newHolder="
+          + newHolder
+          + ", fromX="
+          + fromX
+          + ", fromY="
+          + fromY
+          + ", toX="
+          + toX
+          + ", toY="
+          + toY
+          + '}';
     }
   }
 
   private static class VpaListenerAdapter implements ViewPropertyAnimatorListener {
 
     @Override
-    public void onAnimationStart(View view) {
-    }
+    public void onAnimationStart(View view) {}
 
     @Override
-    public void onAnimationEnd(View view) {
-    }
+    public void onAnimationEnd(View view) {}
 
     @Override
-    public void onAnimationCancel(View view) {
-    }
+    public void onAnimationCancel(View view) {}
   }
 
   protected class DefaultAddVpaListener extends VpaListenerAdapter {

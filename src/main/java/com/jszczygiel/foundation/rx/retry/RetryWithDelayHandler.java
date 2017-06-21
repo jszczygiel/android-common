@@ -3,9 +3,7 @@ package com.jszczygiel.foundation.rx.retry;
 import com.jszczygiel.foundation.containers.Tuple;
 import com.jszczygiel.foundation.exceptions.CannotRetryException;
 import com.jszczygiel.foundation.rx.time.Delay;
-
 import java.util.concurrent.TimeUnit;
-
 import rx.Observable;
 import rx.Scheduler;
 import rx.functions.Action4;
@@ -23,30 +21,30 @@ public class RetryWithDelayHandler implements Func1<Tuple<Integer, Throwable>, O
    * Construct a {@link RetryWithDelayHandler retry handler} that will retry on all errors.
    *
    * @param maxAttempts the maximum number of retries before a {@link CannotRetryException} is
-   *                    thrown. It will be capped at <code>{@link Integer#MAX_VALUE} - 1</code>.
-   * @param retryDelay  the {@link Delay} to apply between each retry (can grow, eg. by using
-   *                    {@link ExponentialDelay}).
+   *     thrown. It will be capped at <code>{@link Integer#MAX_VALUE} - 1</code>.
+   * @param retryDelay the {@link Delay} to apply between each retry (can grow, eg. by using {@link
+   *     ExponentialDelay}).
    */
   public RetryWithDelayHandler(int maxAttempts, Delay retryDelay) {
     this(maxAttempts, retryDelay, null, null);
   }
 
   /**
-   * Construct a {@link RetryWithDelayHandler retry handler} that will retry on most errors but
-   * will stop on specific errors.
+   * Construct a {@link RetryWithDelayHandler retry handler} that will retry on most errors but will
+   * stop on specific errors.
    *
-   * @param maxAttempts                the maximum number of retries before a {@link
-   *                                   CannotRetryException} is thrown. It will be capped at
-   *                                   <code>{@link Integer#MAX_VALUE} - 1</code>.
-   * @param retryDelay                 the {@link Delay} to apply between each retry (can grow,
-   *                                   eg. by using {@link ExponentialDelay}).
+   * @param maxAttempts the maximum number of retries before a {@link CannotRetryException} is
+   *     thrown. It will be capped at <code>{@link Integer#MAX_VALUE} - 1</code>.
+   * @param retryDelay the {@link Delay} to apply between each retry (can grow, eg. by using {@link
+   *     ExponentialDelay}).
    * @param errorInterruptingPredicate a predicate that determine if an error must stop the retry
-   *                                   cycle (when true), in which case said error is cascaded
-   *                                   down.
+   *     cycle (when true), in which case said error is cascaded down.
    */
-  public RetryWithDelayHandler(int maxAttempts, Delay retryDelay,
-                               Func1<Throwable, Boolean> errorInterruptingPredicate,
-                               Action4<Integer, Throwable, Long, TimeUnit> doOnRetry) {
+  public RetryWithDelayHandler(
+      int maxAttempts,
+      Delay retryDelay,
+      Func1<Throwable, Boolean> errorInterruptingPredicate,
+      Action4<Integer, Throwable, Long, TimeUnit> doOnRetry) {
     this(maxAttempts, retryDelay, errorInterruptingPredicate, doOnRetry, null);
   }
 
@@ -54,10 +52,12 @@ public class RetryWithDelayHandler implements Func1<Tuple<Integer, Throwable>, O
    * Protected constructor that also allows to set a {@link Scheduler} for the delay, especially
    * useful for tests.
    */
-  protected RetryWithDelayHandler(int maxAttempts, Delay retryDelay,
-                                  Func1<Throwable, Boolean> errorInterruptingPredicate,
-                                  Action4<Integer, Throwable, Long, TimeUnit> doOnRetry,
-                                  Scheduler scheduler) {
+  protected RetryWithDelayHandler(
+      int maxAttempts,
+      Delay retryDelay,
+      Func1<Throwable, Boolean> errorInterruptingPredicate,
+      Action4<Integer, Throwable, Long, TimeUnit> doOnRetry,
+      Scheduler scheduler) {
     this.maxAttempts = Math.min(Integer.MAX_VALUE - 1, maxAttempts);
     this.retryDelay = retryDelay;
     this.errorInterruptingPredicate = errorInterruptingPredicate;
@@ -77,8 +77,8 @@ public class RetryWithDelayHandler implements Func1<Tuple<Integer, Throwable>, O
     if (errorNumber > maxAttempts) {
       return Observable.error(
           new CannotRetryException(messageForMaxAttempts(errorNumber - 1), error));
-    } else if (errorInterruptingPredicate != null && errorInterruptingPredicate.call(
-        error) == Boolean.TRUE) {
+    } else if (errorInterruptingPredicate != null
+        && errorInterruptingPredicate.call(error) == Boolean.TRUE) {
       return Observable.error(error);
     } else {
       final long delay = retryDelay.calculate(errorNumber);

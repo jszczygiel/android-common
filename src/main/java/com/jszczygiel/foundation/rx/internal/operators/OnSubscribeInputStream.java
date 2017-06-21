@@ -3,7 +3,6 @@ package com.jszczygiel.foundation.rx.internal.operators;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-
 import rx.Observer;
 import rx.observables.SyncOnSubscribe;
 

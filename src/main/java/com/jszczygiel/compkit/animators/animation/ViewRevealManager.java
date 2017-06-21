@@ -11,7 +11,6 @@ import android.graphics.Region;
 import android.os.Build;
 import android.util.Property;
 import android.view.View;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,9 +19,7 @@ public class ViewRevealManager {
 
   private Map<View, RevealValues> targets = new HashMap<>();
 
-  public ViewRevealManager() {
-
-  }
+  public ViewRevealManager() {}
 
   private static RevealValues getValues(Animator animator) {
     return (RevealValues) ((ObjectAnimator) animator).getTarget();
@@ -32,43 +29,40 @@ public class ViewRevealManager {
     ObjectAnimator animator =
         ObjectAnimator.ofFloat(data, REVEAL, data.startRadius, data.endRadius);
 
-    animator.addListener(new AnimatorListenerAdapter() {
-      @Override
-      public void onAnimationStart(Animator animation) {
-        RevealValues values = getValues(animation);
-        values.clip(true);
-      }
+    animator.addListener(
+        new AnimatorListenerAdapter() {
+          @Override
+          public void onAnimationStart(Animator animation) {
+            RevealValues values = getValues(animation);
+            values.clip(true);
+          }
 
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        RevealValues values = getValues(animation);
-        values.clip(false);
-        targets.remove(values.target());
-      }
-    });
+          @Override
+          public void onAnimationEnd(Animator animation) {
+            RevealValues values = getValues(animation);
+            values.clip(false);
+            targets.remove(values.target());
+          }
+        });
 
     targets.put(data.target(), data);
     return animator;
   }
 
-  /**
-   * @return Map of started animators
-   */
+  /** @return Map of started animators */
   public final Map<View, RevealValues> getTargets() {
     return targets;
   }
 
   /**
    * @return True if you don't want use Android native reveal animator in order to use your own
-   * custom one
+   *     custom one
    */
   protected boolean hasCustomerRevealAnimator() {
     return false;
   }
 
-  /**
-   * @return True if animation was started and it is still running, otherwise returns False
-   */
+  /** @return True if animation was started and it is still running, otherwise returns False */
   public boolean isClipped(View child) {
     RevealValues data = targets.get(child);
     return data != null && data.isClipping();
@@ -79,9 +73,9 @@ public class ViewRevealManager {
    * transformation and restore it afterwards
    *
    * @param canvas Canvas to apply clipping before drawing
-   * @param child  Reveal animation target
-   * @return True if transformation was successfully applied on referenced child, otherwise child
-   * be not the target and therefore animation was skipped
+   * @param child Reveal animation target
+   * @return True if transformation was successfully applied on referenced child, otherwise child be
+   *     not the target and therefore animation was skipped
    */
   public boolean transform(Canvas canvas, View child) {
     final RevealValues revealData = targets.get(child);
@@ -118,8 +112,7 @@ public class ViewRevealManager {
 
     Region.Op op = Region.Op.REPLACE;
 
-    public RevealValues(View target, int centerX, int centerY, float startRadius,
-                        float endRadius) {
+    public RevealValues(View target, int centerX, int centerY, float startRadius, float endRadius) {
       this.target = target;
       this.centerX = centerX;
       this.centerY = centerY;
@@ -131,16 +124,12 @@ public class ViewRevealManager {
       this.radius = radius;
     }
 
-    /**
-     * @return current clipping radius
-     */
+    /** @return current clipping radius */
     public float radius() {
       return radius;
     }
 
-    /**
-     * @return Animating view
-     */
+    /** @return Animating view */
     public View target() {
       return target;
     }
@@ -149,35 +138,29 @@ public class ViewRevealManager {
       this.clipping = clipping;
     }
 
-    /**
-     * @return View clip status
-     */
+    /** @return View clip status */
     public boolean isClipping() {
       return clipping;
     }
 
-    /**
-     * @see Canvas#clipPath(Path, Region.Op)
-     */
+    /** @see Canvas#clipPath(Path, Region.Op) */
     public Region.Op op() {
       return op;
     }
 
-    /**
-     * @see Canvas#clipPath(Path, Region.Op)
-     */
+    /** @see Canvas#clipPath(Path, Region.Op) */
     public void op(Region.Op op) {
       this.op = op;
     }
 
     /**
-     * Applies path clipping on a canvas before drawing child, you should save canvas state
-     * before transformation and restore it afterwards
+     * Applies path clipping on a canvas before drawing child, you should save canvas state before
+     * transformation and restore it afterwards
      *
      * @param canvas Canvas to apply clipping before drawing
-     * @param child  Reveal animation target
-     * @return True if transformation was successfully  applied on referenced child, otherwise
-     * child be not the target and therefore animation was skipped
+     * @param child Reveal animation target
+     * @return True if transformation was successfully applied on referenced child, otherwise child
+     *     be not the target and therefore animation was skipped
      */
     boolean applyTransformation(Canvas canvas, View child) {
       if (child != target || !clipping) {
@@ -186,8 +169,7 @@ public class ViewRevealManager {
 
       path.reset();
       // trick to applyTransformation animation, when even x & y translations are running
-      path.addCircle(child.getX() + centerX, child.getY() + centerY, radius,
-          Path.Direction.CW);
+      path.addCircle(child.getX() + centerX, child.getY() + centerY, radius, Path.Direction.CW);
 
       canvas.clipPath(path, op);
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -220,8 +202,8 @@ public class ViewRevealManager {
   }
 
   /**
-   * As class name cue's it changes layer type of {@link View} on animation createAnimator in
-   * order to improve animation smooth & performance and returns original value on animation end
+   * As class name cue's it changes layer type of {@link View} on animation createAnimator in order
+   * to improve animation smooth & performance and returns original value on animation end
    */
   static class ChangeViewLayerTypeAdapter extends AnimatorListenerAdapter {
     private RevealValues viewData;

@@ -1,7 +1,6 @@
 package com.jszczygiel.foundation.enums;
 
 import android.support.annotation.IntDef;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -13,6 +12,5 @@ public interface SubjectAction {
 
   @IntDef({ADDED, CHANGED, REMOVED})
   @Retention(RetentionPolicy.SOURCE)
-  @interface Type {
-  }
+  @interface Type {}
 }

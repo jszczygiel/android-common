@@ -2,9 +2,7 @@ package com.jszczygiel.foundation.presenters;
 
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
-
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -62,14 +60,10 @@ public abstract class BasePresenterImpl<T> implements BasePresenter<T> {
   }
 
   @Override
-  public void onSaveInstanceState(Bundle outState) {
-
-  }
+  public void onSaveInstanceState(Bundle outState) {}
 
   @Override
-  public void onRestoreInstanceState(Bundle savedInstanceState) {
-
-  }
+  public void onRestoreInstanceState(Bundle savedInstanceState) {}
 
   @Override
   public void setOrientation(int orientation) {

@@ -26,8 +26,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
-public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl> extends
-    SimpleFragmentActivityImpl<T> {
+public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl>
+    extends SimpleFragmentActivityImpl<T> {
   public static final String EXTRA_REVEAL_OPTIONS = "extra_revel_options";
   private static final long FRAME = 16;
   protected Point point;
@@ -59,50 +59,57 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
 
     if (savedInstanceState == null) {
       container.setVisibility(View.INVISIBLE);
-      subscription = Observable.interval(FRAME, TimeUnit.MILLISECONDS)
-          .onBackpressureDrop()
-          .filter(new Func1<Long, Boolean>() {
-            @Override
-            public Boolean call(Long filter) {
-              return RevelSimpleFragmentActivityImpl.this.getFragment().isVisible();
-            }
-          })
-          .subscribeOn(SchedulerHelper.computation())
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(new Action1<Long>() {
-            @Override
-            public void call(Long next) {
-              subscription.unsubscribe();
-              circularRevealActivity();
-            }
-          });
-
+      subscription =
+          Observable.interval(FRAME, TimeUnit.MILLISECONDS)
+              .onBackpressureDrop()
+              .filter(
+                  new Func1<Long, Boolean>() {
+                    @Override
+                    public Boolean call(Long filter) {
+                      return RevelSimpleFragmentActivityImpl.this.getFragment().isVisible();
+                    }
+                  })
+              .subscribeOn(SchedulerHelper.computation())
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe(
+                  new Action1<Long>() {
+                    @Override
+                    public void call(Long next) {
+                      subscription.unsubscribe();
+                      circularRevealActivity();
+                    }
+                  });
     }
   }
 
   private void circularRevealActivity() {
     if (!isFinishing()) {
       if (animator == null) {
-        animator = AnimationHelper.circularReveal(container, x, y, getWidth(), point.y,
-            new AnimationHelper.SimpleAnimatorListener() {
-              @Override
-              public void onAnimationEnd(Animator a) {
-                animator = null;
-                isReveled = true;
-                if (getFragment() != null && getFragment().getView() != null) {
-                  getFragment().getView().requestLayout();
-                }
-
-              }
-            });
+        animator =
+            AnimationHelper.circularReveal(
+                container,
+                x,
+                y,
+                getWidth(),
+                point.y,
+                new AnimationHelper.SimpleAnimatorListener() {
+                  @Override
+                  public void onAnimationEnd(Animator a) {
+                    animator = null;
+                    isReveled = true;
+                    if (getFragment() != null && getFragment().getView() != null) {
+                      getFragment().getView().requestLayout();
+                    }
+                  }
+                });
         container.setVisibility(View.VISIBLE);
         animator.start();
       }
-      final int color = revelOptions == null ? Color.TRANSPARENT : revelOptions
-          .getFromColor();
+      final int color = revelOptions == null ? Color.TRANSPARENT : revelOptions.getFromColor();
       if (color != Color.TRANSPARENT) {
-        transition = new TransitionDrawable(new Drawable[]{new ColorDrawable(
-            color), getFragmentView().getBackground()});
+        transition =
+            new TransitionDrawable(
+                new Drawable[] {new ColorDrawable(color), getFragmentView().getBackground()});
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
           getFragmentView().setBackground(transition);
         } else {
@@ -143,18 +150,23 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
       }
       ActivityCompat.finishAfterTransition(RevelSimpleFragmentActivityImpl.this);
     } else if (animator == null) {
-      animator = AnimationHelper.circularReveal(container, x, y, point.y, getWidth(),
-          new AnimationHelper.SimpleAnimatorListener() {
-            @Override
-            public void onAnimationEnd(Animator a) {
+      animator =
+          AnimationHelper.circularReveal(
+              container,
+              x,
+              y,
+              point.y,
+              getWidth(),
+              new AnimationHelper.SimpleAnimatorListener() {
+                @Override
+                public void onAnimationEnd(Animator a) {
 
-              if (container != null) {
-                container.setVisibility(View.GONE);
-              }
-              ActivityCompat.finishAfterTransition(
-                  RevelSimpleFragmentActivityImpl.this);
-            }
-          });
+                  if (container != null) {
+                    container.setVisibility(View.GONE);
+                  }
+                  ActivityCompat.finishAfterTransition(RevelSimpleFragmentActivityImpl.this);
+                }
+              });
       if (transition != null) {
         transition.reverseTransition(AnimationHelper.LONG_DURATION);
       }
@@ -162,7 +174,6 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
       animator.start();
     }
   }
-
 
   @Override
   @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -174,5 +185,4 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
   public View getContainer() {
     return container;
   }
-
 }

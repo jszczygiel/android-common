@@ -7,9 +7,7 @@ import android.support.annotation.CallSuper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
 import com.jszczygiel.compkit.collections.SortedList;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -31,45 +29,45 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
   public BaseRecyclerAdapter(Context context) {
     this.context = context;
     this.inflater = LayoutInflater.from(context);
-    this.collection = new SortedList<>(BaseViewModel.class,
-        new SortedList.Callback<BaseViewModel>() {
-          @Override
-          public int compare(BaseViewModel o1, BaseViewModel o2) {
-            return getComparator().compare(o1, o2);
-          }
+    this.collection =
+        new SortedList<>(
+            BaseViewModel.class,
+            new SortedList.Callback<BaseViewModel>() {
+              @Override
+              public int compare(BaseViewModel o1, BaseViewModel o2) {
+                return getComparator().compare(o1, o2);
+              }
 
-          @Override
-          public void onInserted(int position, int count) {
-            notifyItemRangeInserted(position, count);
-          }
+              @Override
+              public void onInserted(int position, int count) {
+                notifyItemRangeInserted(position, count);
+              }
 
-          @Override
-          public void onRemoved(int position, int count) {
-            notifyItemRangeRemoved(position, count);
-          }
+              @Override
+              public void onRemoved(int position, int count) {
+                notifyItemRangeRemoved(position, count);
+              }
 
-          @Override
-          public void onMoved(int fromPosition, int toPosition) {
-            notifyItemMoved(fromPosition, toPosition);
-          }
+              @Override
+              public void onMoved(int fromPosition, int toPosition) {
+                notifyItemMoved(fromPosition, toPosition);
+              }
 
-          @Override
-          public void onChanged(int position, int count) {
-            notifyItemRangeChanged(position, count);
-          }
+              @Override
+              public void onChanged(int position, int count) {
+                notifyItemRangeChanged(position, count);
+              }
 
-          @Override
-          public boolean areContentsTheSame(BaseViewModel oldItem,
-                                            BaseViewModel newItem) {
-            return !(oldItem == null || newItem == null) && oldItem.equals(newItem);
-          }
+              @Override
+              public boolean areContentsTheSame(BaseViewModel oldItem, BaseViewModel newItem) {
+                return !(oldItem == null || newItem == null) && oldItem.equals(newItem);
+              }
 
-          @Override
-          public boolean areItemsTheSame(BaseViewModel item1, BaseViewModel item2) {
-            return !(item1 == null || item2 == null) && item1.hashCode() == item2
-                .hashCode();
-          }
-        });
+              @Override
+              public boolean areItemsTheSame(BaseViewModel item1, BaseViewModel item2) {
+                return !(item1 == null || item2 == null) && item1.hashCode() == item2.hashCode();
+              }
+            });
   }
 
   protected abstract Comparator<BaseViewModel> getComparator();
@@ -272,7 +270,6 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
           return item;
         }
       }
-
     }
     return null;
   }
@@ -291,8 +288,7 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
       if (in.containsKey(LIST)) {
         Parcelable[] list = in.getParcelableArray(LIST);
         if (list instanceof BaseViewModel[]) {
-          collection.setAll((BaseViewModel[]) in.getParcelableArray(LIST),
-              in.getInt(SIZE));
+          collection.setAll((BaseViewModel[]) in.getParcelableArray(LIST), in.getInt(SIZE));
         }
       }
       notifyDataSetChanged();

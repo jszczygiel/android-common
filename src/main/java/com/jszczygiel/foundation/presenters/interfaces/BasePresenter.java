@@ -1,7 +1,6 @@
 package com.jszczygiel.foundation.presenters.interfaces;
 
 import android.os.Bundle;
-
 import rx.Subscription;
 
 public interface BasePresenter<T> {

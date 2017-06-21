@@ -1,7 +1,6 @@
 package com.jszczygiel.foundation.enums;
 
 import android.support.annotation.IntDef;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -13,6 +12,5 @@ public interface ListAction {
 
   @IntDef({ADD, REMOVE, CLEAR_ALL})
   @Retention(RetentionPolicy.SOURCE)
-  @interface Type {
-  }
+  @interface Type {}
 }

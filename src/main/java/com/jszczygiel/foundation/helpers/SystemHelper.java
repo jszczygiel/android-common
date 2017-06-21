@@ -27,14 +27,14 @@ public class SystemHelper {
 
   public static boolean isTablet(Context context) {
     return (context.getResources().getConfiguration().screenLayout
-        & Configuration.SCREENLAYOUT_SIZE_MASK)
+            & Configuration.SCREENLAYOUT_SIZE_MASK)
         >= Configuration.SCREENLAYOUT_SIZE_LARGE;
   }
 
   public static void hideKeyboard(Context context, View view) {
     if (view != null && context != null) {
-      InputMethodManager imm = (InputMethodManager) context.getSystemService(
-          Context.INPUT_METHOD_SERVICE);
+      InputMethodManager imm =
+          (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
       imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
   }
@@ -72,8 +72,8 @@ public class SystemHelper {
   }
 
   /**
-   * Gets the number of cores available in this device, across all processors. Requires: Ability
-   * to peruse the filesystem at "/sys/devices/system/cpu"
+   * Gets the number of cores available in this device, across all processors. Requires: Ability to
+   * peruse the filesystem at "/sys/devices/system/cpu"
    *
    * @return The number of cores, or 1 if failed to get result
    */
@@ -102,29 +102,29 @@ public class SystemHelper {
   }
 
   public static void showKeyboard(final EditText message) {
-    message.postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        InputMethodManager keyboard = (InputMethodManager)
-            message.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        keyboard.showSoftInput(message, 0);
-      }
-    }, 100);
-
+    message.postDelayed(
+        new Runnable() {
+          @Override
+          public void run() {
+            InputMethodManager keyboard =
+                (InputMethodManager)
+                    message.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            keyboard.showSoftInput(message, 0);
+          }
+        },
+        100);
   }
 
   public static String getProcessName(Context context) {
     int pid = android.os.Process.myPid();
-    ActivityManager manager
-        = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+    ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
-    List<ActivityManager.RunningServiceInfo> runningServiceInfos = manager.getRunningServices(
-        Integer.MAX_VALUE);
+    List<ActivityManager.RunningServiceInfo> runningServiceInfos =
+        manager.getRunningServices(Integer.MAX_VALUE);
     if (runningServiceInfos != null) {
       for (ActivityManager.RunningServiceInfo runningServiceInfo : runningServiceInfos) {
         if (runningServiceInfo.pid == pid) {
           return runningServiceInfo.process;
-
         }
       }
     }

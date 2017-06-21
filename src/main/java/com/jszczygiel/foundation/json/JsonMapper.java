@@ -20,7 +20,6 @@ public enum JsonMapper {
     mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
-
   }
 
   public <T> T fromJson(String json, Class<T> clazz) throws IOException {

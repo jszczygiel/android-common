@@ -5,21 +5,21 @@ import android.graphics.Point;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
-
 import com.jszczygiel.compkit.animators.AnimationHelper;
 
 public class RevelOptions implements Parcelable {
-  public static final Creator<RevelOptions> CREATOR = new Creator<RevelOptions>() {
-    @Override
-    public RevelOptions createFromParcel(Parcel in) {
-      return new RevelOptions(in);
-    }
+  public static final Creator<RevelOptions> CREATOR =
+      new Creator<RevelOptions>() {
+        @Override
+        public RevelOptions createFromParcel(Parcel in) {
+          return new RevelOptions(in);
+        }
 
-    @Override
-    public RevelOptions[] newArray(int size) {
-      return new RevelOptions[size];
-    }
-  };
+        @Override
+        public RevelOptions[] newArray(int size) {
+          return new RevelOptions[size];
+        }
+      };
   final int x;
   final int y;
   final int width;

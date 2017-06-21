@@ -1,7 +1,6 @@
 package com.jszczygiel.foundation;
 
 import android.app.Application;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.CallSuper;
 
 public abstract class BaseApplication extends Application {
@@ -27,5 +26,4 @@ public abstract class BaseApplication extends Application {
     super.onCreate();
     INSTANCE = this;
   }
-
 }

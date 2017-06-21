@@ -1,7 +1,6 @@
 package com.jszczygiel.foundation.views.interfaces;
 
 import android.content.Intent;
-
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 
 public interface BaseService<T extends BasePresenter> {

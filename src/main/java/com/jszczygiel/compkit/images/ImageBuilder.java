@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-
 import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -22,12 +21,10 @@ import com.bumptech.glide.request.target.Target;
 import com.jszczygiel.compkit.images.transformations.BlurTransformation;
 import com.jszczygiel.compkit.images.transformations.PaddingTransformation;
 import com.jszczygiel.compkit.images.transformations.RoundTransformation;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
-
 import rx.Observable;
 
 public class ImageBuilder {
@@ -145,8 +142,8 @@ public class ImageBuilder {
   }
 
   /**
-   * Resizes loaded images for give sizeMultiplayer. Doesnt work if used with Transformation due
-   * to glide bug
+   * Resizes loaded images for give sizeMultiplayer. Doesnt work if used with Transformation due to
+   * glide bug
    */
   public ImageBuilder sizeMultiplier(float sizeMultiplier) {
     this.sizeMultiplier = sizeMultiplier;
@@ -166,8 +163,7 @@ public class ImageBuilder {
   public Request build() {
     // Preconditions
     if (context == null && activity == null && fragment == null) {
-      throw new IllegalArgumentException(
-          "either context or activity or fragment should be set");
+      throw new IllegalArgumentException("either context or activity or fragment should be set");
     }
 
     if (placeHolderId <= 0 && TextUtils.isEmpty(url) && resourceId <= 0) {
@@ -218,21 +214,27 @@ public class ImageBuilder {
       key = url != null ? url : String.valueOf(resourceId);
     }
     if (listener != null) {
-      request = request.listener(new RequestListener() {
-        @Override
-        public boolean onException(Exception e, Object model, Target target,
-                                   boolean isFirstResource) {
-          listener.onCancel();
-          return false;
-        }
+      request =
+          request.listener(
+              new RequestListener() {
+                @Override
+                public boolean onException(
+                    Exception e, Object model, Target target, boolean isFirstResource) {
+                  listener.onCancel();
+                  return false;
+                }
 
-        @Override
-        public boolean onResourceReady(Object resource, Object model, Target target,
-                                       boolean isFromMemoryCache, boolean isFirstResource) {
-          listener.onLoaded();
-          return false;
-        }
-      });
+                @Override
+                public boolean onResourceReady(
+                    Object resource,
+                    Object model,
+                    Target target,
+                    boolean isFromMemoryCache,
+                    boolean isFirstResource) {
+                  listener.onLoaded();
+                  return false;
+                }
+              });
     }
 
     ArrayList<BitmapTransformation> transformationList = new ArrayList<>();
@@ -253,14 +255,20 @@ public class ImageBuilder {
           break;
       }
     }
-    if (padding > 0 && Observable.from(transformationList).ofType(
-        RoundTransformation.class).count().toBlocking().first() == 0) {
+    if (padding > 0
+        && Observable.from(transformationList)
+                .ofType(RoundTransformation.class)
+                .count()
+                .toBlocking()
+                .first()
+            == 0) {
       transformationList.add(new PaddingTransformation(localContext, padding));
     }
 
     if (transformationList.size() > 0) {
-      request = request.transform(transformationList.toArray(
-          new BitmapTransformation[transformationList.size()]));
+      request =
+          request.transform(
+              transformationList.toArray(new BitmapTransformation[transformationList.size()]));
     }
 
     if (request == null) {
@@ -274,17 +282,18 @@ public class ImageBuilder {
       return new Request(targetRequest.getRequest(), key);
     }
     if (target != null) {
-      SimpleTarget<Drawable> simpleTarget = new SimpleTarget<Drawable>() {
-        @Override
-        public void onResourceReady(Drawable resource, GlideAnimation glideAnimation) {
-          target.onResourceReady(resource);
-        }
+      SimpleTarget<Drawable> simpleTarget =
+          new SimpleTarget<Drawable>() {
+            @Override
+            public void onResourceReady(Drawable resource, GlideAnimation glideAnimation) {
+              target.onResourceReady(resource);
+            }
 
-        @Override
-        public void onLoadFailed(Exception e, Drawable errorDrawable) {
-          target.onLoadFailed(e);
-        }
-      };
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+              target.onLoadFailed(e);
+            }
+          };
       request.into(simpleTarget);
       return new Request(simpleTarget.getRequest(), key);
     }
@@ -294,8 +303,7 @@ public class ImageBuilder {
   private boolean isValidContext(@NonNull Context localContext) {
     if (localContext instanceof Activity) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-        return !((Activity) localContext).isFinishing() && !((Activity) localContext)
-            .isDestroyed();
+        return !((Activity) localContext).isFinishing() && !((Activity) localContext).isDestroyed();
       } else {
         return !((Activity) localContext).isFinishing();
       }
@@ -315,8 +323,7 @@ public class ImageBuilder {
     public static final int BLUR = 1;
     public static final int CENTER_CROP = 2;
     public static final int FIT_CENTER = 3;
-    @Type
-    int transformation;
+    @Type int transformation;
 
     public Transformations(@Type int transformation) {
       this.transformation = transformation;
@@ -329,8 +336,7 @@ public class ImageBuilder {
 
     @IntDef({ROUND, BLUR, FIT_CENTER, CENTER_CROP})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface Type {
-    }
+    public @interface Type {}
   }
 
   public static class Request {
@@ -355,10 +361,8 @@ public class ImageBuilder {
 
   public abstract static class TargetListener {
 
-    public void onResourceReady(Drawable bitmap) {
-    }
+    public void onResourceReady(Drawable bitmap) {}
 
-    public void onLoadFailed(Exception exception) {
-    }
+    public void onLoadFailed(Exception exception) {}
   }
 }

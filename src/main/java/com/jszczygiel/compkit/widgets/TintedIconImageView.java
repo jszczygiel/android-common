@@ -6,7 +6,6 @@ import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.util.StateSet;
-
 import com.jszczygiel.R;
 import com.jszczygiel.compkit.helpers.ColorHelper;
 
@@ -39,21 +38,28 @@ public class TintedIconImageView extends TintedImageView {
 
       if (colorStateList == null) {
         Resources resources = getResources();
-        int defaultColor = ta.getColor(R.styleable.TintedIconImageView_defaultColor,
-            resources.getColor(android.R.color.black));
-        int disabledColor = ta.getColor(R.styleable.TintedIconImageView_disabledColor,
-            resources.getColor(android.R.color.black));
-        int focusedColor = ta.getColor(R.styleable.TintedIconImageView_focusedColor,
-            resources.getColor(android.R.color.black));
-        int focusedDisabledColor = ta.getColor(
-            R.styleable.TintedIconImageView_focusedDisabledColor,
-            resources.getColor(android.R.color.black));
+        int defaultColor =
+            ta.getColor(
+                R.styleable.TintedIconImageView_defaultColor,
+                resources.getColor(android.R.color.black));
+        int disabledColor =
+            ta.getColor(
+                R.styleable.TintedIconImageView_disabledColor,
+                resources.getColor(android.R.color.black));
+        int focusedColor =
+            ta.getColor(
+                R.styleable.TintedIconImageView_focusedColor,
+                resources.getColor(android.R.color.black));
+        int focusedDisabledColor =
+            ta.getColor(
+                R.styleable.TintedIconImageView_focusedDisabledColor,
+                resources.getColor(android.R.color.black));
 
-        colorStateList = ColorHelper.ColorStateListBuilder
-            .forStates(STATE_DISABLED, STATE_PRESSED, STATE_PRESSED_DISABLED,
-                StateSet.WILD_CARD)
-            .withColors(disabledColor, focusedColor, focusedDisabledColor, defaultColor)
-            .toList();
+        colorStateList =
+            ColorHelper.ColorStateListBuilder.forStates(
+                    STATE_DISABLED, STATE_PRESSED, STATE_PRESSED_DISABLED, StateSet.WILD_CARD)
+                .withColors(disabledColor, focusedColor, focusedDisabledColor, defaultColor)
+                .toList();
       }
 
       setEnabled(enabled);
