@@ -1,23 +1,29 @@
 package com.jszczygiel.foundation.helpers;
 
 import android.util.Log;
-import com.jszczygiel.foundation.BaseApplication;
 
 public class LoggerHelper {
-  public static final String TAG = "APP";
+
+  private static int LOGLEVEL = Log.ASSERT;
+  private static boolean ERROR = LOGLEVEL > Log.ERROR;
+  private static boolean INFO = LOGLEVEL > Log.INFO;
+  private static boolean DEBUG = LOGLEVEL > Log.DEBUG;
+  private static final String TAG = "APP";
 
   public static void logInfo(String message) {
-    Log.i(TAG, message);
+    if (INFO) {
+      Log.i(TAG, message);
+    }
   }
 
   public static void logDebug(String message) {
-    if (BaseApplication.getInstance().isDebug()) {
+    if (DEBUG) {
       Log.d(TAG, message);
     }
   }
 
   public static void logError(String message) {
-    if (BaseApplication.getInstance().isDebug()) {
+    if (ERROR) {
       Log.e(TAG, message);
     }
   }
@@ -27,7 +33,7 @@ public class LoggerHelper {
   }
 
   public static void log(Throwable e) {
-    if (BaseApplication.getInstance().isDebug()) {
+    if (INFO) {
       e.printStackTrace();
     }
   }
