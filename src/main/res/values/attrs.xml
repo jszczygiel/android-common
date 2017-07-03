@@ -12,7 +12,7 @@
     <attr format="reference" name="disabledColor"/>
     <attr format="reference" name="focusedDisabledColor"/>
     <attr format="color" name="colorStateList"/>
-    <attr format="boolean" name="tint"/>
+    <attr format="boolean" name="tintEnabled"/>
     <attr name="android:src"/>
     <attr name="android:enabled"/>
   </declare-styleable>

@@ -31,7 +31,7 @@ public class TintedIconImageView extends TintedImageView {
     try {
       ta = context.obtainStyledAttributes(attrs, R.styleable.TintedIconImageView, 0, 0);
 
-      boolean shouldTint = ta.getBoolean(R.styleable.TintedIconImageView_tint, true);
+      boolean shouldTint = ta.getBoolean(R.styleable.TintedIconImageView_tintEnabled, true);
       boolean enabled = ta.getBoolean(R.styleable.TintedIconImageView_android_enabled, true);
 
       colorStateList = ta.getColorStateList(R.styleable.TintedIconImageView_colorStateList);
