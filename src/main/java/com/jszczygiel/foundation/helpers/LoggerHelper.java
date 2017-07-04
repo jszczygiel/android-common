@@ -35,6 +35,7 @@ public class LoggerHelper {
     }
   }
 
+
   public static void setLogLevel(int logLevel) {
     LOGLEVEL = logLevel;
   }
