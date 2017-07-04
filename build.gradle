@@ -1,37 +1,4 @@
-buildscript {
-    repositories {
-        maven { url 'https://maven.fabric.io/public' }
-        jcenter()
-        mavenCentral()
-    }
-    dependencies {
-        classpath "com.android.tools.build:gradle:$rootProject.ext.gradlePluginVersion"
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.14.0'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-    }
-}
-allprojects {
-    repositories {
-        maven { url 'https://maven.fabric.io/public' }
-        jcenter()
-        maven { url "https://jitpack.io" }
-        mavenCentral()
-    }
-    buildscript {
-        repositories {
-            maven { url 'https://maven.fabric.io/public' }
-            jcenter()
-            maven { url "https://jitpack.io" }
-            mavenCentral()
-        }
-    }
-}
-
-apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-
-group = 'com.github.jszczygiel'
 
 android {
     compileSdkVersion rootProject.ext.compileApi
@@ -42,26 +9,17 @@ android {
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
 }
-
 
 configurations.all {
     resolutionStrategy.force "com.android.support:support-annotations:$rootProject.ext.supportVersion"
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
     //ui
     compile "com.android.support:appcompat-v7:$rootProject.ext.supportVersion"
     compile "com.android.support:design:$rootProject.ext.supportVersion"
@@ -71,14 +29,14 @@ dependencies {
     compile 'com.github.justzak:dilatingdotsprogressbar:1.0.1'
 
     //data
-    compile 'com.fasterxml.jackson.core:jackson-core:2.8.6'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.6'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.6'
-    compile ('com.fasterxml.jackson.datatype:jackson-datatype-joda:2.8.6'){
+    compile "com.fasterxml.jackson.core:jackson-core:$rootProject.ext.jacksonVersion"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$rootProject.ext.jacksonVersion"
+    compile "com.fasterxml.jackson.core:jackson-databind:$rootProject.ext.jacksonVersion"
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-joda:$rootProject.ext.jacksonVersion") {
         exclude group: 'joda-time', module: 'joda-time'
     }
     compile 'com.squareup.sqlbrite:sqlbrite:1.1.2'
-    compile 'net.danlew:android.joda:2.9.9'
+    compile "net.danlew:android.joda:$rootProject.ext.jodaTime"
 
     //rx
     compile 'io.reactivex:rxandroid:1.2.1'
