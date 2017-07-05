@@ -9,15 +9,15 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
-import android.os.Build;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -47,20 +47,12 @@ public class SystemHelper {
   }
 
   public static int getNumberOfCores() {
-    if (Build.VERSION.SDK_INT >= 17) {
-      return Runtime.getRuntime().availableProcessors();
-    } else {
-      // Use saurabh64's answer
-      return getNumCoresOldPhones();
-    }
+    return Runtime.getRuntime().availableProcessors();
   }
 
   public static boolean isRTL(Context ctx) {
     Configuration config = ctx.getResources().getConfiguration();
-    if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
-      return config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
-    }
-    return false;
+    return config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
   }
 
   public static boolean isArabic() {
@@ -117,6 +109,13 @@ public class SystemHelper {
 
   public static String getProcessName(Context context) {
     int pid = android.os.Process.myPid();
+
+    final File cmdline = new File("/proc/" + pid + "/cmdline");
+    try (BufferedReader reader = new BufferedReader(new FileReader(cmdline))) {
+      return reader.readLine().trim();
+    } catch (IOException ignored) {
+    }
+
     ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
     List<ActivityManager.RunningServiceInfo> runningServiceInfos =
@@ -160,12 +159,9 @@ public class SystemHelper {
   }
 
   public static boolean isScreenLocked(Context context) {
-    KeyguardManager myKM = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-    if (myKM.inKeyguardRestrictedInputMode()) {
-      return true;
-    } else {
-      return false;
-    }
+    KeyguardManager keyguardManager =
+        (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+    return keyguardManager.inKeyguardRestrictedInputMode();
   }
 
   public static boolean hasFlashLight(Context context) {
