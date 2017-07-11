@@ -22,12 +22,6 @@ android {
     lintOptions {
         abortOnError false
     }
-    flavorDimensions "api"
-    productFlavors {
-        ci {
-            dimension "api"
-        }
-    }
 }
 
 configurations.all {
