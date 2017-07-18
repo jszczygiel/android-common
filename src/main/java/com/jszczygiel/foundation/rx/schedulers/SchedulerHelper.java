@@ -39,4 +39,8 @@ public class SchedulerHelper {
   public static Scheduler computation() {
     return Schedulers.computation();
   }
+
+  public static Scheduler io() {
+    return Schedulers.io();
+  }
 }
