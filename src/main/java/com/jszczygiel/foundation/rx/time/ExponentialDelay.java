@@ -61,13 +61,19 @@ public class ExponentialDelay extends Delay {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder("ExponentialDelay{");
-    sb.append("growBy ").append(growBy);
-    sb.append(" " + unit());
-    sb.append(", powers of ").append(powersOf);
-    sb.append("; lower=").append(lower);
-    sb.append(", upper=").append(upper);
-    sb.append('}');
-    return sb.toString();
+    String sb =
+        "ExponentialDelay{"
+            + "growBy "
+            + growBy
+            + " "
+            + unit()
+            + ", powers of "
+            + powersOf
+            + "; lower="
+            + lower
+            + ", upper="
+            + upper
+            + '}';
+    return sb;
   }
 }

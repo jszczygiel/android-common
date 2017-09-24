@@ -30,12 +30,17 @@ public class LinearDelay extends Delay {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder("LinearDelay{");
-    sb.append("growBy ").append(growBy);
-    sb.append(" " + unit());
-    sb.append("; lower=").append(lower);
-    sb.append(", upper=").append(upper);
-    sb.append('}');
-    return sb.toString();
+    String sb =
+        "LinearDelay{"
+            + "growBy "
+            + growBy
+            + " "
+            + unit()
+            + "; lower="
+            + lower
+            + ", upper="
+            + upper
+            + '}';
+    return sb;
   }
 }
