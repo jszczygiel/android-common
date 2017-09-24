@@ -87,11 +87,7 @@ public class AnimationHelper {
     }
     TransitionDrawable transitionDrawable =
         new TransitionDrawable(new Drawable[] {drawable, background});
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
       view.setBackground(transitionDrawable);
-    } else {
-      view.setBackgroundDrawable(transitionDrawable);
-    }
     transitionDrawable.startTransition(VERY_LONG_DURATION);
   }
 

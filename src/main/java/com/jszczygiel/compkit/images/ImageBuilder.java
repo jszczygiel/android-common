@@ -3,7 +3,6 @@ package com.jszczygiel.compkit.images;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -302,11 +301,7 @@ public class ImageBuilder {
 
   private boolean isValidContext(@NonNull Context localContext) {
     if (localContext instanceof Activity) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-        return !((Activity) localContext).isFinishing() && !((Activity) localContext).isDestroyed();
-      } else {
-        return !((Activity) localContext).isFinishing();
-      }
+      return !((Activity) localContext).isFinishing() && !((Activity) localContext).isDestroyed();
     }
     return true;
   }

@@ -110,11 +110,7 @@ public abstract class RevelSimpleFragmentActivityImpl<T extends BaseFragmentImpl
         transition =
             new TransitionDrawable(
                 new Drawable[] {new ColorDrawable(color), getFragmentView().getBackground()});
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-          getFragmentView().setBackground(transition);
-        } else {
-          getFragmentView().setBackgroundDrawable(transition);
-        }
+        getFragmentView().setBackground(transition);
         transition.startTransition(AnimationHelper.LONG_DURATION);
       }
     }
