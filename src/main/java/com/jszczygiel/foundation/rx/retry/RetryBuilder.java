@@ -74,8 +74,8 @@ public class RetryBuilder {
    * Make only one retry attempt (default).
    *
    * <p>If an error that can trigger a retry occurs twice in a row, it will be wrapped as the cause
-   * inside a {@link CannotRetryException}, which will be emitted via the observable's onError
-   * method.
+   * inside a {@link com.jszczygiel.foundation.exceptions.CannotRetryException}, which will be
+   * emitted via the observable's onError method.
    */
   public RetryBuilder once() {
     this.maxAttempts = 1;
@@ -90,8 +90,8 @@ public class RetryBuilder {
    * accounting for the original call.
    *
    * <p>If an error that can trigger a retry occurs more that <i>maxAttempts</i>, it will be wrapped
-   * as the cause inside a {@link CannotRetryException}, which will be emitted via the observable's
-   * onError method.
+   * as the cause inside a {@link com.jszczygiel.foundation.exceptions.CannotRetryException}, which
+   * will be emitted via the observable's onError method.
    */
   public RetryBuilder max(int maxAttempts) {
     this.maxAttempts = Math.min(maxAttempts, Integer.MAX_VALUE - 1);

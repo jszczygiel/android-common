@@ -133,7 +133,7 @@ public class StringObservable {
    * <p><img width="640" src="https://raw.github.com/wiki/ReactiveX/RxJava/images/rx-operators/St
    * .from.png" alt="">
    *
-   * @param i Source {@link Reader}
+   * @param reader {@link Reader}
    * @param size internal buffer size
    * @return the Observable of Strings read from the source
    */
@@ -555,7 +555,7 @@ public class StringObservable {
    * <p><img width="640" height="315" src="https://raw.github
    * .com/wiki/ReactiveX/RxJava/images/rx-operators/from.png" alt="">
    *
-   * @param str the source String
+   * @param source the source String
    * @return an Observable that emits each char in the source String
    * @see <a href="https://github.com/ReactiveX/RxJava/wiki/Creating-Observables#from">RxJava wiki:
    *     from</a>

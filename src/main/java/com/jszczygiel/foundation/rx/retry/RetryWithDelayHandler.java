@@ -23,7 +23,7 @@ public class RetryWithDelayHandler implements Func1<Tuple<Integer, Throwable>, O
    * @param maxAttempts the maximum number of retries before a {@link CannotRetryException} is
    *     thrown. It will be capped at <code>{@link Integer#MAX_VALUE} - 1</code>.
    * @param retryDelay the {@link Delay} to apply between each retry (can grow, eg. by using {@link
-   *     ExponentialDelay}).
+   *     com.jszczygiel.foundation.rx.time.ExponentialDelay}).
    */
   public RetryWithDelayHandler(int maxAttempts, Delay retryDelay) {
     this(maxAttempts, retryDelay, null, null);
@@ -36,7 +36,7 @@ public class RetryWithDelayHandler implements Func1<Tuple<Integer, Throwable>, O
    * @param maxAttempts the maximum number of retries before a {@link CannotRetryException} is
    *     thrown. It will be capped at <code>{@link Integer#MAX_VALUE} - 1</code>.
    * @param retryDelay the {@link Delay} to apply between each retry (can grow, eg. by using {@link
-   *     ExponentialDelay}).
+   *     com.jszczygiel.foundation.rx.time.ExponentialDelay}).
    * @param errorInterruptingPredicate a predicate that determine if an error must stop the retry
    *     cycle (when true), in which case said error is cascaded down.
    */

@@ -40,7 +40,7 @@ import java.util.NoSuchElementException;
 @SuppressWarnings("unchecked")
 public class SortedList<T extends BaseViewModel> implements Iterable<T> {
 
-  /** Used by {@link #indexOf(Object)} when he item cannot be found in the list. */
+  /** Used by {@link #indexOf(BaseViewModel)} when he item cannot be found in the list. */
   public static final int INVALID_POSITION = -1;
 
   private static final int MIN_CAPACITY = 10;
@@ -105,8 +105,8 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
    * <p>If the sorting criteria of the item is changed, SortedList won't be able to find its
    * duplicate in the list which will result in having a duplicate of the Item in the list. If you
    * need to update sorting criteria of an item that already exists in the list, use {@link
-   * #updateItemAt(int, Object)}. You can find the index of the item using {@link #indexOf(Object)}
-   * before you update the object.
+   * #updateItemAt(int, BaseViewModel)}. You can find the index of the item using {@link
+   * #indexOf(BaseViewModel)} before you update the object.
    *
    * @param item The item to be added into the list.
    * @return The index of the newly added item.
@@ -541,7 +541,7 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
    *
    * @param index The index of the item to replace
    * @param item The item to replace the item at the given Index.
-   * @see #add(Object)
+   * @see #add(BaseViewModel)
    */
   public boolean updateItemAt(int index, T item) {
     throwIfMerging();
@@ -604,8 +604,8 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
    * be repositioned.
    *
    * @param index The current index of the Item whose position should be re-calculated.
-   * @see #updateItemAt(int, Object)
-   * @see #add(Object)
+   * @see #updateItemAt(int, BaseViewModel)
+   * @see #add(BaseViewModel)
    */
   public void recalculatePositionOfItemAt(int index) {
     throwIfMerging();
