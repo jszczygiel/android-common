@@ -209,6 +209,11 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseViewH
   }
 
   @Override
+  public void onViewRecycled(BaseViewHolder holder) {
+    holder.onViewRecycled();
+  }
+
+  @Override
   public void onAttachedToRecyclerView(RecyclerView recyclerView) {
     super.onAttachedToRecyclerView(recyclerView);
     this.recyclerView = recyclerView;

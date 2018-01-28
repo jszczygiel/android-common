@@ -26,6 +26,8 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
     this.recyclerView = null;
   }
 
+  public void onViewRecycled() {}
+
   @CallSuper
   public void onBind(T model, BaseInteractionListener listener, List<Object> payloads) {
     if (payloads == null || payloads.size() == 0) {
