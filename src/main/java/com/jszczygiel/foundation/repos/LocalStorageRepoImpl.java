@@ -8,7 +8,6 @@ import com.jszczygiel.foundation.helpers.LoggerHelper;
 import com.jszczygiel.foundation.json.JsonMapper;
 import com.jszczygiel.foundation.repos.interfaces.BaseModel;
 import com.jszczygiel.foundation.repos.interfaces.Repo;
-import com.jszczygiel.foundation.rx.PublishSubject;
 import com.jszczygiel.foundation.rx.schedulers.SchedulerHelper;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
@@ -20,6 +19,7 @@ import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Cancellable;
 import rx.functions.Func1;
+import rx.subjects.PublishSubject;
 
 public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<T> {
 
@@ -33,8 +33,8 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
   public LocalStorageRepoImpl(Lazy<BriteDatabase> database) {
     this.database = database;
 
-    collectionSubject = PublishSubject.createWith(PublishSubject.BUFFER);
-    subject = PublishSubject.createWith(PublishSubject.BUFFER);
+    this.collectionSubject = PublishSubject.create();
+    this.subject = PublishSubject.create();
   }
 
   public abstract Class<T> getType();

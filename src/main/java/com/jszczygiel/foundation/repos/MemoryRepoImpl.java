@@ -4,7 +4,6 @@ import com.jszczygiel.foundation.containers.Tuple;
 import com.jszczygiel.foundation.enums.SubjectAction;
 import com.jszczygiel.foundation.repos.interfaces.BaseModel;
 import com.jszczygiel.foundation.repos.interfaces.Repo;
-import com.jszczygiel.foundation.rx.PublishSubject;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -12,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import rx.Observable;
 import rx.functions.Func0;
 import rx.functions.Func1;
+import rx.subjects.PublishSubject;
 
 public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
 
@@ -20,9 +20,9 @@ public abstract class MemoryRepoImpl<T extends BaseModel> implements Repo<T> {
   private final Map<String, T> models;
 
   protected MemoryRepoImpl() {
-    models = new ConcurrentHashMap<>();
-    collectionSubject = PublishSubject.createWith(PublishSubject.BUFFER);
-    subject = PublishSubject.createWith(PublishSubject.BUFFER);
+    this.models = new ConcurrentHashMap<>();
+    this.collectionSubject = PublishSubject.create();
+    this.subject = PublishSubject.create();
   }
 
   @Override
