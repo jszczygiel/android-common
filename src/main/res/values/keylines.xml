@@ -7,6 +7,7 @@
   <dimen name="keyline_space_grid_half">4dp</dimen>
   <dimen name="keyline_space_grid_three_eight">6dp</dimen>
   <dimen name="keyline_space_grid_1">8dp</dimen>
+  <dimen name="keyline_space_grid_1_quarter">10dp</dimen>
   <dimen name="keyline_space_grid_1_half">12dp</dimen>
   <dimen name="keyline_space_grid_2">16dp</dimen>
   <dimen name="keyline_space_grid_2_half">20dp</dimen>
