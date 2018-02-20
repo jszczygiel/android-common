@@ -56,7 +56,10 @@ public abstract class BasePresenterImpl<T> implements BasePresenter<T> {
 
   @Override
   public void clearSubscriptions() {
-    subscriptionList.clear();
+    try {
+      subscriptionList.clear();
+    } catch (Exception ignored) {
+    }
   }
 
   @Override
