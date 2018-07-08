@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.jszczygiel.foundation.helpers.LoggerHelper;
 import java.io.IOException;
 import java.util.List;
@@ -17,6 +18,7 @@ public enum JsonMapper {
 
   JsonMapper() {
     mapper = new ObjectMapper();
+    mapper.registerModule(new JodaModule());
     mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
