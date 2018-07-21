@@ -59,7 +59,7 @@ dependencies {
     api "com.google.dagger:dagger:$rootProject.ext.dagger"
 
     //rx
-    api "io.reactivex:rxandroid:$rootProject.ext.rxjavaAndroid"
+    api "io.reactivex:rxandroid:$rootProject.ext.rxandroid"
     api "io.reactivex:rxjava:$rootProject.ext.rxjava"
     api "io.reactivex:rxjava-math:$rootProject.ext.rxjavaMath"
     api "com.artemzin.rxjava:proguard-rules:$rootProject.ext.rxjavaProguard"
