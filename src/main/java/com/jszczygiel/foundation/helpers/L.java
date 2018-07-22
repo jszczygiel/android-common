@@ -2,24 +2,24 @@ package com.jszczygiel.foundation.helpers;
 
 import android.util.Log;
 
-public class LoggerHelper {
+public class L {
 
   private static int LOGLEVEL = Log.VERBOSE;
   private static final String TAG = "APP";
 
-  public static void logInfo(String message) {
+  public static void i(String message) {
     if (LOGLEVEL > Log.INFO) {
       Log.i(TAG, message);
     }
   }
 
-  public static void logDebug(String message) {
+  public static void d(String message) {
     if (LOGLEVEL > Log.DEBUG) {
       Log.d(TAG, message);
     }
   }
 
-  public static void logError(String message) {
+  public static void e(String message) {
     if (LOGLEVEL > Log.ERROR) {
       Log.e(TAG, message);
     }
@@ -29,7 +29,7 @@ public class LoggerHelper {
     new Throwable().printStackTrace();
   }
 
-  public static void log(Throwable e) {
+  public static void print(Throwable e) {
     if (LOGLEVEL > Log.DEBUG) {
       e.printStackTrace();
     }

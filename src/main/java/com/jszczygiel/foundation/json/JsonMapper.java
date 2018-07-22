@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.jszczygiel.foundation.helpers.LoggerHelper;
+import com.jszczygiel.foundation.helpers.L;
 import java.io.IOException;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public enum JsonMapper {
     try {
       return mapper.readValue(json, clazz);
     } catch (IOException e) {
-      LoggerHelper.log(e);
+      L.print(e);
       throw e;
     }
   }
@@ -37,7 +37,7 @@ public enum JsonMapper {
     try {
       return mapper.readValue(json, clazz);
     } catch (IOException e) {
-      LoggerHelper.log(e);
+      L.print(e);
       throw e;
     }
   }
@@ -46,7 +46,7 @@ public enum JsonMapper {
     try {
       return mapper.writeValueAsString(model);
     } catch (JsonProcessingException e) {
-      LoggerHelper.log(e);
+      L.print(e);
       return null;
     }
   }
@@ -61,7 +61,7 @@ public enum JsonMapper {
     try {
       return mapper.readValue(jsonString, type);
     } catch (IOException e) {
-      LoggerHelper.log(e);
+      L.print(e);
       throw e;
     }
   }

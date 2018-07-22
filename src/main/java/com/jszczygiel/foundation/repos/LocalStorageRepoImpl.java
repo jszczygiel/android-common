@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import com.jszczygiel.foundation.containers.Tuple;
 import com.jszczygiel.foundation.enums.SubjectAction;
-import com.jszczygiel.foundation.helpers.LoggerHelper;
+import com.jszczygiel.foundation.helpers.L;
 import com.jszczygiel.foundation.json.JsonMapper;
 import com.jszczygiel.foundation.repos.interfaces.BaseModel;
 import com.jszczygiel.foundation.repos.interfaces.Repo;
@@ -43,7 +43,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
 
   @Override
   public Observable<T> get(String id) {
-    LoggerHelper.logDebug("local:" + this.getClass().toString() + " get:" + id);
+    L.d("local:" + this.getClass().toString() + " get:" + id);
     return database
         .get()
         .createQuery(getTableName(), "SELECT * FROM " + getTableName() + " WHERE id = ?", id)
@@ -85,7 +85,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
 
   @Override
   public Observable<T> getAll() {
-    LoggerHelper.logDebug("local:" + this.getClass().toString() + " getAll");
+    L.d("local:" + this.getClass().toString() + " getAll");
     return database
         .get()
         .createQuery(getTableName(), "SELECT * FROM " + getTableName())
@@ -126,7 +126,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
   }
 
   protected synchronized void add(T model) {
-    LoggerHelper.logDebug("local:" + this.getClass().toString() + " add:" + model);
+    L.d("local:" + this.getClass().toString() + " add:" + model);
     ContentValues values = new ContentValues();
     values.put(ID, model.id());
     values.put(DATA, JsonMapper.INSTANCE.toJson(model));
@@ -136,7 +136,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
 
   @Override
   public Observable<T> remove(final String id) {
-    LoggerHelper.logDebug("local:" + this.getClass().toString() + " remove:" + id);
+    L.d("local:" + this.getClass().toString() + " remove:" + id);
     return get(id)
         .observeOn(SchedulerHelper.databaseWriterScheduler())
         .map(
@@ -151,7 +151,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
   }
 
   protected synchronized void update(T model) {
-    LoggerHelper.logDebug("local:" + this.getClass().toString() + " update:" + model);
+    L.d("local:" + this.getClass().toString() + " update:" + model);
     ContentValues values = new ContentValues();
     values.put(ID, model.id());
     values.put(DATA, JsonMapper.INSTANCE.toJson(model));
@@ -161,7 +161,7 @@ public abstract class LocalStorageRepoImpl<T extends BaseModel> implements Repo<
 
   @Override
   public void put(final T model) {
-    LoggerHelper.logDebug("local:" + this.getClass().toString() + " put:" + model);
+    L.d("local:" + this.getClass().toString() + " put:" + model);
     database
         .get()
         .createQuery(
