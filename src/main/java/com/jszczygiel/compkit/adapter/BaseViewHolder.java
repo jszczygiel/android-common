@@ -3,11 +3,13 @@ package com.jszczygiel.compkit.adapter;
 import android.content.Context;
 import android.support.annotation.CallSuper;
 import android.support.annotation.ColorInt;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import java.util.List;
 
 public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
+
   protected final Context context;
   protected RecyclerView recyclerView;
 
@@ -26,7 +28,8 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
     this.recyclerView = null;
   }
 
-  public void onViewRecycled() {}
+  public void onViewRecycled() {
+  }
 
   @CallSuper
   public void onBind(T model, BaseInteractionListener listener, List<Object> payloads) {
@@ -35,7 +38,8 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
     }
   }
 
-  public void onBind(T model, BaseInteractionListener listener) {}
+  public void onBind(T model, BaseInteractionListener listener) {
+  }
 
   protected final String getString(int resourceId) {
     return context.getString(resourceId);
@@ -55,7 +59,7 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
 
   @ColorInt
   protected final int getColor(int resourceId) {
-    return context.getResources().getColor(resourceId);
+    return ContextCompat.getColor(context, resourceId);
   }
 
   protected final double getDimension(int dimenId) {
@@ -71,10 +75,14 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
    * that extend this one.
    */
   public abstract static class BaseInteractionListener {
-    public void onItemClick(BaseViewModel model, View itemView) {}
 
-    public void onDetailsClick(BaseViewModel model) {}
+    public void onItemClick(BaseViewModel model, View itemView) {
+    }
 
-    public void onHeaderClick(View header, int position, long headerId) {}
+    public void onDetailsClick(BaseViewModel model) {
+    }
+
+    public void onHeaderClick(View header, int position, long headerId) {
+    }
   }
 }

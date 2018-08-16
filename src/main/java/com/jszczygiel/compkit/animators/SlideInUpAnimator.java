@@ -6,7 +6,8 @@ import android.view.animation.Interpolator;
 
 public class SlideInUpAnimator extends BaseItemAnimator {
 
-  public SlideInUpAnimator() {}
+  public SlideInUpAnimator() {
+  }
 
   public SlideInUpAnimator(Interpolator interpolator) {
     mInterpolator = interpolator;
@@ -26,8 +27,8 @@ public class SlideInUpAnimator extends BaseItemAnimator {
 
   @Override
   protected void preAnimateAddImpl(RecyclerView.ViewHolder holder) {
-    ViewCompat.setTranslationY(holder.itemView, holder.itemView.getHeight());
-    ViewCompat.setAlpha(holder.itemView, 0);
+    holder.itemView.setTranslationY(holder.itemView.getHeight());
+    holder.itemView.setAlpha(0);
   }
 
   @Override

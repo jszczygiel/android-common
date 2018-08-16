@@ -11,6 +11,7 @@ import android.support.annotation.PluralsRes;
 import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,9 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     implements BaseFragment<T> {
 
   CompositeSubscription subscriptionList;
-  /** instance of presenter */
+  /**
+   * instance of presenter
+   */
   private T presenter;
 
   private boolean isTablet;
@@ -60,7 +63,9 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     presenter.setOrientation(getResources().getConfiguration().orientation);
   }
 
-  /** @return provides new instance of presenter */
+  /**
+   * @return provides new instance of presenter
+   */
   public abstract T initializePresenter();
 
   @Override
@@ -117,9 +122,9 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
   public void showToast(@PluralsRes final int id, final int quantity, final String... formatArgs) {
     if (isAvailable()) {
       Toast.makeText(
-              getContext(),
-              getQuantityString(id, quantity, (Object[]) formatArgs),
-              Toast.LENGTH_LONG)
+          getContext(),
+          getQuantityString(id, quantity, (Object[]) formatArgs),
+          Toast.LENGTH_LONG)
           .show();
     }
   }
@@ -179,7 +184,7 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
 
   @ColorInt
   public int getColor(@ColorRes int colorId) {
-    return getContext().getResources().getColor(colorId);
+    return ContextCompat.getColor(getContext(), colorId);
   }
 
   public void finishWithResult(int result, Intent intent) {
@@ -195,7 +200,8 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     return (String) getActivity().getTitle();
   }
 
-  public void onNewIntent(Intent intent) {}
+  public void onNewIntent(Intent intent) {
+  }
 
   @Override
   public void addSubscriptionToLifeCycle(Subscription subscription) {
