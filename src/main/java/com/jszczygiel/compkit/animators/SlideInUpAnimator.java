@@ -1,13 +1,14 @@
 package com.jszczygiel.compkit.animators;
 
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.animation.Interpolator;
 
 public class SlideInUpAnimator extends BaseItemAnimator {
 
-  public SlideInUpAnimator() {
-  }
+  public SlideInUpAnimator() {}
 
   public SlideInUpAnimator(Interpolator interpolator) {
     mInterpolator = interpolator;
@@ -41,5 +42,14 @@ public class SlideInUpAnimator extends BaseItemAnimator {
         .setListener(new DefaultAddVpaListener(holder))
         .setStartDelay(getAddDelay(holder))
         .start();
+  }
+
+  @Override
+  public boolean animateChange(
+      @NonNull ViewHolder oldHolder,
+      @NonNull ViewHolder newHolder,
+      @NonNull ItemHolderInfo preInfo,
+      @NonNull ItemHolderInfo postInfo) {
+    return false;
   }
 }
