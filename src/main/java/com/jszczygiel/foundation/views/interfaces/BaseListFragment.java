@@ -1,7 +1,7 @@
 package com.jszczygiel.foundation.views.interfaces;
 
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import com.jszczygiel.compkit.adapter.BaseRecyclerAdapter;
 import com.jszczygiel.compkit.adapter.BaseViewModel;
 import com.jszczygiel.foundation.presenters.interfaces.BaseListPresenter;

@@ -16,6 +16,7 @@
 
 package com.jszczygiel.compkit.collections;
 
+import androidx.recyclerview.widget.RecyclerView;
 import com.jszczygiel.compkit.adapter.BaseViewModel;
 import com.jszczygiel.foundation.exceptions.NotImplementedException;
 import java.lang.reflect.Array;
@@ -27,7 +28,7 @@ import java.util.NoSuchElementException;
 
 /**
  * A Sorted list implementation that can keep items in order and also notify for changes in the list
- * such that it can be bound to a {@link android.support.v7.widget.RecyclerView.Adapter
+ * such that it can be bound to a {@link RecyclerView.Adapter
  * RecyclerView.Adapter}.
  *
  * <p>It keeps items ordered using the {@link Callback#compare(Object, Object)} method and uses
@@ -781,7 +782,7 @@ public class SortedList<T extends BaseViewModel> implements Iterable<T> {
      * that you can change its behavior depending on your UI.
      *
      * <p>For example, if you are using SortedList with a {@link
-     * android.support.v7.widget.RecyclerView.Adapter RecyclerView.Adapter}, you should return
+     * RecyclerView.Adapter RecyclerView.Adapter}, you should return
      * whether the items' visual representations are the same or not.
      *
      * @param oldItem The previous representation of the object.

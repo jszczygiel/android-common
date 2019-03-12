@@ -1,8 +1,8 @@
 package com.jszczygiel.foundation.views;
 
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.CallSuper;
+import androidx.appcompat.app.AppCompatActivity;
 import com.jszczygiel.foundation.helpers.SystemHelper;
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseActivity;

@@ -1,7 +1,7 @@
 package com.jszczygiel.foundation.presenters;
 
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
+import androidx.annotation.CallSuper;
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;

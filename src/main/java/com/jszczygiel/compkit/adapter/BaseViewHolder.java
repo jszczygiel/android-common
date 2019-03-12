@@ -1,10 +1,10 @@
 package com.jszczygiel.compkit.adapter;
 
 import android.content.Context;
-import android.support.annotation.CallSuper;
-import android.support.annotation.ColorInt;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.CallSuper;
+import androidx.annotation.ColorInt;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import java.util.List;
 

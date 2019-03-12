@@ -1,6 +1,6 @@
 package com.jszczygiel.foundation.rx;
 
-import android.support.annotation.CallSuper;
+import androidx.annotation.CallSuper;
 import com.jszczygiel.foundation.helpers.L;
 import rx.Subscriber;
 import rx.exceptions.OnErrorNotImplementedException;

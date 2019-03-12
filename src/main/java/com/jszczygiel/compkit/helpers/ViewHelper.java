@@ -1,6 +1,6 @@
 package com.jszczygiel.compkit.helpers;
 
-import android.support.v4.view.ViewCompat;
+import androidx.core.view.ViewCompat;
 import android.view.View;
 
 public final class ViewHelper {

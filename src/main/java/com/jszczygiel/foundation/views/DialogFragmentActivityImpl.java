@@ -1,7 +1,7 @@
 package com.jszczygiel.foundation.views;
 
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 import android.view.View;
 import com.jszczygiel.R;
 

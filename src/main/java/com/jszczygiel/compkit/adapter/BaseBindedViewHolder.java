@@ -1,7 +1,7 @@
 package com.jszczygiel.compkit.adapter;
 
 import android.content.Context;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 
 public abstract class BaseBindedViewHolder<T, K extends ViewDataBinding> extends BaseViewHolder<T> {
   private final K binding;

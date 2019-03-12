@@ -40,10 +40,10 @@ configurations.all {
 
 dependencies {
     //ui
-    api "com.android.support:appcompat-v7:$rootProject.ext.supportVersion"
-    api "com.android.support:design:$rootProject.ext.supportVersion"
-    api "com.android.support:recyclerview-v7:$rootProject.ext.supportVersion"
-    api "com.android.support:percent:$rootProject.ext.supportVersion"
+    api "androidx.appcompat:appcompat:$rootProject.ext.supportVersion"
+    api "com.google.android.material:material:$rootProject.ext.supportVersion"
+    api "androidx.recyclerview:recyclerview:$rootProject.ext.supportVersion"
+    api "androidx.percentlayout:percentlayout:$rootProject.ext.supportVersion"
     api 'com.github.bumptech.glide:glide:3.7.0'
     api 'com.github.justzak:dilatingdotsprogressbar:1.0.1'
 

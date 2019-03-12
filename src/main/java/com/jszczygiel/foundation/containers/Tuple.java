@@ -1,6 +1,6 @@
 package com.jszczygiel.foundation.containers;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.jszczygiel.foundation.helpers.CompareHelper;
 
 public final class Tuple<T1, T2> implements Comparable<Tuple<T1, T2>> {

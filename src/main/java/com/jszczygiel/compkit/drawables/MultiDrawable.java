@@ -3,7 +3,7 @@ package com.jszczygiel.compkit.drawables;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.support.annotation.IntRange;
+import androidx.annotation.IntRange;
 
 public class MultiDrawable extends LayerDrawable implements Drawable.Callback {
 
