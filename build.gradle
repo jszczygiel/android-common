@@ -40,7 +40,7 @@ configurations.all {
 
 dependencies {
     //ui
-    api "androidx.appcompat:appcompat:$rootProject.ext.supportVersion"
+    api "androidx.appcompat:appcompat:$rootProject.ext.appcompat"
     api "com.google.android.material:material:$rootProject.ext.supportVersion"
     api "androidx.recyclerview:recyclerview:$rootProject.ext.supportVersion"
     api "androidx.percentlayout:percentlayout:$rootProject.ext.supportVersion"
