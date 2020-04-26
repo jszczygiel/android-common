@@ -9,6 +9,8 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.view.Display;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -70,25 +72,25 @@ public class SystemHelper {
    * @return The number of cores, or 1 if failed to get result
    */
   private static int getNumCoresOldPhones() {
-    //Private Class to display only CPU devices in the directory listing
+    // Private Class to display only CPU devices in the directory listing
     class CpuFilter implements FileFilter {
 
       @Override
       public boolean accept(File pathname) {
-        //Check if filename is "cpu", followed by a single digit number
+        // Check if filename is "cpu", followed by a single digit number
         return Pattern.matches("cpu[0-9]+", pathname.getName());
       }
     }
 
     try {
-      //Get directory containing CPU info
+      // Get directory containing CPU info
       File dir = new File("/sys/devices/system/cpu/");
-      //Filter to only list the devices we care about
+      // Filter to only list the devices we care about
       File[] files = dir.listFiles(new CpuFilter());
-      //Return the number of cores (virtual CPU devices)
+      // Return the number of cores (virtual CPU devices)
       return files.length;
     } catch (Exception e) {
-      //Default to return 1 core
+      // Default to return 1 core
       return 1;
     }
   }
@@ -166,5 +168,13 @@ public class SystemHelper {
 
   public static boolean hasFlashLight(Context context) {
     return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+  }
+
+  public static boolean isBackgroundRestricted(Context context) {
+    if (VERSION.SDK_INT < VERSION_CODES.P) {
+      return false;
+    }
+
+    return context.getSystemService(ActivityManager.class).isBackgroundRestricted();
   }
 }
