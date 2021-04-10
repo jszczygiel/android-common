@@ -3,8 +3,8 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion rootProject.ext.compileApi
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding  true
     }
 
     defaultConfig {
