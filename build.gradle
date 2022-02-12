@@ -10,27 +10,21 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion rootProject.ext.compileApi
-        versionCode 1
-        versionName "1.0"
     }
     buildTypes {
         releaseDebuggable{}
         fabric{}
         debugMinified{}
     }
-
-    lintOptions {
-        abortOnError false
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/DEPENDENCIES.txt', 'META-INF/DEPENDENCIES', 'META-INF/dependencies.txt', 'META-INF/LGPL2.1', 'META-INF/NOTICE.txt', 'META-INF/NOTICE', 'META-INF/notice.txt']
+        }
     }
 
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES.txt'
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/dependencies.txt'
-        exclude 'META-INF/LGPL2.1'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/notice.txt'
+
+    lint {
+        abortOnError false
     }
 }
 
