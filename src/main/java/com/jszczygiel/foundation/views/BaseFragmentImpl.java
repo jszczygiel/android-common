@@ -2,6 +2,10 @@ package com.jszczygiel.foundation.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.annotation.CallSuper;
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
@@ -10,12 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.PluralsRes;
 import androidx.annotation.StringRes;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
+import androidx.fragment.app.Fragment;
 import com.jszczygiel.foundation.helpers.SystemHelper;
 import com.jszczygiel.foundation.presenters.interfaces.BasePresenter;
 import com.jszczygiel.foundation.views.interfaces.BaseFragment;
@@ -26,12 +26,11 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     implements BaseFragment<T> {
 
   CompositeSubscription subscriptionList;
-  /**
-   * instance of presenter
-   */
+  /** instance of presenter */
   private T presenter;
 
   private boolean isTablet;
+  private int onResumeCount;
 
   @Override
   @CallSuper
@@ -122,9 +121,9 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
   public void showToast(@PluralsRes final int id, final int quantity, final String... formatArgs) {
     if (isAvailable()) {
       Toast.makeText(
-          getContext(),
-          getQuantityString(id, quantity, (Object[]) formatArgs),
-          Toast.LENGTH_LONG)
+              getContext(),
+              getQuantityString(id, quantity, (Object[]) formatArgs),
+              Toast.LENGTH_LONG)
           .show();
     }
   }
@@ -149,6 +148,15 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     } else {
       getPresenter().onLoad(getArguments());
     }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    if (onResumeCount > 0) {
+      getPresenter().onNewVisible();
+    }
+    onResumeCount++;
   }
 
   @Override
@@ -200,8 +208,7 @@ public abstract class BaseFragmentImpl<T extends BasePresenter> extends Fragment
     return (String) getActivity().getTitle();
   }
 
-  public void onNewIntent(Intent intent) {
-  }
+  public void onNewIntent(Intent intent) {}
 
   @Override
   public void addSubscriptionToLifeCycle(Subscription subscription) {

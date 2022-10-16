@@ -27,4 +27,6 @@ public interface BasePresenter<T> {
   void setOrientation(int orientation);
 
   void onLoad(Bundle arguments);
+
+  default void onNewVisible(){}
 }
