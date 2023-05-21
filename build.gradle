@@ -29,16 +29,12 @@ android {
     namespace 'com.jszczygiel'
 }
 
-configurations.all {
-    resolutionStrategy.force "com.android.support:support-annotations:$rootProject.ext.supportVersion"
-}
-
 dependencies {
     //ui
     api "androidx.appcompat:appcompat:$rootProject.ext.appcompat"
-    api "com.google.android.material:material:$rootProject.ext.supportVersion"
-    api "androidx.recyclerview:recyclerview:$rootProject.ext.supportVersion"
-    api "androidx.percentlayout:percentlayout:$rootProject.ext.supportVersion"
+    api "com.google.android.material:material:$rootProject.ext.material"
+    api "androidx.recyclerview:recyclerview:$rootProject.ext.recyclerView"
+    api "androidx.percentlayout:percentlayout:$rootProject.ext.percentageLayout"
     api 'com.github.bumptech.glide:glide:3.7.0'
     api 'com.github.justzak:dilatingdotsprogressbar:1.0.1'
 
